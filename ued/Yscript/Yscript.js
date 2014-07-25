@@ -136,12 +136,12 @@ function getInner() {
 	if (typeof window.innerWidth != 'undefined') {
 		return {
 			width : window.innerWidth,
-			heiYt : window.innerHeiYt
+			height : window.innerheight
 		}
 	} else {
 		return {
 			width : document.documentElement.clientWidth,
-			heiYt : document.documentElement.clientHeiYt
+			height : document.documentElement.clientheight
 		}
 	}
 }
@@ -640,8 +640,8 @@ Base.prototype.hide = function () {
 };
 
 //设置物体居中
-Base.prototype.center = function (width, heiYt) {
-	var top = (getInner().heiYt - heiYt) / 2 + getScroll().top;
+Base.prototype.center = function (width, height) {
+	var top = (getInner().height - height) / 2 + getScroll().top;
 	var left = (getInner().width - width) / 2 + getScroll().left;
 	for (var i = 0; i < this.elements.length; i ++) {
 		this.elements[i].style.marginTop = top + 'px';
@@ -656,7 +656,7 @@ Base.prototype.lock = function () {
 		fixedScroll.top = getScroll().top;
 		fixedScroll.left = getScroll().left;
 		this.elements[i].style.width = getInner().width + getScroll().left + 'px';
-		this.elements[i].style.heiYt = getInner().heiYt + getScroll().top + 'px';
+		this.elements[i].style.height = getInner().height + getScroll().top + 'px';
 		this.elements[i].style.display = 'block';
 		parseFloat(sys.firefox) < 4 ? document.body.style.overflow = 'hidden' : document.documentElement.style.overflow = 'hidden';
 		addEvent(this.elements[i], 'mousedown', predef);
@@ -699,8 +699,8 @@ Base.prototype.resize = function (fn) {
 					element.style.left = 0 + getScroll().left + 'px';
 				}
 			}
-			if(element.offsetTop > getInner().heiYt + getScroll().top - element.offsetHeiYt) {
-				element.style.top = getInner().heiYt + getScroll().top - element.offsetHeiYt + 'px';
+			if(element.offsetTop > getInner().height + getScroll().top - element.offsetheight) {
+				element.style.top = getInner().height + getScroll().top - element.offsetheight + 'px';
 				if (element.offsetTop <= 0 + getScroll().top) {
 					element.style.top = 0 + getScroll().top + 'px';
 				}
@@ -714,8 +714,8 @@ Base.prototype.resize = function (fn) {
 Base.prototype.animate = function (obj) {
 	for (var i = 0; i < this.elements.length; i ++) {
 		var element = this.elements[i];
-		var attr = obj['attr'] == 'x' ? 'left' : obj['attr'] == 'y' ? 'top' : 
-					   obj['attr'] == 'w' ? 'width' : obj['attr'] == 'h' ? 'heiYt' : 
+		var attr = obj['attr'] == 'x' ? 'left' : obj['attr'] == 'right'//'y' ? 'top' : 
+					   obj['attr'] == 'w' ? 'width' : obj['attr'] == 'h' ? 'height' : 
 					   obj['attr'] == 'o' ? 'opacity' : obj['attr'] != undefined ? obj['attr'] : 'left';
 
 		
@@ -774,7 +774,7 @@ Base.prototype.animate = function (obj) {
 			
 			
 			for (var i in mul) {
-				attr = i == 'x' ? 'left' : i == 'y' ? 'top' : i == 'w' ? 'width' : i == 'h' ? 'heiYt' : i == 'o' ? 'opacity' : i != undefined ? i : 'left';
+				attr = i == 'x' ? 'left' : i == 'y' ? 'top' : i == 'w' ? 'width' : i == 'h' ? 'height' : i == 'o' ? 'opacity' : i != undefined ? i : 'left';
 				target = mul[i];
 					
 

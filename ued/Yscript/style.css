@@ -1,6 +1,45 @@
+pre{
+    position: absolute;
+    left: 10%;
+    top:10%;
+    background: whiteSmoke;
+    padding:10px 15px;
+    font-size: 12px;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    color：#333;
+    display: none;
+}
+a.pre{padding: 5px;background: #ff0;border: 1px solid red;font-size: 12px;line-height: 1em; position: absolute;left: 10%; color: #999}
+h1{font-weight: bold;font-size: 30px;text-align: center;line-height: 2em;background:#ccc;margin-bottom: 10px;}
+h2{font-weight: bold;font-size: 20px;text-align: center;line-height: 2em;background:#ddd;margin: 10px 0;} 
 .top{height: 150px;}
 .bot{height: 50px;margin: 0 auto;}
-#show{width: 100%;height: 200px;}
-#show .box1{width: 200px;height: 150px;background: red;margin: 0 auto;}
-#show .bot{width:100px;}
+
+#selector{width: 100%;height: 240px;position: relative;}
+#selector ul{width: 200px;height: 150px;background: white;margin: 0 auto;}
+#selector li{line-height: 30px;text-align: center;}
+#selector .bot{width:300px;}
+#selector input{padding: 5px 10px;background: #ff0;border: 1px solid red;margin-top: 10px}
+
+#show{width: 100%;height: 240px;position: relative;}
+#show .box1{width: 20%;height: 150px;background: red;margin: 0 auto;}
+#show .bot{width:120px;}
 #show button{padding: 5px 10px;background: #ff0;border: 1px solid red;margin-top: 10px}
+
+#animate{width: 100%;height: 240px;position: relative;}
+#animate .box2{width: 20%;height: 150px;background: red;margin: 0 auto}
+#animate .bot{width:150px;}
+#animate input{padding: 5px 10px;background: #ff0;border: 1px solid red;margin-top: 10px}
+
+
+
+
+
+
+
+
+
+
+
+
