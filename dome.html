@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <title>测试Dome - Yscript</title>
+    <link rel="stylesheet" type="text/css" href="base.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="Yscript.js"></script>
+</head>
+
+<body>
+<!--显示隐藏-->
+<div id="show">
+    <div class="top">
+        <div class="box1"></div>
+    </div>
+    <div class="bot">
+        <button class="show">显示</button>
+        <button class="hide">隐藏</button>
+    </div>
+</div>
+<!--动画-->
+<script type="text/javascript">
+
+Y('.show').click(function(event) {
+    Y('.box1').show();
+});
+Y('.hide').click(function(event) {
+    Y('.box1').hide();
+});
+
+    Y('.but1').click(function(){
+        //alert(111);
+    	Y('.div1').animate({
+            alter : 0,
+            target : 500,
+
+        });
+        Y('#divb').attr('style','')
+    });
+
+</script>
+</body>
+</html>

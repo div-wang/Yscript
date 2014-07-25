@@ -1,0 +1,6 @@
+.top{height: 150px;}
+.bot{height: 50px;margin: 0 auto;}
+#show{width: 100%;height: 200px;}
+#show .box1{width: 200px;height: 150px;background: red;margin: 0 auto;}
+#show .bot{width:100px;}
+#show button{padding: 5px 10px;background: #ff0;border: 1px solid red;margin-top: 10px}
