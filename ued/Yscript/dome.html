@@ -47,7 +47,8 @@ Y('selector li').eq(4) //寻找last li
 </div>
 <script type="text/javascript">
     Y('.click_id').click(function(event) {
-        Y('selector li').css('background','');
+        Y('#selector li').input
+        Y('#selector li').css('background','');
         Y('#selector_id').css('background','red');
     });
     Y('.click_class').click(function(event) {
@@ -189,13 +190,7 @@ Y('.pre').click(function(event) {
         this.parentNode.getElementsByTagName('pre')[0].style.display = 'none';
     }
 });
-/*var H2 = document.getElementsByTagName('h2');
-for (var i = 0 ; i < H2.length ; i++) {
-    H2[i].onclick = function() {
-        alert(this.parentNode)
-        this.parentNode.getElementsByTagName('pre')[0].style.display = 'block'
-    };
-};*/
+
     
 
 </script>
