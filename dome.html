@@ -222,8 +222,8 @@ Y('.removeclass').click(function(){
 <h2>文档操作</h2>
     <div class="top">
         <div class="box6">
-            <span></span>
-            <input type="text" >
+            <input type="text" ><br>
+            <span>在输入框内输入内容后点击下面的按钮，看会出现什么</span>
         </div>
     </div>
     <div class="bot">
@@ -234,26 +234,35 @@ Y('.removeclass').click(function(){
     <pre>
 js代码块：
 
-Y('.addclass').click(function(){
-    Y('.box5').addClass('blue');
+Y('.dochtml').click(function(){
+    var text = Y('.box6').html();
+    Y('.box6 span').text('这是html:'+text);
 }); 
-Y('.removeclass').click(function(){
-    Y('.box5').removeClass('blue');
+Y('.doctext').click(function(){
+    var text = Y('.box6').text();
+    Y('.box6 span').text('这是text:'+text);
 });  
+Y('.docvalue').click(function(){
+    var text = Y('.box6 input').value();
+    Y('.box6 span').text('这是value:'+text);
+});
     </pre>
 </div>
 <script type="text/javascript">
 Y('.dochtml').click(function(){
-    var text = Y('.box5 input').value();
-    Y('.box6 span').html('text');
+    var text = Y('.box6').html();
+    Y('.box6 span').text('这是html:'+text);
 }); 
 Y('.doctext').click(function(){
-    Y('.box5').removeClass('blue');
+    var text = Y('.box6').text();
+    Y('.box6 span').text('这是text:'+text);
 });  
 Y('.docvalue').click(function(){
-    Y('.box5').removeClass('blue');
+    var text = Y('.box6 input').value();
+    Y('.box6 span').text('这是value:'+text);
 });
 </script>
+
 <!--公用js代码-->
 <script type="text/javascript">
 Y('.pre').click(function(event) {
@@ -265,8 +274,6 @@ Y('.pre').click(function(event) {
         this.parentNode.getElementsByTagName('pre')[0].style.display = 'none';
     }
 });
-
-    
 
 </script>
 </body>

@@ -588,7 +588,10 @@ Base.prototype.text = function (str) {
 		if (arguments.length == 0) {
 			return getInnerText(this.elements[i]);
 		}
-		setInnerText(this.elements[i], text);
+		if (typeof this.elements[i].textContent == 'string') 
+		this.elements[i].textContent = str ;
+		else
+		this.elements[i].innerText = str ;
 	}
 	return this;
 }
