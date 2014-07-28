@@ -838,7 +838,7 @@ Base.prototype.animate = function (obj) {
 	return this;
 };
 //封装ajax
-Base.prototype.ajax = function (obj) {
+function ajax(obj) {
 	var xhr = (function () {
 		if (typeof XMLHttpRequest != 'undefined') {
 			return new XMLHttpRequest();
