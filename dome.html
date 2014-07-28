@@ -10,7 +10,8 @@
 
 <body>
 <h1>测试Dome - Yscript</h1>
-<!--选择器-->
+
+<!----------------------选择器---------------------->
 <div id="selector">
 <a class="pre" href="javascript:">js代码</a>
 <h2>显示/隐藏</h2>
@@ -47,7 +48,6 @@ Y('selector li').eq(4) //寻找last li
 </div>
 <script type="text/javascript">
     Y('.click_id').click(function(event) {
-        Y('#selector li').input
         Y('#selector li').css('background','');
         Y('#selector_id').css('background','red');
     });
@@ -68,7 +68,8 @@ Y('selector li').eq(4) //寻找last li
         Y('selector li').eq(4).css('background','red');
     });
 </script>
-<!--显示隐藏-->
+
+<!----------------------显示隐藏---------------------->
 <div id="show">
 <a class="pre" href="javascript:">js代码</a>
 <h2>显示/隐藏</h2>
@@ -99,7 +100,8 @@ Y('.hide').click(function(event) {
         Y('.box1').hide();
     });
 </script>
-<!--动画-->
+
+<!----------------------动画---------------------->
 <div id="animate">
 <a class="pre" href="javascript:">js代码</a>
 <h2>动画</h2>
@@ -107,7 +109,7 @@ Y('.hide').click(function(event) {
         <div class="box2"></div>
     </div>
     <div class="bot">
-        <input type="button" value="固定值" class="but1">
+        <input type="button" value="固定值" class="anim_left">
         <input type="button" value="递增值" class="but1">
     </div>
     <pre>
@@ -124,62 +126,135 @@ Y('.anim_left').click(function(){
     </pre>
 </div>
 <script type="text/javascript">
-Y('.anim_left').click(function(){
+Y('.but1').click(function(){
     Y('.box2').animate({
         speed : 20,  //缓动速度，数字越大速度越慢
         alter : 0,   //改变left值，每次加50
         target : 1000 //固定left值
     });
-});
-
-Y('.anim_right').click(function(){
-    Y('.box2').animate({
-        speed : 20,  //缓动速度，数字越大速度越慢
-        alter : 50 //改变left值，每次加50
-    });
-});    
+});   
 </script>
-<!--显示隐藏-->
+
+<!----------------------鼠标划过------------------------------>
 <div id="show">
 <a class="pre" href="javascript:">js代码</a>
-<h2>显示/隐藏</h2>
+<h2>鼠标划过</h2>
     <div class="top">
-        <div class="box1"></div>
+        <div class="box3 box1"></div>
     </div>
     <div class="bot">
-        <button class="show">显示</button>
-        <button class="hide">隐藏</button>
+        鼠标划过红色区域<br>看会发生什么
     </div>
     <pre>
 js代码块：
 
-//用法与jquery保持一致
-Y('.show').click(function(event) {
-    Y('.box1').show();
-});
-Y('.hide').click(function(event) {
-    Y('.box1').hide();
+Y('.box3').hover(function(){
+    alert('鼠标划过了box3');
 });
     </pre>
 </div>
-
-
 <script type="text/javascript">
-Y('.anim_left').click(function(){
-    Y('.box2').animate({
-        speed : 20,  //缓动速度，数字越大速度越慢
-        alter : 0,   //改变left值，每次加50
-        target : 1000 //固定left值
-    });
+Y('.box3').hover(function(){
+    alert('鼠标划过了box3');
 });
-
-Y('.anim_right').click(function(){
-    Y('.box2').animate({
-        speed : 20,  //缓动速度，数字越大速度越慢
-        alter : 50 //改变left值，每次加50
-    });
-});    
 </script>
+
+<!----------------------css操作------------------------------>
+<div id="show">
+<a class="pre" href="javascript:">js代码</a>
+<h2>css操作</h2>
+    <div class="top">
+        <div class="box4 box1"></div>
+    </div>
+    <div class="bot">
+        <button class="css_config">点击</button>
+    </div>
+    <pre>
+js代码块：
+
+Y('.css_config').click(function(){
+    Y('.box4').css('width','500px');
+    Y('.box4').css('height','100px');
+});
+    </pre>
+</div>
+<script type="text/javascript">
+Y('.css_config').click(function(){
+    Y('.box4').css('width','500px');
+    Y('.box4').css('height','100px');
+});
+</script>
+
+<!----------------------class操作---------------------->
+<div id="class">
+<a class="pre" href="javascript:">js代码</a>
+<h2>class操作</h2>
+    <div class="top">
+        <div class="box5"></div>
+    </div>
+    <div class="bot">
+        <input type="button" value="增加class" class="addclass">
+        <input type="button" value="删除class" class="removeclass">
+    </div>
+    <pre>
+js代码块：
+
+Y('.addclass').click(function(){
+    Y('.box5').addClass('blue');
+}); 
+Y('.removeclass').click(function(){
+    Y('.box5').removeClass('blue');
+});  
+    </pre>
+</div>
+<script type="text/javascript">
+Y('.addclass').click(function(){
+    Y('.box5').addClass('blue');
+}); 
+Y('.removeclass').click(function(){
+    Y('.box5').removeClass('blue');
+});  
+</script>
+
+<!----------------------文档操作---------------------->
+<div id="doc">
+<a class="pre" href="javascript:">js代码</a>
+<h2>文档操作</h2>
+    <div class="top">
+        <div class="box6">
+            <span></span>
+            <input type="text" >
+        </div>
+    </div>
+    <div class="bot">
+        <input type="button" value="html" class="dochtml">
+        <input type="button" value="text" class="doctext">
+        <input type="button" value="value" class="docvalue">
+    </div>
+    <pre>
+js代码块：
+
+Y('.addclass').click(function(){
+    Y('.box5').addClass('blue');
+}); 
+Y('.removeclass').click(function(){
+    Y('.box5').removeClass('blue');
+});  
+    </pre>
+</div>
+<script type="text/javascript">
+Y('.dochtml').click(function(){
+    var text = Y('.box5 input').value();
+    Y('.box6 span').html('text');
+}); 
+Y('.doctext').click(function(){
+    Y('.box5').removeClass('blue');
+});  
+Y('.docvalue').click(function(){
+    Y('.box5').removeClass('blue');
+});
+</script>
+<!--公用js代码-->
 <script type="text/javascript">
 Y('.pre').click(function(event) {
     if (this.innerHTML == 'js代码') {
