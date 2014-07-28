@@ -41,9 +41,9 @@ js代码块：
  */
 Y('#selector_id') //寻找id
 Y('.selector_class') //寻找class;
-Y('selector li') //寻找节点
-Y('selector li').eq(0) //寻找first li
-Y('selector li').eq(4) //寻找last li
+Y('#selector').find('li') //寻找节点
+Y('#selector li').first() //寻找first li
+Y('#selector li').last() //寻找last li
     </pre>
 </div>
 <script type="text/javascript">
@@ -52,20 +52,20 @@ Y('selector li').eq(4) //寻找last li
         Y('#selector_id').css('background','red');
     });
     Y('.click_class').click(function(event) {
-        Y('selector li').css('background','');
+        Y('#selector li').css('background','');
         Y('.selector_class').css('background','red');
     });
     Y('.click_node').click(function(event) {
-        Y('selector li').css('background','');
-        Y('selector li').css('background','red');
+        Y('#selector li').css('background','');
+        Y('#selector').find('li').css('background','red');
     });
     Y('.click_frist').click(function(event) {
-        Y('selector li').css('background','');
-        Y('selector li').eq(0).css('background','red');
+        Y('#selector li').css('background','');
+        Y('#selector li').first().style.background = 'red'
     });
     Y('.click_last').click(function(event) {
-        Y('selector li').css('background','');
-        Y('selector li').eq(4).css('background','red');
+        Y('#selector li').css('background','');
+        Y('#selector li').last().style.background = 'red'
     });
 </script>
 
