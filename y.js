@@ -1,10 +1,10 @@
 ﻿/*
- *Yscript
- *版本：alpha 1.0 
+ *y.js
+ *版本：bate 0.1 
  *制作：div_wang
  *版权所有：39yst.com
  *特别感谢‘落雪飞花’，提供的技术支持！(*^__^*)
- *未经授权，不得用做商业用途，否则后果自负。
+ *未经授权，不得用做商业用途，否则承担法律责任。
  */
 (function () {
 
@@ -569,19 +569,6 @@ Base.prototype.hover = function (over, out) {
 	return this;
 };
 
-//设置点击切换方法
-Base.prototype.toggle = function () {
-	for (var i = 0; i < this.elements.length; i ++) {
-		(function (element, args) {
-			var count = 0;
-			addEvent(element, 'click', function () {
-				args[count++ % args.length].call(this);
-			});
-		})(this.elements[i], arguments);
-	}
-	return this;
-};
-
 //设置显示
 Base.prototype.show = function () {
 	for (var i = 0; i < this.elements.length; i ++) {
@@ -629,133 +616,20 @@ Base.prototype.resize = function (fn) {
 	return this;
 };
 
-//设置动画
-Base.prototype.animate = function (obj) {
-	for (var i = 0; i < this.elements.length; i ++) {
-		var element = this.elements[i];
-		var attr = obj['attr'] == 'x' ? 'left' : obj['attr'] == 'right'//'y' ? 'top' : 
-					   obj['attr'] == 'w' ? 'width' : obj['attr'] == 'h' ? 'height' : 
-					   obj['attr'] == 'o' ? 'opacity' : obj['attr'] != undefined ? obj['attr'] : 'left';
-
-		
-		var start = obj['start'] != undefined ? obj['start'] : 
-						attr == 'opacity' ? parseFloat(getStyle(element, attr)) * 100 : 
-												   parseInt(getStyle(element, attr));
-		
-		var t = obj['t'] != undefined ? obj['t'] : 10;												//可选，默认10毫秒执行一次
-		var step = obj['step'] != undefined ? obj['step'] : 20;								//可选，每次运行10像素
-		
-		var alter = obj['alter'];
-		var target = obj['target'];
-		var mul = obj['mul'];
-		
-		var speed = obj['speed'] != undefined ? obj['speed'] : 6;							//可选，默认缓冲速度为6
-		var type = obj['type'] == 0 ? 'constant' : obj['type'] == 1 ? 'buffer' : 'buffer';		//可选，0表示匀速，1表示缓冲，默认缓冲
-		
-		
-		if (alter != undefined && target == undefined) {
-			target = alter + start;
-		} else if (alter == undefined && target == undefined && mul == undefined) {
-			throw new Error('alter增量或target目标量必须传一个！');
-		}
-		
-		
-		
-		if (start > target) step = -step;
-		
-		if (attr == 'opacity') {
-			element.style.opacity = parseInt(start) / 100;
-			element.style.filter = 'alpha(opacity=' + parseInt(start) +')';
-		} else {
-			//element.style[attr] = start + 'px';
-		}
-		
-		
-		if (mul == undefined) {
-			mul = {};
-			mul[attr] = target;
-		} 
-		
-
-		clearInterval(element.timer);
-		element.timer = setInterval(function () {
-		
-			/*
-				问题1：多个动画执行了多个列队动画，我们要求不管多少个动画只执行一个列队动画
-				问题2：多个动画数值差别太大，导致动画无法执行到目标值，原因是定时器提前清理掉了
-				
-				解决1：不管多少个动画，只提供一次列队动画的机会
-				解决2：多个动画按最后一个分动画执行完毕后再清理即可
-			*/
-			
-			//创建一个布尔值，这个值可以了解多个动画是否全部执行完毕
-			var flag = true; //表示都执行完毕了
-			
-			
-			for (var i in mul) {
-				attr = i == 'x' ? 'left' : i == 'y' ? 'top' : i == 'w' ? 'width' : i == 'h' ? 'height' : i == 'o' ? 'opacity' : i != undefined ? i : 'left';
-				target = mul[i];
-					
-
-				if (type == 'buffer') {
-					step = attr == 'opacity' ? (target - parseFloat(getStyle(element, attr)) * 100) / speed :
-														 (target - parseInt(getStyle(element, attr))) / speed;
-					step = step > 0 ? Math.ceil(step) : Math.floor(step);
-				}
-				
-				
-				
-				if (attr == 'opacity') {
-					if (step == 0) {
-						setOpacity();
-					} else if (step > 0 && Math.abs(parseFloat(getStyle(element, attr)) * 100 - target) <= step) {
-						setOpacity();
-					} else if (step < 0 && (parseFloat(getStyle(element, attr)) * 100 - target) <= Math.abs(step)) {
-						setOpacity();
-					} else {
-						var temp = parseFloat(getStyle(element, attr)) * 100;
-						element.style.opacity = parseInt(temp + step) / 100;
-						element.style.filter = 'alpha(opacity=' + parseInt(temp + step) + ')';
-					}
-					
-					if (parseInt(target) != parseInt(parseFloat(getStyle(element, attr)) * 100)) flag = false;
-
-				} else {
-					if (step == 0) {
-						setTarget();
-					} else if (step > 0 && Math.abs(parseInt(getStyle(element, attr)) - target) <= step) {
-						setTarget();
-					} else if (step < 0 && (parseInt(getStyle(element, attr)) - target) <= Math.abs(step)) {
-						setTarget();
-					} else {
-						element.style[attr] = parseInt(getStyle(element, attr)) + step + 'px';
-					}
-					
-					if (parseInt(target) != parseInt(getStyle(element, attr))) flag = false;
-				}
-				
-				//document.getElementById('test').innerHTML += i + '--' + parseInt(target) + '--' + parseInt(getStyle(element, attr)) + '--' + flag + '<br />';
-				
-			}
-			
-			if (flag) {
-				clearInterval(element.timer);
-				if (obj.fn != undefined) obj.fn();
-			}
-				
-		}, t);
-		
-		function setTarget() {
-			element.style[attr] = target + 'px';
-		}
-		
-		function setOpacity() {
-			element.style.opacity = parseInt(target) / 100;
-			element.style.filter = 'alpha(opacity=' + parseInt(target) + ')';
-		}
-	}
-	return this;
+//插件入口
+Base.prototype.extend = function (name, fn) {
+	Base.prototype[name] = fn;
 };
+
+//前台调用
+var Y = function (args) {
+	return new Base(args);
+}
+
+window.Y = Y;
+
+})();
+
 //封装ajax
 function ajax(obj) {
 	var xhr = (function () {
@@ -812,23 +686,57 @@ function ajax(obj) {
 		}	
 	}
 }
-//插件入口
-Base.prototype.extend = function (name, fn) {
-	Base.prototype[name] = fn;
-};
 
-//前台调用
-var Y = function (args) {
-	return new Base(args);
+function startMove(obj, json, fnEnd)
+{
+	function getStyle(obj, name)
+	{
+		if(obj.currentStyle)
+		{
+			return obj.currentStyle[name];
+		}
+		else
+		{
+			return getComputedStyle(obj, false)[name];
+		}
+	}
+	clearInterval(obj.timer);
+	obj.timer=setInterval(function (){
+		var bStop=true;		//假设：所有值都已经到了
+		for(var attr in json)
+		{
+			var cur=0;
+			
+			if(attr=='opacity')
+			{
+				cur=Math.round(parseFloat(getStyle(obj, attr))*100);
+			}
+			else
+			{
+				cur=parseInt(getStyle(obj, attr));
+			}
+			var speed=(json[attr]-cur)/6;
+			speed=speed>0?Math.ceil(speed):Math.floor(speed);
+			if(cur!=json[attr])
+				bStop=false;
+			
+			if(attr=='opacity')
+			{
+				obj.style.filter='alpha(opacity:'+(cur+speed)+')';
+				obj.style.opacity=(cur+speed)/100;
+			}
+			else
+			{
+				obj.style[attr]=cur+speed+'px';
+			}
+		}
+		if(bStop)
+		{
+			clearInterval(obj.timer);			
+			if(fnEnd)fnEnd();
+		}
+	}, 30);
 }
-
-window.Y = Y;
-
-})();
-
-
-
-
 
 
 
