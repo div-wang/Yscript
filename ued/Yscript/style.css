@@ -24,7 +24,7 @@ h2{font-weight: bold;font-size: 20px;text-align: center;line-height: 2em;backgro
 
 #show{width: 100%;height: 240px;position: relative;}
 #show .box1{width: 20%;height: 150px;background: red;margin: 0 auto;}
-#show .bot{width:120px;text-align: center;}
+#show .bot{width:170px;text-align: center;}
 #show button{padding: 5px 10px;background: #ff0;border: 1px solid red;margin-top: 10px}
 
 #animate{width: 100%;height: 240px;position: relative;}
