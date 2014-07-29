@@ -79,6 +79,7 @@ Y('#selector li').last() //寻找last li
     <div class="bot">
         <button class="show">显示</button>
         <button class="hide">隐藏</button>
+        <button class="opacity">透明</button>
     </div>
     <pre>
 js代码块：
@@ -99,6 +100,9 @@ Y('.hide').click(function(event) {
     Y('.hide').click(function(event) {
         Y('.box1').hide();
     });
+    Y('.opacity').click(function(event) {
+        Y('.box1').opacity(30);
+    });    
 </script>
 
 <!----------------------动画---------------------->

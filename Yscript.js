@@ -445,10 +445,6 @@ Base.prototype.last = function () {
 	return this.elements[this.elements.length - 1];
 };
 
-//获取某组节点的数量
-Base.prototype.length = function () {
-	return this.elements.length;
-};
 
 //获取某一个节点的属性
 Base.prototype.attr = function (obj, value) {
@@ -487,25 +483,6 @@ Base.prototype.eq = function (num) {
 	return this;
 };
 
-//获取当前节点的下一个元素节点
-Base.prototype.next = function () {
-	for (var i = 0; i < this.elements.length; i ++) {
-		this.elements[i] = this.elements[i].nextSibling;
-		if (this.elements[i] == null) throw new Error('找不到下一个同级元素节点！');
-		if (this.elements[i].nodeType == 3) this.next();
-	}
-	return this;
-};
-
-//获取当前节点的上一个元素节点
-Base.prototype.prev = function () {
-	for (var i = 0; i < this.elements.length; i ++) {
-		this.elements[i] = this.elements[i].previousSibling;
-		if (this.elements[i] == null) throw new Error('找不到上一个同级元素节点！');
-		if (this.elements[i].nodeType == 3) this.prev();
-	}
-	return this;
-};
 
 //设置CSS
 Base.prototype.css = function (attr, value) {
@@ -538,27 +515,6 @@ Base.prototype.removeClass = function (className) {
 	return this;
 }
 
-//添加link或style的CSS规则
-Base.prototype.addRule = function (num, selectorText, cssText, position) {
-	var sheet = document.styleSheets[num];
-	insertRule(sheet, selectorText, cssText, position);
-	return this;
-}
-
-//移除link或style的CSS规则
-Base.prototype.removeRule = function (num, index) {
-	var sheet = document.styleSheets[num];
-	deleteRule(sheet, index);
-	return this;
-}
-
-//设置表单字段元素
-Base.prototype.form = function (name) {
-	for (var i = 0; i < this.elements.length; i ++) {
-		this.elements[i] = this.elements[i][name];
-	}
-	return this;
-};
 
 //设置表单字段内容获取
 Base.prototype.value = function (str) {
@@ -638,46 +594,6 @@ Base.prototype.show = function () {
 Base.prototype.hide = function () {
 	for (var i = 0; i < this.elements.length; i ++) {
 		this.elements[i].style.display = 'none';
-	}
-	return this;
-};
-
-//设置物体居中
-Base.prototype.center = function (width, height) {
-	var top = (getInner().height - height) / 2 + getScroll().top;
-	var left = (getInner().width - width) / 2 + getScroll().left;
-	for (var i = 0; i < this.elements.length; i ++) {
-		this.elements[i].style.marginTop = top + 'px';
-		this.elements[i].style.marginLeft = left + 'px';
-	}
-	return this;
-};
-
-//锁屏功能
-Base.prototype.lock = function () {
-	for (var i = 0; i < this.elements.length; i ++) {
-		fixedScroll.top = getScroll().top;
-		fixedScroll.left = getScroll().left;
-		this.elements[i].style.width = getInner().width + getScroll().left + 'px';
-		this.elements[i].style.height = getInner().height + getScroll().top + 'px';
-		this.elements[i].style.display = 'block';
-		parseFloat(sys.firefox) < 4 ? document.body.style.overflow = 'hidden' : document.documentElement.style.overflow = 'hidden';
-		addEvent(this.elements[i], 'mousedown', predef);
-		addEvent(this.elements[i], 'mouseup', predef);
-		addEvent(this.elements[i], 'selectstart', predef);
-		addEvent(window, 'scroll', fixedScroll);
-	}
-	return this;
-};
-
-Base.prototype.unlock = function () {
-	for (var i = 0; i < this.elements.length; i ++) {
-		this.elements[i].style.display = 'none';
-		parseFloat(sys.firefox) < 4 ? document.body.style.overflow = 'auto' : document.documentElement.style.overflow = 'auto';
-		removeEvent(this.elements[i], 'mousedown', predef);
-		removeEvent(this.elements[i], 'mouseup', predef);
-		removeEvent(this.elements[i], 'selectstart', predef);
-		removeEvent(window, 'scroll', fixedScroll);
 	}
 	return this;
 };
