@@ -12,6 +12,20 @@
  *工具类开始
  */
 
+//浏览器检测  
+(function () {  
+    window.sys = {};  
+    var ua = navigator.userAgent.toLowerCase();   
+    var s;        
+    (s = ua.match(/msie ([\d.]+)/)) ? sys.ie = s[1] :  
+    (s = ua.match(/firefox\/([\d.]+)/)) ? sys.firefox = s[1] :  
+    (s = ua.match(/chrome\/([\d.]+)/)) ? sys.chrome = s[1] :   
+    (s = ua.match(/opera\/.*version\/([\d.]+)/)) ? sys.opera = s[1] :   
+    (s = ua.match(/version\/([\d.]+).*safari/)) ? sys.safari = s[1] : 0;  
+      
+    if (/webkit/.test(ua)) sys.webkit = ua.match(/webkit\/([\d.]+)/)[1];  
+})();  
+
 //DOM加载
 function addDomLoaded(fn) {
 	var isReady = false;
@@ -260,7 +274,7 @@ function setCookie(name, value, expires, path, domain, secure) {
 		cookieText += '; expires=' + expires;
 	}
 	if (path) {
-		cookieText += '; expires=' + expires;
+		cookieText += '; path=' + path;
 	}
 	if (domain) {
 		cookieText += '; domain=' + domain;
@@ -630,63 +644,38 @@ window.Y = Y;
 
 })();
 
-//封装ajax
-function ajax(obj) {
-	var xhr = (function () {
-		if (typeof XMLHttpRequest != 'undefined') {
-			return new XMLHttpRequest();
-		} else if (typeof ActiveXObject != 'undefined') {
-			var version = [
-										'MSXML2.XMLHttp.6.0',
-										'MSXML2.XMLHttp.3.0',
-										'MSXML2.XMLHttp'
-			];
-			for (var i = 0; version.length; i ++) {
-				try {
-					return new ActiveXObject(version[i]);
-				} catch (e) {
-					//跳过
-				}	
-			}
-		} else {
-			throw new Error('您的系统或浏览器不支持XHR对象！');
-		}
-	})();
-	obj.url = obj.url + '?rand=' + Math.random();
-	obj.data = (function (data) {
-		var arr = [];
-		for (var i in data) {
-			arr.push(encodeURIComponent(i) + '=' + encodeURIComponent(data[i]));
-		}
-		return arr.join('&');
-	})(obj.data);
-	if (obj.method === 'get') obj.url += obj.url.indexOf('?') == -1 ? '?' + obj.data : '&' + obj.data;
-	if (obj.async === true) {
-		xhr.onreadystatechange = function () {
-			if (xhr.readyState == 4) {
-				callback();
-			}
-		};
-	}
-	xhr.open(obj.method, obj.url, obj.async);
-	if (obj.method === 'post') {
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		xhr.send(obj.data);	
-	} else {
-		xhr.send(null);
-	}
-	if (obj.async === false) {
-		callback();
-	}
-	function callback() {
-		if (xhr.status == 200) {
-			obj.success(xhr.responseText);			//回调传递参数
-		} else {
-			alert('获取数据错误！错误代号：' + xhr.status + '，错误信息：' + xhr.statusText);
-		}	
-	}
-}
+//写入Cookie，key为键，value是值
+//duration过期时间（天为单位，默认1天）
+function setCookie(key, value, duration)
+{
+    delCookie(key);
+    var d = new Date();
+    if (duration <= 0)
+        duration = 1;
+    d.setTime(d.getTime() + 1000 * 60 * 60 * 24 * duration);
+    document.cookie = key + "=" + encodeURI(value) + "; expires=" + d.toGMTString() + ";path=/";
+};
+//读取Cookie，key是键
+//不存在返回空字符串""
+function getCookie(key)
+{
+    var arr = document.cookie.match(new RegExp("(^| )" + key + "=([^;]*)(;|$)"));
+    if (arr != null)
+        return decodeURIComponent(arr[2]);
+    return "";
+};
+//移除Cookie,key为键
+function delCookie(key)
+{
+    var d = new Date();
+    if (getCookie(key) != "")
+    {
+        d.setTime(d.getTime() - (86400 * 1000 * 1));
+        document.cookie = key + "=;expires=" + d.toGMTString();
+    }
+};
 
+//动画
 function startMove(obj, json, fnEnd)
 {
 	function getStyle(obj, name)
@@ -739,7 +728,78 @@ function startMove(obj, json, fnEnd)
 }
 
 
-
+//封装ajax
+ajax = function(conf) {
+	var xhr = (function () {
+		if (typeof XMLHttpRequest != 'undefined') {
+			return new XMLHttpRequest();
+		} else if (typeof ActiveXObject != 'undefined') {
+			var version = [
+										'MSXML2.XMLHttp.6.0',
+										'MSXML2.XMLHttp.3.0',
+										'MSXML2.XMLHttp'
+			];
+			for (var i = 0; version.length; i ++) {
+				try {
+					return new ActiveXObject(version[i]);
+				} catch (e) {
+					//跳过
+				}	
+			}
+		} else {
+			throw new Error('您的系统或浏览器不支持XHR对象！');
+		}
+	})();
+	//type参数,可选
+    var type = conf.type;
+    //url参数，必填 
+    var url = conf.url;
+    //data参数可选，只有在post请求时需要
+    var data = conf.data;
+    //datatype参数可选    
+    var dataType = conf.dataType;
+    //回调函数可选
+    var success = conf.success;
+                                                                                         
+    if (type == null){
+        //type参数可选，默认为get
+        type = "get";
+    }
+    if (dataType == null){
+        //dataType参数可选，默认为text
+        dataType = "text";
+    }
+    // 打开
+    xhr.open(type, url, true);
+    // 发送
+    if (type == "GET" || type == "get") {
+        xhr.send(null);
+    } else if (type == "POST" || type == "post") {
+        xhr.setRequestHeader("content-type",
+                    "application/x-www-form-urlencoded");
+        xhr.send(data);
+    }
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            if(dataType == "text"||dataType=="TEXT") {
+                if (success != null){
+                    //普通文本
+                    success(xhr.responseText);
+                }
+            }else if(dataType=="xml"||dataType=="XML") {
+                if (success != null){
+                    //接收xml文档    
+                    success(xhr.responseXML);
+                }  
+            }else if(dataType=="json"||dataType=="JSON") {
+                if (success != null){
+                    //将json字符串转换为js对象  
+                    success(eval("("+xhr.responseText+")"));
+                }
+            }
+        }
+    };
+}
 
 
 
