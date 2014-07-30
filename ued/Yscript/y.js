@@ -484,7 +484,7 @@ Base.prototype.index = function () {
 Base.prototype.opacity = function (num) {
 	for (var i = 0; i < this.elements.length; i ++) {
 		this.elements[i].style.opacity = num / 100;
-		this.elements[i].style.filter = 'alpha(opacity=' + num + ')';
+		this.elements[i].style.filter = 'alpha(opacity=' + num + ',finishOpacity=0,style=0)';
 	}
 	return this;
 };
