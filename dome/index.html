@@ -14,7 +14,7 @@
 <!----------------------选择器---------------------->
 <div id="selector">
 <a class="pre" href="javascript:">js代码</a>
-<h2>显示/隐藏</h2>
+<h2>选择器</h2>
     <div class="top">
     <ul>
         <li>这是frist节点</li>
@@ -34,11 +34,6 @@
     <pre>
 js代码块：
 
-/*
- *用法大致与jquery一致，
- *但没有封装子节点操作,
- *寻找子节点要逻辑判断一下
- */
 Y('#selector_id') //寻找id
 Y('.selector_class') //寻找class;
 Y('#selector').find('li') //寻找节点
@@ -96,11 +91,13 @@ Y('.hide').click(function(event) {
 <script type="text/javascript">
     Y('.show').click(function(event) {
         Y('.box1').show();
+        Y('.box1').opacity(100);
     });
     Y('.hide').click(function(event) {
         Y('.box1').hide();
     });
     Y('.opacity').click(function(event) {
+
         Y('.box1').opacity(30);
     });    
 </script>
@@ -110,34 +107,10 @@ Y('.hide').click(function(event) {
 <a class="pre" href="javascript:">js代码</a>
 <h2>动画</h2>
     <div class="top">
-        <div class="box2"></div>
+        <div class="box2"><a href="slide.html">点击查看演示动画</a></div>
     </div>
-    <div class="bot">
-        <input type="button" value="固定值" class="anim_left">
-        <input type="button" value="递增值" class="but1">
-    </div>
-    <pre>
-js代码块：
-
-//用法与jquery保持一致
-Y('.anim_left').click(function(){
-    Y('.box2').animate({
-        speed : 20,  //缓动速度，数字越大速度越慢
-        alter : 0,   //改变left值，每次加50
-        target : 1000 //固定left值
-    });
-});
-    </pre>
 </div>
-<script type="text/javascript">
-Y('.but1').click(function(){
-    Y('.box2').animate({
-        speed : 20,  //缓动速度，数字越大速度越慢
-        alter : 0,   //改变left值，每次加50
-        target : 1000 //固定left值
-    });
-});   
-</script>
+
 
 <!----------------------鼠标划过------------------------------>
 <div id="show">
@@ -171,7 +144,9 @@ Y('.box3').hover(function(){
         <div class="box4 box1"></div>
     </div>
     <div class="bot">
-        <button class="css_config">点击</button>
+        <button class="css_config1">变宽</button>
+        <button class="css_config2">变矮</button>
+        <button class="css_config3">还原</button>
     </div>
     <pre>
 js代码块：
@@ -183,9 +158,15 @@ Y('.css_config').click(function(){
     </pre>
 </div>
 <script type="text/javascript">
-Y('.css_config').click(function(){
+Y('.css_config1').click(function(){
     Y('.box4').css('width','500px');
+});
+Y('.css_config2').click(function(){
     Y('.box4').css('height','100px');
+});
+Y('.css_config3').click(function(){
+    Y('.box4').css('width','20%');
+    Y('.box4').css('height','150px');
 });
 </script>
 
