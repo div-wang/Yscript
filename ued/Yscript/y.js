@@ -644,35 +644,36 @@ window.Y = Y;
 
 })();
 
-//写入Cookie，key为键，value是值
+//写入Cookie，name为名字，value是值
 //duration过期时间（天为单位，默认1天）
-function setCookie(key, value, duration)
+function setCookie(name, value, duration)
 {
-    delCookie(key);
-    var d = new Date();
+    var oDate = new Date();
     if (duration <= 0)
         duration = 1;
-    d.setTime(d.getTime() + 1000 * 60 * 60 * 24 * duration);
-    document.cookie = key + "=" + encodeURI(value) + "; expires=" + d.toGMTString() + ";path=/";
+	oDate.setDate(oDate.getDate()+duration);
+    document.cookie = name + "=" + encodeURI(value) + "; expires=" + oDate;
 };
-//读取Cookie，key是键
-//不存在返回空字符串""
-function getCookie(key)
+//读取Cookie,不存在返回空字符串""
+function getCookie(name)
 {
-    var arr = document.cookie.match(new RegExp("(^| )" + key + "=([^;]*)(;|$)"));
-    if (arr != null)
-        return decodeURIComponent(arr[2]);
-    return "";
+    var arr=document.cookie.split('; ');
+	
+	for(var i=0;i<arr.length;i++)
+	{
+		var arr2=arr[i].split('=');
+		
+		if(arr2[0]==name)
+		{
+			return decodeURIComponent(arr2[1]);
+		}
+	}
+	return "";
 };
-//移除Cookie,key为键
-function delCookie(key)
+//移除Cookie
+function delCookie(name)
 {
-    var d = new Date();
-    if (getCookie(key) != "")
-    {
-        d.setTime(d.getTime() - (86400 * 1000 * 1));
-        document.cookie = key + "=;expires=" + d.toGMTString();
-    }
+    setCookie(name, 1, -1);
 };
 
 //动画
