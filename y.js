@@ -1,6 +1,6 @@
 ﻿/*
  *y.js
- *版本：bate 0.1 
+ *版本：0.1.1 
  *制作：div_wang
  *版权所有：39yst.com
  *特别感谢‘落雪飞花’，提供的技术支持！(*^__^*)
@@ -457,7 +457,31 @@ Base.prototype.eq = function (num) {
 	return this;
 };
 
+//获取某一个节点的高度值，
+Base.prototype.height = function () {
+	for (var i = 0; i < this.elements.length; i ++) {
+			var px = getStyle(this.elements[i],'height');
+			var height = px.split('p');
+			return height[0]
+	}
+}
 
+//获取某一个节点的宽度值，
+Base.prototype.width = function () {
+	for (var i = 0; i < this.elements.length; i ++) {
+			var px = getStyle(this.elements[i],'width');
+			var width = px.split('p');
+			return width[0]
+	}
+}
+
+//获取某一个对象距离顶部的距离，
+Base.prototype.offsetTop = function () {
+	for (var i = 0; i < this.elements.length; i ++) {
+			var top = this.elements[i].offsetTop ;
+			return top
+	}
+}
 //设置CSS
 Base.prototype.css = function (attr, value) {
 	for (var i = 0; i < this.elements.length; i ++) {
@@ -540,7 +564,7 @@ Base.prototype.hover = function (over, out) {
 		addEvent(this.elements[i], 'mouseover', over);
 		addEvent(this.elements[i], 'mouseout', out);
 	}
-	return this;
+	return this; 
 };
 
 //设置显示
