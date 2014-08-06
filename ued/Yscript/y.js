@@ -880,14 +880,13 @@ function y_slide(box, box_cur, point, point_cur, lr_but){
 }
 
 /**
- * 获取url 
+ * 获取url 参数
  */
-function getUrl(key){
-	var curl = window.location.href;
-	if(curl.indexOf('?') > 0){
+String.prototype.getUrlParam = function(key){
+	if(this.indexOf('?') > 0){
 		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
 		var oreg = new RegExp(sreg,'gim');
-		if(oreg.test(curl)){
+		if(oreg.test(this)){
 			return RegExp.$4;
 		}else{
 			return null;
@@ -896,9 +895,25 @@ function getUrl(key){
 		return null;
 	}
 }
-
-
-
-
-
-
+/**
+ * 设置url 参数
+ */
+String.prototype.setUrlParam = function(key,value){
+	if(this.indexOf('?') > 0){
+		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
+		var oreg = new RegExp(sreg,'gim');
+		if(oreg.test(this)){
+			return this.replace(oreg,'$1$2$3' + value + '$5');
+		}else{
+			return this + '&' + key + '=' + value;
+		}
+	}else{
+		return this + '?' + key + '=' + value;
+	}
+}
+/**
+ * 去头尾空白
+ */
+String.prototype.trim = function (){
+	return this.replace(/(^\s+)|(\s+$)/gi,'');
+}
