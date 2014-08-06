@@ -614,10 +614,36 @@ Base.prototype.resize = function (fn) {
 	return this;
 };
 
+/**
+ * 设置geturl 
+ */
+Base.prototype.setUrl = function(key,value){
+	var curl = this;
+	if(curl.indexOf('?') > 0){
+		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
+		var oreg = new RegExp(sreg,'gim');
+		if(oreg.test(curl)){
+			return curl.replace(oreg,'$1$2$3' + value + '$5');
+		}else{
+			return curl + '&' + key + '=' + value;
+		}
+	}else{
+		return curl + '?' + key + '=' + value;
+	}
+}
+/**
+ * 去头尾空白
+ */
+Base.prototype.trim = function (){
+	return this.replace(/(^\s+)|(\s+$)/gi,'');
+}
+
 //插件入口
 Base.prototype.extend = function (name, fn) {
 	Base.prototype[name] = fn;
 };
+
+
 
 //前台调用
 var Y = function (args) {
@@ -786,6 +812,7 @@ ajax = function(conf) {
     };
 }
 
+//轮播图插件
 function y_slide(box, box_cur, point, point_cur, lr_but){
     var oBox = document.getElementById(box);
     var oList = document.getElementById(list).getElementsByTagName(list_cur);
@@ -852,7 +879,23 @@ function y_slide(box, box_cur, point, point_cur, lr_but){
     }   
 }
 
-
+/**
+ * 获取url 
+ */
+function getUrl(key){
+	var curl = window.location.href;
+	if(curl.indexOf('?') > 0){
+		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
+		var oreg = new RegExp(sreg,'gim');
+		if(oreg.test(curl)){
+			return RegExp.$4;
+		}else{
+			return null;
+		}
+	}else{
+		return null;
+	}
+}
 
 
 
