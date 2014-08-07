@@ -1,4 +1,4 @@
-window.onload = function(){
+
 	var RegionData = [];
 	var namea = [], nameb = [], namec = [], named = [], namee = [], namef = [], nameg = [], nameh = [], namei = [], namej = [], namek = [], namel = [], namem = [], namen = [], nameo = [], namep = [], nameq = [], namer = [], names = [], namet = [], nameu = [], namev = [], namew = [], namex = [], namey = [], namez = [], nameqt = [];
 	function getJSON(url){
@@ -101,7 +101,7 @@ window.onload = function(){
 		};
 		return namea, nameb, namec, named, namee, namef, nameg, nameh, namei, namej, namek, namel, namem, namen, nameo, namep, nameq, namer, names, namet, nameu, namev, namew, namex, namey, namez, nameqt;
 	};
-	getJSON("catalog_list.json");
+	
 	setTimeout(abc,100);
 
 	var YDropdown_input = document.getElementById('YDropdown');
@@ -201,4 +201,3 @@ setTimeout(function(){
 		}
 	}*/
 	
-}
