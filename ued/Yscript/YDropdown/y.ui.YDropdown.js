@@ -1,6 +1,7 @@
-
+function YDropdown(YDropdown,YDropdownlist,url){
 	var RegionData = [];
 	var namea = [], nameb = [], namec = [], named = [], namee = [], namef = [], nameg = [], nameh = [], namei = [], namej = [], namek = [], namel = [], namem = [], namen = [], nameo = [], namep = [], nameq = [], namer = [], names = [], namet = [], nameu = [], namev = [], namew = [], namex = [], namey = [], namez = [], nameqt = [];
+
 	function getJSON(url){
 		ajax({
 			url:url,
@@ -15,7 +16,17 @@
 		})
 		//返回数组
 		return RegionData
+		//alert(RegionData)
 	};
+	getJSON(url);
+	var ds = setInterval(function(){
+		if(RegionData != ""){ 
+			jsondata();
+			clearInterval(ds);
+		};
+	},50);
+
+function jsondata(){
 	//处理数组
 	var abc = function(){
 		var tit = [];
@@ -27,7 +38,7 @@
 				namea.push(str[1]);
 				break;
 				case "b":
-				nameb.push(str[0]+';'+str[1]);
+				nameb.push(str[1]);
 				break;
 				case "c":
 				namec.push(str[1]);
@@ -109,12 +120,13 @@
 		//返回首字母匹配的字符串
 		return namea, nameb, namec, named, namee, namef, nameg, nameh, namei, namej, namek, namel, namem, namen, nameo, namep, nameq, namer, names, namet, nameu, namev, namew, namex, namey, namez, nameqt;
 	};
+	
 	//延时加载abc，each函数执行时间较长
-	setTimeout(abc,100);
-
-	var YDropdown_input = document.getElementById('YDropdown');
-	var YDropdown_list = document.getElementById('YDropdown_list');
-	YDropdown_list.innerHTML = '<style type="text/css">*{margin:0;padding:0}input{width:380px;height:30px;border:1px solid #ccc;color:#999}#YDropdown_list{position:relative;width:400px;height:auto;border:1px solid #aaa}#YDropdown_list ul{width:400px;height:30px;text-align:center;}#YDropdown_list ul li{display:none;line-height:30px;padding:0 5px;cursor:pointer}#YDropdown_list dl{width:400px;height:auto;display:none;margin-bottom:20px}#YDropdown_list dl div{margin-top:20px;padding:0 10px;height:100%}#YDropdown_list dl div span{width:20px;display:inline-table;height:100%;text-align:center}#YDropdown_list dl div a{padding:0 3px;display:inline-table;font-size:12px}</style><ul><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul><dl style="display:block"></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl>'
+	//setTimeout(abc,100);
+	abc()
+	var YDropdown_input = document.getElementById(YDropdown);
+	var YDropdown_list = document.getElementById(YDropdownlist);
+	YDropdown_list.innerHTML = '<style type="text/css">*{margin:0;padding:0}input{width:380px;height:30px;border:1px solid #ccc;color:#999}.YDropdown_list{position:relative;width:400px;height:auto;border:1px solid #aaa}.YDropdown_list ul{width:400px;height:30px;text-align:center;}.YDropdown_list ul li{display:none;line-height:30px;cursor:pointer;border-bottom:2px solid #ccc;width:50px}.YDropdown_list dl{width:400px;height:auto;display:none;margin-bottom:20px}.YDropdown_list dl div{margin-top:20px;padding:0 10px;height:100%}.YDropdown_list dl div span{width:20px;display:inline-table;height:100%;text-align:center}.YDropdown_list dl div a{padding:0 3px;display:inline-table;font-size:12px}</style><ul><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul><dl style="display:block"></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl>'
 	var YDropdown_li = YDropdown_list.getElementsByTagName('ul')[0].getElementsByTagName('li');
 	var YDropdown_dl = YDropdown_list.getElementsByTagName('dl');
 	var YDropdown_a = YDropdown_list.getElementsByTagName('a');	
@@ -141,7 +153,6 @@
 		}
 	};
 	//延时插入字符串，each函数执行时间较长
-setTimeout(function(){
 	var dl = 0;
 	//判断字母下有否有字符串，如没有则隐藏;
 	var listSTR = function(name,span){
@@ -149,7 +160,7 @@ setTimeout(function(){
 		else {
 			var Ahtml = '';
 			for (var i = 0 ; i < name.length ; i++) {
-				var allhtml = '<a href="javascript:" style="padding:0 3px" id="'+name[i].split(';')[0]+'">'+name[i].split(';')[1]+'</a>';
+				var allhtml = '<a href="javascript:" style="padding:0 3px">'+name[i]+'</a>';
 				Ahtml += allhtml;
 			};
 			if (YDropdown_dl[dl].getElementsByTagName('div').length == 4)
@@ -157,14 +168,9 @@ setTimeout(function(){
 			if(YDropdown_dl[dl].getElementsByTagName('div').length<4){
 				YDropdown_dl[dl].innerHTML += '<div><span>'+span+'</span>'+Ahtml+'</div>';
 				YDropdown_li[dl].style.display = 'inline-table';
-				
-			}
-			if (YDropdown_li[dl].innerHTML.length == 4)
-				dl += 1
-			if(YDropdown_li[dl].innerHTML.length < 4){
 				YDropdown_li[dl].innerHTML += span;
-				
 			}
+
 		}
 	}
 	listSTR(namea,'A');
@@ -201,13 +207,7 @@ setTimeout(function(){
 			YDropdown_list.style.display = "none";
 		}
 	}
-},200);
-/*	for (var x = 0 ; x < YDropdown_a.length ; x++) {
-		YDropdown_a[x].onclick = function(){ 
-			if (YDropdown_input.value !== "中文/拼音")
-				YDropdown_input.style.color = "#333";	
-			else YDropdown_input.value ="";		
-			YDropdown_input.value +=  this.innerHTML+',';
-		}
-	}*/
-	
+
+}
+
+}	
