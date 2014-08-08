@@ -3,45 +3,52 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>放大镜</title>
-<script type="text/javascript" src="http://www.sucaijiayuan.com/statics/js/jquery.js"></script>
-
 <style type="text/css">
 *{margin: 0;padding: 0 ;position: relative;}
 
 </style>
-<script type="text/javascript">
- <!--
-function getInner() {
-	if (typeof window.innerWidth != 'undefined') {
-		return {
-			width : window.innerWidth,
-			height : window.innerHeight
-		}
-	} else {
-		return {
-			width : document.documentElement.clientWidth,
-			height : document.documentElement.clientHeight
-		}
-	}
-}
-window.onload = function(){
 
-
-	var but1 = document.getElementById('but1')
-	but1.onclick = function(){
-		var html =  document.body.innerHTML;
-		document.body.innerHTML = html+'<div id="tan" style="background: #000;opacity: 0.3;display: none;position: absolute;z-index:2;top: 0;left: 0;"><div class="tan_box" style="width: 500px;height:200px;margin: 100px auto 0;background: #f00;border-radius:12px;-weiket-border-radius:12px;position:absolute;z-index:10"></div></div>'
-		var tan = document.getElementById('tan');
-		tan.style.display = "block";
-		tan.style.height = getInner().height+'px';
-		tan.style.width = getInner().width+'px';
-	}
-}
-</script>
 
 </head>
 <body>
-<input type="submit" value="点击" id="but1">
-
+<input type="submit" value="点击" id="but" name="but1">
+<div id="tan_html" style="width:500px;height:200px;display:none">
+	<div>abc</div>
+	<h1>cccc</h1>
+</div>
 </body>
+<script type="text/javascript" src="../y.js"></script>
+<script type="text/javascript">
+function ytan(but,html,height,width){
+	function getInner() {
+		if (typeof window.innerWidth != 'undefined') {
+			return {
+				width : window.innerWidth,
+				height : window.innerHeight
+			}
+		} else {
+			return {
+				width : document.documentElement.clientWidth,
+				height : document.documentElement.clientHeight
+			}
+		}
+	}
+	var but = document.getElementById(but);
+	var tan_html = document.getElementById(html);
+	but.onclick = function(){
+		var html =  document.body.innerHTML;
+		document.body.innerHTML = html+'<div id="tan" style="background: #000;opacity: 0.4; filter: alpha(opacity=40);position: absolute;z-index:2;top: 0;left: 0;"></div><div id="tan_box" style="background: #fff;border:1px solid #ccc;border-radius:12px;-weiket-border-radius:12px;position:absolute;z-index:10;"></div>'
+		var tan = document.getElementById('tan');
+		var tan_box = document.getElementById('tan_box');
+		tan.style.height = getInner().height+'px';
+		tan.style.width = getInner().width+'px';
+		tan_box.style.height = height + 'px';
+		tan_box.style.width = width + 'px';
+		tan_box.style.left = (getInner().width-tan_box.clientWidth)/2+'px';
+		tan_box.style.top = (getInner().height-tan_box.clientHeight)/2+'px';
+		tan_box.innerHTML = tan_html.innerHTML
+	}
+}
+ytan('but','tan_html',200,500)
+</script>
 </html>
