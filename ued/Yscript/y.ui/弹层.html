@@ -8,18 +8,10 @@
 
 </style>
 
-
-</head>
-<body>
-<input type="submit" value="点击" id="but" name="but1">
-<div id="tan_html" style="width:500px;height:200px;display:none">
-	<div>abc</div>
-	<h1>cccc</h1>
-</div>
-</body>
 <script type="text/javascript" src="../y.js"></script>
 <script type="text/javascript">
-function ytan(but,html,height,width){
+
+function ytan(but,html,height,width,callback){
 	function getInner() {
 		if (typeof window.innerWidth != 'undefined') {
 			return {
@@ -33,22 +25,53 @@ function ytan(but,html,height,width){
 			}
 		}
 	}
-	var but = document.getElementById(but);
 	var tan_html = document.getElementById(html);
-	but.onclick = function(){
-		var html =  document.body.innerHTML;
-		document.body.innerHTML = html+'<div id="tan" style="background: #000;opacity: 0.4; filter: alpha(opacity=40);position: absolute;z-index:2;top: 0;left: 0;"></div><div id="tan_box" style="background: #fff;border:1px solid #ccc;border-radius:12px;-weiket-border-radius:12px;position:absolute;z-index:10;padding:10px"></div>'
-		var tan = document.getElementById('tan');
-		var tan_box = document.getElementById('tan_box');
-		tan.style.height = getInner().height+'px';
-		tan.style.width = getInner().width+'px';
-		tan_box.style.height = height + 'px';
-		tan_box.style.width = width + 'px';
-		tan_box.style.left = (getInner().width-tan_box.clientWidth)/2+'px';
-		tan_box.style.top = (getInner().height-tan_box.clientHeight)/2+'px';
-		tan_box.innerHTML = tan_html.innerHTML
-	}
+	var body =  document.body.innerHTML;
+	var html = '<div id="tan" style="background: #000;opacity: 0.4; filter: alpha(opacity=40);position: absolute;z-index:2;top: 0;left: 0;"></div><div id="tan_box" style="background: #fff;border:1px solid #ccc;border-radius:5px;-weiket-border-radius:12px;position:absolute;z-index:10;"><h1 style="background: #ccc;clear:both;height:38px;border-bottom:2px solid #eaeaea"><span style="float:right;cursor: pointer">x</span></h1><div id="tan_html"></div><input type="button" value="提交" id="taninput" style="padding:5px 10px;display:block;margin:5px auto;"></div>'
+	document.body.innerHTML = body + html ; 
+	var tan = document.getElementById('tan');
+	var tan_box = document.getElementById('tan_box');
+	tan.style.height = getInner().height+'px';
+	tan.style.width = getInner().width+'px';
+	tan_box.style.height = height + 'px';
+	tan_box.style.width = width + 'px';
+	tan_box.style.left = (getInner().width-tan_box.clientWidth)/2+'px';
+	tan_box.style.top = (getInner().height-tan_box.clientHeight)/2+'px';
+	//tan_box.innerHTML = tan_html.innerHTML;
+
+	var tab_span = tan_box.getElementsByTagName('h1')[0].getElementsByTagName('span')[0];
+	tab_span.onclick = function (){document.body.removeChild(tan);document.body.removeChild(tan_box);}
+		//tan_box.innerHTML = '<iframe allowtransparency="true" frameborder="0" width="'+width+'" height="'+height+'" scrolling="no" src="'+html+'"></iframe>';
+	document.getElementById('taninput').onclick = function call(){
+		ajax({
+			type:"post",
+			url:'../YDropdown/catalog_list.json',
+			date:{"mame":'abc',"num":'123'},
+			success:function(str){
+				if(str!=''){
+					alert('提交成功')
+					document.body.removeChild(tan);
+					document.body.removeChild(tan_box);
+				}
+				/*var data = eval('(' + str + ')');
+				if(data.mag == 'ok'){
+					alert('提交成功')
+					document.body.removeChild(tan);
+					document.body.removeChild(tan_box);
+				}*/
+			}			
+		})
+	};
 }
-ytan('but','tan_html',200,500)
+
 </script>
+</head>
+<body>
+<span id="but" name="but1" onclick="javascript:ytan(this,'tan_html',200,500,function(){alert(111)});">点击</span>
+<input type="button" value="点击" id="but" name="but1" onclick="javascript:ytan(this,'tan_html',200,500);">
+<div id="tan_html1" >
+
+</div>
+</body>
+
 </html>
