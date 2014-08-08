@@ -614,29 +614,6 @@ Base.prototype.resize = function (fn) {
 	return this;
 };
 
-/**
- * 设置geturl 
- */
-Base.prototype.setUrl = function(key,value){
-	var curl = this;
-	if(curl.indexOf('?') > 0){
-		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
-		var oreg = new RegExp(sreg,'gim');
-		if(oreg.test(curl)){
-			return curl.replace(oreg,'$1$2$3' + value + '$5');
-		}else{
-			return curl + '&' + key + '=' + value;
-		}
-	}else{
-		return curl + '?' + key + '=' + value;
-	}
-}
-/**
- * 去头尾空白
- */
-Base.prototype.trim = function (){
-	return this.replace(/(^\s+)|(\s+$)/gi,'');
-}
 
 //插件入口
 Base.prototype.extend = function (name, fn) {
@@ -812,12 +789,10 @@ ajax = function(conf) {
     };
 }
 
-
-
 /**
  * 获取url 参数
  */
-Y.prototype.getUrlParam = function(key){
+String.prototype.getUrlParam = function(key){
 	if(this.indexOf('?') > 0){
 		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
 		var oreg = new RegExp(sreg,'gim');
@@ -833,7 +808,7 @@ Y.prototype.getUrlParam = function(key){
 /**
  * 设置url 参数
  */
-Y.prototype.setUrlParam = function(key,value){
+String.prototype.setUrlParam = function(key,value){
 	if(this.indexOf('?') > 0){
 		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
 		var oreg = new RegExp(sreg,'gim');
@@ -849,7 +824,7 @@ Y.prototype.setUrlParam = function(key,value){
 /**
  * 去头尾空白
  */
-Y.prototype.trim = function (){
+String.prototype.trim = function (){
 	return this.replace(/(^\s+)|(\s+$)/gi,'');
 }
 

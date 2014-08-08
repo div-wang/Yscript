@@ -2,12 +2,23 @@
 	var RegionData = [];
 	var namea = [], nameb = [], namec = [], named = [], namee = [], namef = [], nameg = [], nameh = [], namei = [], namej = [], namek = [], namel = [], namem = [], namen = [], nameo = [], namep = [], nameq = [], namer = [], names = [], namet = [], nameu = [], namev = [], namew = [], namex = [], namey = [], namez = [], nameqt = [];
 	function getJSON(url){
-		$.getJSON(url, function(result)
+		ajax({
+			url:url,
+			success:function(result)
+			{
+			//将json字符串转成json对象	
+			var json = eval('(' + result + ')')
+			each(json, function(i, value){
+		    	RegionData.push(value.id+';'+value.name+';'+value.alias);  
+		    	})
+			}
+		})
+/*		$.getJSON(url, function(result)
 		{
 			each(result, function(i, field){
 		      RegionData.push(field.id+';'+field.name+';'+field.alias);  
 		     })
-		})
+		})*/
 		return RegionData
 	};
 	var abc = function(){
