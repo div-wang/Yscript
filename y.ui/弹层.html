@@ -25,6 +25,18 @@ function ytan(but,html,height,width,callback){
 			}
 		}
 	}
+	var RegionData = [];
+	ajax({
+		url:"../YDropdown/catalog_list.json",
+		dataType:"json",
+		success:function(json){
+			each(json, function(i, value){
+	    		RegionData.push(value.id+';'+value.name+';'+value.alias);
+	    		
+	    	})
+		}
+	})
+	setTimeout(function(){alert(RegionData)},100)
 	var tan_html = document.getElementById(html);
 	var body =  document.body.innerHTML;
 	var html = '<div id="tan" style="background: #000;opacity: 0.4; filter: alpha(opacity=40);position: absolute;z-index:2;top: 0;left: 0;"></div><div id="tan_box" style="background: #fff;border:1px solid #ccc;border-radius:5px;-weiket-border-radius:12px;position:absolute;z-index:10;"><h1 style="background: #ccc;clear:both;height:38px;border-bottom:2px solid #eaeaea"><span style="float:right;cursor: pointer">x</span></h1><div id="tan_html"></div><input type="button" value="提交" id="taninput" style="padding:5px 10px;display:block;margin:5px auto;"></div>'
@@ -67,7 +79,7 @@ function ytan(but,html,height,width,callback){
 </script>
 </head>
 <body>
-<span id="but" name="but1" onclick="javascript:ytan(this,'tan_html',200,500,function(){alert(111)});">点击</span>
+<span id="23" name="but1" onclick="javascript:ytan(this,'tan_html',200,500,function(){alert(111)});">点击</span>
 <input type="button" value="点击" id="but" name="but1" onclick="javascript:ytan(this,'tan_html',200,500);">
 <div id="tan_html1" >
 

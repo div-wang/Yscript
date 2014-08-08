@@ -6,14 +6,19 @@
 
 </head>
 <body>
-<input type="text" value="中文/拼音" id="YDropdown">
-<div id="YDropdown_list" style="display:none">
+<input type="text" value="中文/拼音" id="w0" class="YDropdown">
+<div id="w1" style="display:none" class="YDropdown_list">
+
+</div>
+<input type="text" value="中文/拼音" id="a1" class="YDropdown">
+<div id="a2" style="display:none" class="YDropdown_list">
 
 </div>
 <script type="text/javascript" src="../y.js"></script>
 <script type="text/javascript" src="y.ui.YDropdown.js"></script>
 <script type="text/javascript">
-	getJSON("catalog_list.json");
+	YDropdown('w0','w1',"catalog_list.json");
+	YDropdown('a1','a2',"catalog_list.json");
 	//alert(Y('#ddd').value())
 	//alert("String".getUrlParam())
 </script>
