@@ -4,7 +4,7 @@
 	function getJSON(url){
 		$.getJSON(url, function(result)
 		{
-			$.each(result, function(i, field){
+			each(result, function(i, field){
 		      RegionData.push(field.id+';'+field.name+';'+field.alias);  
 		     })
 		})
