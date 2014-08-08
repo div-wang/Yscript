@@ -13,19 +13,15 @@
 		    	})
 			}
 		})
-/*		$.getJSON(url, function(result)
-		{
-			each(result, function(i, field){
-		      RegionData.push(field.id+';'+field.name+';'+field.alias);  
-		     })
-		})*/
+		//返回数组
 		return RegionData
 	};
+	//处理数组
 	var abc = function(){
 		var tit = [];
 		for (var i = 0 ; i < RegionData.length ; i++) {
 			var str = RegionData[i].split(';')
-			tit.push(str[2].charAt(0))
+			tit.push(str[2].charAt(0)) //判断首字母
 			switch (tit[i]){
 				case "a":
 				namea.push(str[1]);
@@ -110,14 +106,15 @@
 			}
 
 		};
+		//返回首字母匹配的字符串
 		return namea, nameb, namec, named, namee, namef, nameg, nameh, namei, namej, namek, namel, namem, namen, nameo, namep, nameq, namer, names, namet, nameu, namev, namew, namex, namey, namez, nameqt;
 	};
-	
+	//延时加载abc，each函数执行时间较长
 	setTimeout(abc,100);
 
 	var YDropdown_input = document.getElementById('YDropdown');
 	var YDropdown_list = document.getElementById('YDropdown_list');
-	YDropdown_list.innerHTML = '<style type="text/css">*{margin:0;padding:0}input{width:380px;height:30px;border:1px solid #ccc;color:#999}#YDropdown_list{position:relative;width:400px;height:auto;border:1px solid #aaa}#YDropdown_list ul{width:400px;height:30px;text-align:center}#YDropdown_list ul li{display:none;line-height:30px;padding:0 5px;cursor:pointer}#YDropdown_list dl{width:400px;height:auto;display:none;margin-bottom:20px}#YDropdown_list dl div{margin-top:20px;padding:0 10px;height:100%}#YDropdown_list dl div span{width:20px;display:inline-table;height:100%;text-align:center}#YDropdown_list dl div a{padding:0 3px;display:inline-table;font-size:12px}</style><ul><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul><dl style="display:block"></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl>'
+	YDropdown_list.innerHTML = '<style type="text/css">*{margin:0;padding:0}input{width:380px;height:30px;border:1px solid #ccc;color:#999}#YDropdown_list{position:relative;width:400px;height:auto;border:1px solid #aaa}#YDropdown_list ul{width:400px;height:30px;text-align:center;}#YDropdown_list ul li{display:none;line-height:30px;padding:0 5px;cursor:pointer}#YDropdown_list dl{width:400px;height:auto;display:none;margin-bottom:20px}#YDropdown_list dl div{margin-top:20px;padding:0 10px;height:100%}#YDropdown_list dl div span{width:20px;display:inline-table;height:100%;text-align:center}#YDropdown_list dl div a{padding:0 3px;display:inline-table;font-size:12px}</style><ul><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul><dl style="display:block"></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl>'
 	var YDropdown_li = YDropdown_list.getElementsByTagName('ul')[0].getElementsByTagName('li');
 	var YDropdown_dl = YDropdown_list.getElementsByTagName('dl');
 	var YDropdown_a = YDropdown_list.getElementsByTagName('a');	
@@ -143,9 +140,11 @@
 			YDropdown_dl[this.index].style.display = "block";
 		}
 	};
+	//延时插入字符串，each函数执行时间较长
 setTimeout(function(){
 	var dl = 0;
-	var listSTR = function(name,cc,div,span){
+	//判断字母下有否有字符串，如没有则隐藏;
+	var listSTR = function(name,span){
 		if (name == '') return
 		else {
 			var Ahtml = '';
@@ -168,33 +167,33 @@ setTimeout(function(){
 			}
 		}
 	}
-	listSTR(namea,0,0,'a');
-	listSTR(nameb,0,1,'b');
-	listSTR(namec,0,2,'c');
-	listSTR(named,0,3,'d');
-	listSTR(namee,0,0,'e');
-	listSTR(namef,0,1,'f');
-	listSTR(nameg,0,2,'g');
-	listSTR(nameh,0,3,'h');
-	listSTR(namei,0,0,'i');
-	listSTR(namej,0,1,'j');
-	listSTR(namek,0,2,'k');
-	listSTR(namel,0,3,'l');
-	listSTR(namem,0,0,'m');
-	listSTR(namen,0,1,'n');
-	listSTR(nameo,0,2,'o');
-	listSTR(namep,0,3,'p');
-	listSTR(nameq,0,0,'q');
-	listSTR(namer,0,1,'r');
-	listSTR(names,0,2,'s');
-	listSTR(namet,0,3,'t');
-	listSTR(nameu,0,0,'u');
-	listSTR(namev,0,1,'v');
-	listSTR(namew,0,2,'w');
-	listSTR(namex,0,3,'x');
-	listSTR(namey,0,0,'y');
-	listSTR(namez,0,1,'z');
-	listSTR(nameqt,7,0,'其他');	
+	listSTR(namea,'A');
+	listSTR(nameb,'B');
+	listSTR(namec,'C');
+	listSTR(named,'D');
+	listSTR(namee,'E');
+	listSTR(namef,'F');
+	listSTR(nameg,'G');
+	listSTR(nameh,'H');
+	listSTR(namei,'I');
+	listSTR(namej,'J');
+	listSTR(namek,'K');
+	listSTR(namel,'L');
+	listSTR(namem,'M');
+	listSTR(namen,'N');
+	listSTR(nameo,'O');
+	listSTR(namep,'P');
+	listSTR(nameq,'Q');
+	listSTR(namer,'R');
+	listSTR(names,'S');
+	listSTR(namet,'T');
+	listSTR(nameu,'U');
+	listSTR(namev,'V');
+	listSTR(namew,'W');
+	listSTR(namex,'X');
+	listSTR(namey,'Y');
+	listSTR(namez,'Z');
+	listSTR(nameqt,'其他');	
 	for (var x = 0 ; x < YDropdown_a.length ; x++) {
 		YDropdown_a[x].onclick = function(){ 
 			YDropdown_input.style.color = "#333 ";	
