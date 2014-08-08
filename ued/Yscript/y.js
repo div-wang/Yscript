@@ -812,77 +812,12 @@ ajax = function(conf) {
     };
 }
 
-//轮播图插件
-function y_slide(box, box_cur, point, point_cur, lr_but){
-    var oBox = document.getElementById(box);
-    var oList = document.getElementById(list).getElementsByTagName(list_cur);
-    var oBoxli = oBox.getElementsByTagName(box_cur);
-    var oBoxspan = oBox.getElementsByTagName(lr_but)
-    var img = 0;
 
-    oBox.onmouseover = function(){
-        oBoxspan[0].style.display = 'block';
-        oBoxspan[1].style.display = 'block';
-    }
-    oBox.onmouseout = function(){
-        oBoxspan[0].style.display = 'none';
-        oBoxspan[1].style.display = 'none';        
-    }
-    oBoxspan[0].onmouseover = function(){
-        this.style.filter='alpha(opacity:"60")';
-        this.style.opacity= '0.6';
-    }
-    for (var i = 0 ;i < oList.length; i++) {
-        oList[i].index = i;
-        oList[i].onclick = function (){  
-            var a = this.index;
-            for (var j = 0 ; j < oList.length; j++ ) {
-                oList[j].className = '';
-                oBoxli[j].style.display = 'none';
-            };
-            this.className = 'sp_cur';            
-            oBoxli[a].style.display = 'block';
-            img = a;
-        }   
-    };
-    var start = setInterval(function (){   
-        for (var j = img ; j < oList.length; j++ ) {
-            var a = oBoxli[j].getAttribute("name");
-            oList[j].className = '';
-            oBoxli[j].style.display = 'none';
-        };   
-        img = img + 1;
-        if (img == 5) {img = 0}; 
-        oList[img].className = 'sp_cur';            
-        oBoxli[img].style.display = 'block';
-    },3000)
-
-    oBoxspan[0].onclick = function(){
-        for (var j = 0 ; j < oList.length; j++ ) {
-            oList[j].className = '';
-            oBoxli[j].style.display = 'none';
-        };
-            if (img>0) img = img-1
-            else img = 4;
-            oList[img].className = 'sp_cur';            
-            oBoxli[img].style.display = 'block'                       
-    }
-    oBoxspan[1].onclick = function(){
-        for (var j = 0 ; j < oList.length; j++ ) {
-            oList[j].className = '';
-            oBoxli[j].style.display = 'none';
-        };
-            if (img<4) img = img+1
-            else img = 0
-            oList[img].className = 'sp_cur';            
-            oBoxli[img].style.display = 'block';
-    }   
-}
 
 /**
  * 获取url 参数
  */
-String.prototype.getUrlParam = function(key){
+Y.prototype.getUrlParam = function(key){
 	if(this.indexOf('?') > 0){
 		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
 		var oreg = new RegExp(sreg,'gim');
@@ -898,7 +833,7 @@ String.prototype.getUrlParam = function(key){
 /**
  * 设置url 参数
  */
-String.prototype.setUrlParam = function(key,value){
+Y.prototype.setUrlParam = function(key,value){
 	if(this.indexOf('?') > 0){
 		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
 		var oreg = new RegExp(sreg,'gim');
@@ -914,6 +849,43 @@ String.prototype.setUrlParam = function(key,value){
 /**
  * 去头尾空白
  */
-String.prototype.trim = function (){
+Y.prototype.trim = function (){
 	return this.replace(/(^\s+)|(\s+$)/gi,'');
+}
+
+function each(object, callback, args) {
+//该方法有三个参数:进行操作的对象obj，进行操作的函数fn，函数的参数args
+	var name, i = 0,length = object.length;
+	if (args) {
+		if (length == undefined) {
+			for (name in object) {
+				if (callback.apply(object[name], args) === false) {
+					break;
+				}
+			}
+		}else {
+			for (; i < length;) {
+				if (callback.apply(object[i++], args) === false) {
+					break;
+				}
+			}
+		}
+	} else {
+		if (length == undefined) {
+			for (name in object) {
+				if (callback.call(object[name], name, object[name]) === false) {
+					break;
+				}
+			}
+		} else {
+			for (var value = object[0]; i < length && callback.call(value, i, value) !== false; value = object[++i]) {}
+			/*object[0]取得jQuery对象中的第一个DOM元素，通过for循环，
+			得到遍历整个jQuery对象中对应的每个DOM元素，通过 callback.call( value,i,value);
+			将callback的this对象指向value对象，并且传递两个参数,i表示索引值，value表示DOM元素；
+			其中callback是类似于 function(index, elem) { ... } 的方法。
+			所以就得到 $("...").each(function(index, elem){ ... });
+			*/
+		}
+	}
+	return object;
 }
