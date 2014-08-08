@@ -27,7 +27,7 @@
 				namea.push(str[1]);
 				break;
 				case "b":
-				nameb.push(str[1]);
+				nameb.push(str[0]+';'+str[1]);
 				break;
 				case "c":
 				namec.push(str[1]);
@@ -149,7 +149,7 @@ setTimeout(function(){
 		else {
 			var Ahtml = '';
 			for (var i = 0 ; i < name.length ; i++) {
-				var allhtml = '<a href="javascript:" style="padding:0 3px">'+name[i]+'</a>';
+				var allhtml = '<a href="javascript:" style="padding:0 3px" id="'+name[i].split(';')[0]+'">'+name[i].split(';')[1]+'</a>';
 				Ahtml += allhtml;
 			};
 			if (YDropdown_dl[dl].getElementsByTagName('div').length == 4)
