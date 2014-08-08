@@ -17,7 +17,7 @@ function y_tan(btn,html,height,width){
     var tan_html = document.getElementById(html);
     but.onclick = function(){
         var html =  document.body.innerHTML;
-        document.body.innerHTML = html+'<div id="tan" style="background: #000;opacity: 0.4; filter: alpha(opacity=40);position: absolute;z-index:2;top: 0;left: 0;"></div><div id="tan_box" style="background: #fff;border:1px solid #ccc;border-radius:12px;-weiket-border-radius:12px;position:absolute;z-index:10;"></div>'
+        document.body.innerHTML = html+'<div id="tan" style="background: #000;opacity: 0.4; filter: alpha(opacity=40);position: absolute;z-index:100;top: 0;left: 0;"></div><div id="tan_box" style="background: #fff;border:1px solid #ccc;border-radius:12px;-weiket-border-radius:12px;position:absolute;z-index:1000;padding:10px"></div>'
         var tan = document.getElementById('tan');
         var tan_box = document.getElementById('tan_box');
         tan.style.height = getInner().height+'px';
