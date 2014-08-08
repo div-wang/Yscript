@@ -10,7 +10,7 @@ function YDropdown(YDropdown,YDropdownlist,url){
 			//将json字符串转成json对象	
 			var json = eval('(' + result + ')')
 			each(json, function(i, value){
-		    	RegionData.push(value.id+';'+value.name+';'+value.alias);  
+		    	RegionData.push(value.id+';'+value.name+';'+value.initial);  
 		    	})
 			}
 		})
@@ -32,88 +32,88 @@ function jsondata(){
 		var tit = [];
 		for (var i = 0 ; i < RegionData.length ; i++) {
 			var str = RegionData[i].split(';')
-			tit.push(str[2].charAt(0)) //判断首字母
-			switch (tit[i]){
-				case "a":
-				namea.push(str[1]);
-				break;
-				case "b":
-				nameb.push(str[1]);
-				break;
-				case "c":
-				namec.push(str[1]);
-				break;
-				case "d":
-				named.push(str[1]);
-				break;
-				case "e":
-				namee.push(str[1]);
-				break;
-				case "f":
-				namef.push(str[1]);
-				break;
-				case "g":
-				nameg.push(str[1]);
-				break;
-				case "h":
-				nameh.push(str[1]);
-				break;
-				case "i":
-				namei.push(str[1]);
-				break;
-				case "j":
-				namej.push(str[1]);
-				break;
-				case "k":
-				namek.push(str[1]);
-				break;
-				case "l":
-				namel.push(str[1]);
-				break;
-				case "m":
-				namem.push(str[1]);
-				break;
-				case "n":
-				namen.push(str[1]);
-				break;
-				case "o":
-				nameo.push(str[1]);
-				break;
-				case "p":
-				namep.push(str[1]);
-				break;
-				case "q":
-				nameq.push(str[1]);
-				break;
-				case "r":
-				namer.push(str[1]);
-				break;
-				case "s":
-				names.push(str[1]);
-				break;
-				case "t":
-				namet.push(str[1]);
-				break;
-				case "u":
-				nameu.push(str[1]);
-				break;
-				case "v":
-				namev.push(str[1]);
-				break;
-				case "w":
-				namew.push(str[1]);
-				break;
-				case "x":
-				namex.push(str[1]);
-				break;
-				case "y":
-				namey.push(str[1]);
-				break;
-				case "z":
-				namez.push(str[1]);
-				break;
-				default : 
-				nameqt.push(str[1]);
+			tit.push(str[2].charAt(0).toLocaleUpperCase()) //判断首字母
+			switch (tit[i]) {
+				case "A":
+					namea.push(str[0] + ';' + str[1]);
+					break;
+				case "B":
+					nameb.push(str[0] + ';' + str[1]);
+					break;
+				case "C":
+					namec.push(str[0] + ';' + str[1]);
+					break;
+				case "D":
+					named.push(str[0] + ';' + str[1]);
+					break;
+				case "E":
+					namee.push(str[0] + ';' + str[1]);
+					break;
+				case "F":
+					namef.push(str[0] + ';' + str[1]);
+					break;
+				case "G":
+					nameg.push(str[0] + ';' + str[1]);
+					break;
+				case "H":
+					nameh.push(str[0] + ';' + str[1]);
+					break;
+				case "I":
+					namei.push(str[0] + ';' + str[1]);
+					break;
+				case "J":
+					namej.push(str[0] + ';' + str[1]);
+					break;
+				case "K":
+					namek.push(str[0] + ';' + str[1]);
+					break;
+				case "L":
+					namel.push(str[0] + ';' + str[1]);
+					break;
+				case "M":
+					namem.push(str[0] + ';' + str[1]);
+					break;
+				case "N":
+					namen.push(str[0] + ';' + str[1]);
+					break;
+				case "O":
+					nameo.push(str[0] + ';' + str[1]);
+					break;
+				case "P":
+					namep.push(str[0] + ';' + str[1]);
+					break;
+				case "Q":
+					nameq.push(str[0] + ';' + str[1]);
+					break;
+				case "R":
+					namer.push(str[0] + ';' + str[1]);
+					break;
+				case "S":
+					names.push(str[0] + ';' + str[1]);
+					break;
+				case "T":
+					namet.push(str[0] + ';' + str[1]);
+					break;
+				case "U":
+					nameu.push(str[0] + ';' + str[1]);
+					break;
+				case "V":
+					namev.push(str[0] + ';' + str[1]);
+					break;
+				case "W":
+					namew.push(str[0] + ';' + str[1]);
+					break;
+				case "X":
+					namex.push(str[0] + ';' + str[1]);
+					break;
+				case "Y":
+					namey.push(str[0] + ';' + str[1]);
+					break;
+				case "Z":
+					namez.push(str[0] + ';' + str[1]);
+					break;
+				default :
+					nameqt.push(str[0] + ';' + str[1]);
 			}
 
 		};
@@ -160,7 +160,7 @@ function jsondata(){
 		else {
 			var Ahtml = '';
 			for (var i = 0 ; i < name.length ; i++) {
-				var allhtml = '<a href="javascript:" style="padding:0 3px">'+name[i]+'</a>';
+					var allhtml = '&nbsp;&nbsp;<a href="javascript:" style="padding:0 3px" name="' + name[i].split(';')[0] + '">' + name[i].split(';')[1] + '</a>&nbsp;&nbsp;';
 				Ahtml += allhtml;
 			};
 			if (YDropdown_dl[dl].getElementsByTagName('div').length == 4)
