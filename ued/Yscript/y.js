@@ -590,7 +590,55 @@ Base.prototype.text = function (str) {
 	}
 	return this;
 }
+Base.prototype.append = function() {
+		return this.domManip(arguments, true, false, function(elem){
+			if (this.nodeType == 1)
+				this.appendChild( elem );
+		});
+	}
+Base.prototype.domManip = function( args, table, reverse, callback ) {
+		
+	var clone = this.length > 1, elems;
 
+	return this.each(function(){
+		if ( !elems ) {
+			elems = jQuery.clean( args, this.ownerDocument );
+
+			if ( reverse )
+				elems.reverse();
+		}
+
+		var obj = this;
+
+		if ( table && jQuery.nodeName( this, "table" ) && jQuery.nodeName( elems[0], "tr" ) )
+			obj = this.getElementsByTagName("tbody")[0] || this.appendChild( this.ownerDocument.createElement("tbody") );
+
+		var scripts = jQuery( [] );
+
+		jQuery.each(elems, function(){
+			var elem = clone ?
+				jQuery( this ).clone( true )[0] :
+				this;
+
+			// execute all scripts after the elements have been injected
+			if ( jQuery.nodeName( elem, "script" ) )
+				scripts = scripts.add( elem );
+			else {
+				// Remove any inner scripts for later evaluation
+				if ( elem.nodeType == 1 )
+					scripts = scripts.add( jQuery( "script", elem ).remove() );
+
+				// Inject the elements into the document
+				callback.call( obj, elem );
+			}
+		});
+
+		scripts.each( evalScript );
+	});
+}	
+Base.prototype.nodeName =  function( elem, name ) {
+	return elem.nodeName && elem.nodeName.toUpperCase() == name.toUpperCase();
+}
 //设置事件发生器
 Base.prototype.bind = function (event, fn) {
 	for (var i = 0; i < this.elements.length; i ++) {

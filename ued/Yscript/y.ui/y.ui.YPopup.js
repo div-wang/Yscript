@@ -18,10 +18,13 @@ function YPopup(but,tit,tan_html,height,width,callback){
             }
         }
     }
-    var tan_html = document.getElementById(tan_html).innerHTML;
-    var body =  document.body.innerHTML;
-    var html = '<div id="tan" style="background: #000;opacity: 0.4; filter: alpha(opacity=40);position: absolute;z-index:2;top: 0;left: 0;"></div><div id="tan_box" style="background: #fff;border:1px solid #ccc;border-radius:5px;-weiket-border-radius:12px;position:absolute;z-index:10;"><h3 style="background: #ccc;clear:both;height:38px;border-bottom:2px solid #eaeaea">'+tit+'<span style="float:right;cursor: pointer">x</span></h3><form action="#" id="tan_form">'+tan_html+'<input type="button" value="提交" id="taninput" style="padding:5px 10px;display:block;margin:5px auto;"></form></div>'
-	document.body.innerHTML = body + html ; 
+    var tan_html = document.getElementById(tan_html);
+    var html = document.createElement('div') //创建元素节点 
+    //var body = document.body.innerHTML;
+    html.innerHTML = '<div id="tan" style="background: #000;opacity: 0.4; filter: alpha(opacity=40);position: absolute;z-index:2;top: 0;left: 0;"></div><div id="tan_box" style="background: #fff;border:1px solid #ccc;border-radius:5px;-weiket-border-radius:12px;position:absolute;z-index:10;box-shadow:0 0 5px #555;"><h3 style="background: #ccc;clear:both;height:30px;border-bottom:2px solid #eaeaea;text-align:center;line-height:30px;color:blue">'+tit+'<span style="float:right;cursor: pointer;color:#f00">x</span></h3><form action="#" id="tan_form" style="position:relative;width:100%;height:100%;"><input type="button" value="提交" id="taninput" style="padding:5px 10px;display:block;margin:5px auto;position:absolute;bottom:35px;left:40%;"></form></div>'
+    document.body.appendChild(html); 
+    var tan_form = document.getElementById('tan_form');
+    tan_form.appendChild(tan_html);
     var tan = document.getElementById('tan');
     var tan_box = document.getElementById('tan_box');
     tan.style.height = getInner().height+'px';
