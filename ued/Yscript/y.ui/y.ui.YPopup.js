@@ -4,7 +4,7 @@
  *height,width：宽高;
  *callback：点击提交的回调函数;
  */
-function ytan(but,tit,tan_html,height,width,callback){
+function YPopup(but,tit,tan_html,height,width,callback){
     function getInner() {
         if (typeof window.innerWidth != 'undefined') {
             return {
