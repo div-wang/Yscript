@@ -1,8 +1,11 @@
-function YDropdown(YDropdown,YDropdownlist,url){
+function YDropdown(YDropdown,YDropdownlist,url,config){
 	var RegionData = [];
 	var namea = [], nameb = [], namec = [], named = [], namee = [], namef = [], nameg = [], nameh = [], namei = [], namej = [], namek = [], namel = [], namem = [], namen = [], nameo = [], namep = [], nameq = [], namer = [], names = [], namet = [], nameu = [], namev = [], namew = [], namex = [], namey = [], namez = [], nameqt = [];
 
 	function getJSON(url){
+		var gid = config.id;
+		var gname = config.name;
+		var galias = config.alias;
 		ajax({
 			url:url,
 			success:function(result)
@@ -10,7 +13,8 @@ function YDropdown(YDropdown,YDropdownlist,url){
 			//将json字符串转成json对象	
 			var json = eval('(' + result + ')')
 			each(json, function(i, value){
-		    	RegionData.push(value.id+';'+value.name+';'+value.alias);  
+				//alert(value[gid])
+		    	RegionData.push(value[gid]+';'+value[gname]+';'+value[galias]);  
 		    	})
 			}
 		})
@@ -125,9 +129,11 @@ function jsondata(){
 	//延时加载abc，each函数执行时间较长
 	//setTimeout(abc,100);
 	abc()
-	var YDropdown_input = document.getElementById(YDropdown);
+	var YDropdowns = document.getElementById(YDropdown);
+	var YDropdown_input = YDropdowns.getElementsByTagName('input')[0];
+	var hidden_input = YDropdowns.getElementsByTagName('input')[1];
 	var YDropdown_list = document.getElementById(YDropdownlist);
-	YDropdown_list.innerHTML = '<style type="text/css">*{margin:0;padding:0}input{width:380px;height:30px;border:1px solid #ccc;color:#999}.YDropdown_list{position:relative;width:400px;height:auto;border:1px solid #aaa}.YDropdown_list ul{width:400px;height:30px;text-align:center;}.YDropdown_list ul li{display:none;line-height:30px;cursor:pointer;border-bottom:2px solid #ccc;width:50px}.YDropdown_list dl{width:400px;height:auto;display:none;margin-bottom:20px}.YDropdown_list dl div{margin-top:20px;padding:0 10px;height:100%}.YDropdown_list dl div span{width:20px;display:inline-table;height:100%;text-align:center}.YDropdown_list dl div a{padding:0 3px;display:inline-table;font-size:12px}</style><ul><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul><dl style="display:block"></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl>'
+	YDropdown_list.innerHTML = '<style type="text/css">*{margin:0;padding:0}.YDropdown{width:400px;height:30px;}.YDropdown_input{width:400px;height:30px;border:1px solid #ccc;color:#999}.YDropdown_list{position:abloute;top:30px;left:0;width:400px;height:auto;border:1px solid #aaa;}.YDropdown_list ul{width:400px;height:30px;text-align:center;}.YDropdown_list ul li{display:none;line-height:30px;cursor:pointer;border-bottom:2px solid #ccc;width:40px;margin:0 5px}.YDropdown_list ul li.cur{border-bottom:2px solid #f00;}.YDropdown_list dl{width:400px;height:auto;display:none;margin-bottom:20px}.YDropdown_list dl div{margin-top:20px;padding:0 10px;height:100%}.YDropdown_list dl div span{width:20px;display:inline-table;height:100%;text-align:center}.YDropdown_list dl div a{padding:0 3px;display:inline-table;font-size:12px}</style><ul><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul><dl style="display:block"></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl><dl></dl>'
 	var YDropdown_li = YDropdown_list.getElementsByTagName('ul')[0].getElementsByTagName('li');
 	var YDropdown_dl = YDropdown_list.getElementsByTagName('dl');
 	var YDropdown_a = YDropdown_list.getElementsByTagName('a');	
@@ -135,6 +141,7 @@ function jsondata(){
 		YDropdown_input.value = "";
 		YDropdown_input.style.color = "#333 ";	
 		YDropdown_list.style.display = "block"
+		YDropdown_list.style.zIndex = 999;
 	}
 	YDropdown_input.onblur = function(){
 		if (YDropdown_input.value == ""){
@@ -205,6 +212,7 @@ function jsondata(){
 		YDropdown_a[x].onclick = function(){ 
 			YDropdown_input.style.color = "#333 ";	
 			YDropdown_input.value =  this.innerHTML;
+			hidden_input.value = this.name;
 			YDropdown_list.style.display = "none";
 		}
 	}
