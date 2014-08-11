@@ -11,7 +11,7 @@
 <script type="text/javascript" src="../y.js"></script>
 <script type="text/javascript">
 
-function ytan(but,html,height,width,callback){
+function ytan(but,tit,tan_html,height,width,callback){
 	function getInner() {
 		if (typeof window.innerWidth != 'undefined') {
 			return {
@@ -25,21 +25,31 @@ function ytan(but,html,height,width,callback){
 			}
 		}
 	}
-	var RegionData = [];
+	var id = but.id;
+/*	var abcData = [];
 	ajax({
-		url:"../YDropdown/catalog_list.json",
+		url:"http://admin.test1.com/index.php?call=ajax.getCatalogById&id="+id,
 		dataType:"json",
 		success:function(json){
 			each(json, function(i, value){
-	    		RegionData.push(value.id+';'+value.name+';'+value.alias);
-	    		
+	    		//abcData.push(value.id+';'+value.name+';'+value.alias);
+	    		//if (value.id == id) {
+	    		abcData.push( value.name,value.alias);
+	    		//};	
 	    	})
 		}
 	})
-	setTimeout(function(){alert(RegionData)},100)
-	var tan_html = document.getElementById(html);
+	var ds = setInterval(function(){
+		//alert(typeof(RegionData))
+		if(abcData != ""){ 
+			valuedata();
+			clearInterval(ds);
+		};
+	},50);*/
+	
+	var tan_html = document.getElementById(tan_html).innerHTML;
 	var body =  document.body.innerHTML;
-	var html = '<div id="tan" style="background: #000;opacity: 0.4; filter: alpha(opacity=40);position: absolute;z-index:2;top: 0;left: 0;"></div><div id="tan_box" style="background: #fff;border:1px solid #ccc;border-radius:5px;-weiket-border-radius:12px;position:absolute;z-index:10;"><h1 style="background: #ccc;clear:both;height:38px;border-bottom:2px solid #eaeaea"><span style="float:right;cursor: pointer">x</span></h1><div id="tan_html"></div><input type="button" value="提交" id="taninput" style="padding:5px 10px;display:block;margin:5px auto;"></div>'
+	var html = '<div id="tan" style="background: #000;opacity: 0.4; filter: alpha(opacity=40);position: absolute;z-index:2;top: 0;left: 0;"></div><div id="tan_box" style="background: #fff;border:1px solid #ccc;border-radius:5px;-weiket-border-radius:12px;position:absolute;z-index:10;"><h3 style="background: #ccc;clear:both;height:38px;border-bottom:2px solid #eaeaea">'+tit+'<span style="float:right;cursor: pointer">x</span></h3><form action="#" id="tan_form">'+tan_html+'<input type="button" value="提交" id="taninput" style="padding:5px 10px;display:block;margin:5px auto;"></form></div>'
 	document.body.innerHTML = body + html ; 
 	var tan = document.getElementById('tan');
 	var tan_box = document.getElementById('tan_box');
@@ -49,41 +59,28 @@ function ytan(but,html,height,width,callback){
 	tan_box.style.width = width + 'px';
 	tan_box.style.left = (getInner().width-tan_box.clientWidth)/2+'px';
 	tan_box.style.top = (getInner().height-tan_box.clientHeight)/2+'px';
-	//tan_box.innerHTML = tan_html.innerHTML;
-
-	var tab_span = tan_box.getElementsByTagName('h1')[0].getElementsByTagName('span')[0];
+	var tab_span = tan_box.getElementsByTagName('h3')[0].getElementsByTagName('span')[0];
 	tab_span.onclick = function (){document.body.removeChild(tan);document.body.removeChild(tan_box);}
-		//tan_box.innerHTML = '<iframe allowtransparency="true" frameborder="0" width="'+width+'" height="'+height+'" scrolling="no" src="'+html+'"></iframe>';
-	document.getElementById('taninput').onclick = function call(){
-		ajax({
-			type:"post",
-			url:'../YDropdown/catalog_list.json',
-			date:{"mame":'abc',"num":'123'},
-			success:function(str){
-				if(str!=''){
-					alert('提交成功')
-					document.body.removeChild(tan);
-					document.body.removeChild(tan_box);
-				}
-				/*var data = eval('(' + str + ')');
-				if(data.mag == 'ok'){
-					alert('提交成功')
-					document.body.removeChild(tan);
-					document.body.removeChild(tan_box);
-				}*/
-			}			
-		})
+	//function valuedata(){}
+	var taninput = document.getElementById('taninput');
+	taninput.onclick = function(){
+		if (callback()) {
+		document.body.removeChild(tan);document.body.removeChild(tan_box);
+		};
 	};
+
 }
 
 </script>
 </head>
 <body>
-<span id="23" name="but1" onclick="javascript:ytan(this,'tan_html',200,500,function(){alert(111)});">点击</span>
-<input type="button" value="点击" id="but" name="but1" onclick="javascript:ytan(this,'tan_html',200,500);">
-<div id="tan_html1" >
-
+<span id="23" name="but1" onclick="javascript:ytan(this,'这是标题','abc',200,500,call);">点击</span>
+<div id="abc" >
+<label>name:</label><input type="text" value="保健食品"><br>
+<label>别名:</label><input type="text" value="bjsp">
 </div>
 </body>
-
+<script type="text/javascript">
+	function call(){alert(111);return true}
+</script>
 </html>
