@@ -34,12 +34,12 @@ function YPopup(but,tit,tan_html,height,width,callback){
     tan_box.style.left = (getInner().width-tan_box.clientWidth)/2+'px';
     tan_box.style.top = (getInner().height-tan_box.clientHeight)/2+'px';
     var tab_span = tan_box.getElementsByTagName('h3')[0].getElementsByTagName('span')[0];
-    tab_span.onclick = function (){document.body.removeChild(tan);document.body.removeChild(tan_box);}
+    tab_span.onclick = function (){document.body.removeChild(html);}
     //function valuedata(){}
     var taninput = document.getElementById('taninput');
     taninput.onclick = function(){
         if (callback()) {
-        document.body.removeChild(tan);document.body.removeChild(tan_box);
+        document.body.removeChild(html);
         };
     };
 
