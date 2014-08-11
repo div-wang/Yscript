@@ -517,10 +517,51 @@ Base.prototype.removeClass = function (className) {
 //设置表单字段内容获取
 Base.prototype.value = function (str) {
 	for (var i = 0; i < this.elements.length; i ++) {
-		if (arguments.length == 0) {
-			return this.elements[i].value;
+		if(this.elements[i].tagName != 'INPUT' && 
+				this.elements[i].tagName != 'TEXTAREA')
+			continue;
+		else{
+			if (arguments.length == 0) {
+				return this.elements[i].value;
+			}
+			this.elements[i].value = str;
+			return this;
 		}
-		this.elements[i].value = str;
+	}
+	return null;
+}
+
+/**
+ * 表单字段获得焦点
+ * @author	 eglic.csdn@gmail.com
+ * @returns {_L9.Base.prototype}
+ */
+Base.prototype.focus = function () {
+	for (var i = 0; i < this.elements.length; i ++) {
+		if(this.elements[i].tagName != 'INPUT' && 
+				this.elements[i].tagName != 'BUTTON' && 
+				this.elements[i].tagName != 'TEXTAREA')
+			continue;
+		else{
+			this.elements[i].focus();
+		}
+	}
+	return this;
+}
+
+/**
+ * 表单字段选中内容
+ * @author	 eglic.csdn@gmail.com
+ * @returns {_L9.Base.prototype}
+ */
+Base.prototype.select = function () {
+	for (var i = 0; i < this.elements.length; i ++) {
+		if(this.elements[i].tagName != 'INPUT' && 
+				this.elements[i].tagName != 'TEXTAREA')
+			continue;
+		else{
+			this.elements[i].select();
+		}
 	}
 	return this;
 }
