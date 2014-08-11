@@ -25,33 +25,17 @@ function YPopup(but,tit,tan_html,height,width,callback){
 			}
 		}
 	}
-	var id = but.id;
-/*	var abcData = [];
-	ajax({
-		url:"http://admin.test1.com/index.php?call=ajax.getCatalogById&id="+id,
-		dataType:"json",
-		success:function(json){
-			each(json, function(i, value){
-	    		//abcData.push(value.id+';'+value.name+';'+value.alias);
-	    		//if (value.id == id) {
-	    		abcData.push( value.name,value.alias);
-	    		//};	
-	    	})
-		}
-	})
-	var ds = setInterval(function(){
-		//alert(typeof(RegionData))
-		if(abcData != ""){ 
-			valuedata();
-			clearInterval(ds);
-		};
-	},50);*/
+
 	
-	var tan_html = document.getElementById(tan_html).innerHTML;
-	var body =  document.body.innerHTML;
-	var html = '<div id="tan" style="background: #000;opacity: 0.4; filter: alpha(opacity=40);position: absolute;z-index:2;top: 0;left: 0;"></div><div id="tan_box" style="background: #fff;border:1px solid #ccc;border-radius:5px;-weiket-border-radius:12px;position:absolute;z-index:10;"><h3 style="background: #ccc;clear:both;height:38px;border-bottom:2px solid #eaeaea">'+tit+'<span style="float:right;cursor: pointer">x</span></h3><form action="#" id="tan_form">'+tan_html+'<input type="button" value="提交" id="taninput" style="padding:5px 10px;display:block;margin:5px auto;"></form></div>'
-	document.body.innerHTML = body + html ; 
-	var tan = document.getElementById('tan');
+	var tan_html = document.getElementById(tan_html);
+	var html = document.createElement('div') //创建元素节点 
+	//var body = document.body.innerHTML;
+	html.innerHTML = '<div id="tan" style="background: #000;opacity: 0.4; filter: alpha(opacity=40);position: absolute;z-index:2;top: 0;left: 0;"></div><div id="tan_box" style="background: #fff;border:1px solid #ccc;border-radius:5px;-weiket-border-radius:12px;position:absolute;z-index:10;box-shadow:0 0 5px #555;"><h3 style="background: #ccc;clear:both;height:30px;border-bottom:2px solid #eaeaea;text-align:center;line-height:30px;color:blue">'+tit+'<span style="float:right;cursor: pointer;color:#f00">x</span></h3><form action="#" id="tan_form" style="position:relative;width:100%;height:100%;"><input type="button" value="提交" id="taninput" style="padding:5px 10px;display:block;margin:5px auto;position:absolute;bottom:35px;left:40%;"></form></div>'
+
+	document.body.appendChild(html); 
+	var tan_form = document.getElementById('tan_form');
+	tan_form.appendChild(tan_html);
+	var tan = document.getElementById('tan');		
 	var tan_box = document.getElementById('tan_box');
 	tan.style.height = getInner().height+'px';
 	tan.style.width = getInner().width+'px';
@@ -60,12 +44,12 @@ function YPopup(but,tit,tan_html,height,width,callback){
 	tan_box.style.left = (getInner().width-tan_box.clientWidth)/2+'px';
 	tan_box.style.top = (getInner().height-tan_box.clientHeight)/2+'px';
 	var tab_span = tan_box.getElementsByTagName('h3')[0].getElementsByTagName('span')[0];
-	tab_span.onclick = function (){document.body.removeChild(tan);document.body.removeChild(tan_box);}
+	tab_span.onclick = function (){document.body.removeChild(html);}
 	//function valuedata(){}
 	var taninput = document.getElementById('taninput');
 	taninput.onclick = function(){
 		if (callback()) {
-		document.body.removeChild(tan);document.body.removeChild(tan_box);
+		document.body.removeChild(html);
 		};
 	};
 
@@ -74,7 +58,7 @@ function YPopup(but,tit,tan_html,height,width,callback){
 </script>
 </head>
 <body>
-<span id="23" name="but1" onclick="javascript:ytan(this,'这是标题','abc',200,500,call);">点击</span>
+<span id="23" name="but1" onclick="javascript:YPopup(this,'这是标题','abc',200,500,call);">点击</span>
 <div id="abc" >
 <label>name:</label><input type="text" value="保健食品"><br>
 <label>别名:</label><input type="text" value="bjsp">
