@@ -484,13 +484,10 @@ Base.prototype.offsetTop = function () {
 	}
 }
 //获取某一个对象距离左边的距离，
-Base.prototype.offsetLeft = function (value) {
+Base.prototype.offsetLeft = function () {
 	for (var i = 0; i < this.elements.length; i ++) {
-		if (arguments.length == 0) {
 			var left = this.elements[i].offsetLeft ;
 			return left
-		}
-		 this.elements[i].style.offsetLeft = value	
 	}
 }
 
