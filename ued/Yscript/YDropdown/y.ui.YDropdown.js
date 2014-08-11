@@ -10,7 +10,7 @@ function YDropdown(YDropdown,YDropdownlist,url){
 			//将json字符串转成json对象	
 			var json = eval('(' + result + ')')
 			each(json, function(i, value){
-		    	RegionData.push(value.id+';'+value.name+';'+value.initial);  
+		    	RegionData.push(value.id+';'+value.name+';'+value.alias);  
 		    	})
 			}
 		})
@@ -20,6 +20,7 @@ function YDropdown(YDropdown,YDropdownlist,url){
 	};
 	getJSON(url);
 	var ds = setInterval(function(){
+		//alert(typeof(RegionData))
 		if(RegionData != ""){ 
 			jsondata();
 			clearInterval(ds);
