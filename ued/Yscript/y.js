@@ -24,6 +24,37 @@
     (s = ua.match(/version\/([\d.]+).*safari/)) ? sys.safari = s[1] : 0;  
       
     if (/webkit/.test(ua)) sys.webkit = ua.match(/webkit\/([\d.]+)/)[1];  
+	if (typeof(HTMLElement) !== "undefined") {
+		HTMLElement.prototype.insertAdjacentElement = function(where, parsedNode) {
+			switch (where) {
+				case "beforeBegin":
+					this.parentNode.insertBefore(parsedNode, this);
+					break;
+				case "afterBegin":
+					this.insertBefore(parsedNode, this.firstChild);
+					break;
+				case "beforeEnd":
+					this.appendChild(parsedNode);
+					break;
+				case "afterEnd":
+					if (this.nextSibling)
+						this.parentNode.insertBefore(parsedNode, this.nextSibling);
+					else
+						this.parentNode.appendChild(parsedNode);
+					break;
+			}
+		}
+		HTMLElement.prototype.insertAdjacentHTML = function(where, htmlStr) {
+			var r = this.ownerDocument.createRange();
+			r.setStartBefore(this);
+			var parsedHTML = r.createContextualFragment(htmlStr);
+			this.insertAdjacentElement(where, parsedHTML);
+		}
+		HTMLElement.prototype.insertAdjacentText = function(where, txtStr) {
+			var parsedText = document.createTextNode(txtStr);
+			this.insertAdjacentElement(where, parsedText);
+		}
+	}
 })();  
 
 //DOM加载
@@ -598,6 +629,11 @@ Base.prototype.text = function (str) {
 		this.elements[i].innerText = str ;
 	}
 	return this;
+}
+Base.prototype.append = function (html) {
+	if(this.elements.length > 0) for(var i=0;i<this.elements.length;i++){
+		this.elements[i].insertAdjacentHTML('beforeEnd',html);
+	}
 }
 
 
