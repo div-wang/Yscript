@@ -490,7 +490,7 @@ Base.prototype.eq = function (num) {
 };
 
 //获取某一个节点的高度值，
-Base.prototype.height = function () {
+Base.prototype.height = function (obj) {
 	for (var i = 0; i < this.elements.length; i ++) {
 			var px = getStyle(this.elements[i],'height');
 			var height = px.split('p');
@@ -842,9 +842,12 @@ ajax = function(conf) {
     var data = conf.data;
     //datatype参数可选    
     var dataType = conf.dataType;
+    //异步还是同步
+    var async = conf.async;
     //回调函数可选
     var success = conf.success;
-                                                                                         
+
+
     if (type == null){
         //type参数可选，默认为get
         type = "get";
@@ -853,8 +856,13 @@ ajax = function(conf) {
         //dataType参数可选，默认为text
         dataType = "text";
     }
+    if (async == null){
+        //type参数可选，默认为get
+        async = true;
+    }
+
     // 打开
-    xhr.open(type, url, true);
+    xhr.open(type, url, false);
     // 发送
     if (type == "GET" || type == "get") {
         xhr.send(null);
@@ -863,6 +871,7 @@ ajax = function(conf) {
                     "application/x-www-form-urlencoded");
         xhr.send(data);
     }
+    //if (async = true) {
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && xhr.status == 200) {
             if(dataType == "text"||dataType=="TEXT") {
@@ -883,6 +892,7 @@ ajax = function(conf) {
             }
         }
     };
+
 }
 
 /**

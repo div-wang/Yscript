@@ -8,6 +8,7 @@ function YDropdown(YDropdown,YDropdownlist,url,config){
 		var galias = config.alias;
 		ajax({
 			url:url,
+			async:true,
 			success:function(result)
 			{
 			//将json字符串转成json对象	
