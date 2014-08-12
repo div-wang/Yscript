@@ -632,17 +632,36 @@ Base.prototype.text = function (str) {
 	}
 	return this;
 }
+Base.prototype.childs = function () {
+	var c = [];
+	for (var i = 0; i < this.elements.length; i ++) {
+		if(this.elements[i] instanceof HTMLElement){
+			if(this.elements[i].childNodes && this.elements[i].childNodes.length > 0){
+				for(var j=0;j<this.elements[i].childNodes.length;j++){
+					c.push(this.elements[i].childNodes[j]);
+				}
+			}
+		}
+	}
+	return c;
+}
+
 Base.prototype.append = function (html) {
 	if(this.elements.length > 0) for(var i=0;i<this.elements.length;i++){
-		if(typeof html === 'string')
+		if(typeof html === 'string'){
 			this.elements[i].insertAdjacentHTML('beforeEnd',html);
-		else{
+		}else if((html instanceof HTMLElement) || (html instanceof Text)){
+			this.elements[i].insertAdjacentElement('beforeEnd',html);
+			return this;
+		}else if(html instanceof Base){
 			if(html.elements.length > 0){
 				for(var j=0;j<html.elements.length;j++){
 					this.elements[i].insertAdjacentElement('beforeEnd',html.elements[j]);
 				}
 			}
 			return this;
+		}else{
+			throw new Error('错误的对象类型');
 		}
 	}
 	return this;
