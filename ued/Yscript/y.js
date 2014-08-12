@@ -632,10 +632,19 @@ Base.prototype.text = function (str) {
 }
 Base.prototype.append = function (html) {
 	if(this.elements.length > 0) for(var i=0;i<this.elements.length;i++){
-		this.elements[i].insertAdjacentHTML('beforeEnd',html);
+		if(typeof html === 'string')
+			this.elements[i].insertAdjacentHTML('beforeEnd',html);
+		else{
+			if(html.elements.length > 0){
+				for(var j=0;j<html.elements.length;j++){
+					this.elements[i].insertAdjacentElement('beforeEnd',html.elements[j]);
+				}
+			}
+			return this;
+		}
 	}
+	return this;
 }
-
 
 //设置事件发生器
 Base.prototype.bind = function (event, fn) {
