@@ -862,7 +862,7 @@ ajax = function(conf) {
     }
 
     // 打开
-    xhr.open(type, url, false);
+    xhr.open(type, url, async);
     // 发送
     if (type == "GET" || type == "get") {
         xhr.send(null);
@@ -871,28 +871,33 @@ ajax = function(conf) {
                     "application/x-www-form-urlencoded");
         xhr.send(data);
     }
-    //if (async = true) {
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            if(dataType == "text"||dataType=="TEXT") {
-                if (success != null){
-                    //普通文本
-                    success(xhr.responseText);
-                }
-            }else if(dataType=="xml"||dataType=="XML") {
-                if (success != null){
-                    //接收xml文档    
-                    success(xhr.responseXML);
-                }  
-            }else if(dataType=="json"||dataType=="JSON") {
-                if (success != null){
-                    //将json字符串转换为js对象  
-                    success(eval("("+xhr.responseText+")"));
-                }
-            }
-        }
-    };
-
+    if (async) {
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				if(dataType == "text"||dataType=="TEXT") {
+					if (success != null){
+						//普通文本
+						success(xhr.responseText);
+					}
+				}else if(dataType=="xml"||dataType=="XML") {
+					if (success != null){
+						//接收xml文档    
+						success(xhr.responseXML);
+					}  
+				}else if(dataType=="json"||dataType=="JSON") {
+					if (success != null){
+						//将json字符串转换为js对象  
+						success(eval("("+xhr.responseText+")"));
+					}
+				}
+			}
+		};
+	}else{
+		if(xhr.readyState == 4 && xhr.status == 200){
+			//alert(xhr.responseText);
+			//TODO: 根据datatype 返回相应的值
+		}
+	}
 }
 
 /**
