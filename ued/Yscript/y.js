@@ -565,12 +565,12 @@ Base.prototype.value = function (str) {
 		else{
 			if (arguments.length == 0) {
 				return this.elements[i].value;
+			}else{
+				this.elements[i].value = str;
 			}
-			this.elements[i].value = str;
-			return this;
 		}
 	}
-	return null;
+	return this;
 }
 
 /**
