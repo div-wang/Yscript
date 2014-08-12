@@ -319,8 +319,10 @@ function Base(args) {
 				if (node.length == 0) node.push(document);		//如果默认没有父节点，就把document放入
 				switch (elements[i].charAt(0)) {
 					case '#' :
-						childElements = [];				//清理掉临时节点，以便父节点失效，子节点有效
-						childElements.push(this.getId(elements[i]));
+						childElements = [];	
+						if (this.getId(elements[i]) != null) {			//清理掉临时节点，以便父节点失效，子节点有效
+							childElements.push(this.getId(elements[i]));
+						};
 						node = childElements;		//保存父节点，因为childElements要清理，所以需要创建node数组
 						break;
 					case '.' : 
@@ -894,8 +896,23 @@ ajax = function(conf) {
 		};
 	}else{
 		if(xhr.readyState == 4 && xhr.status == 200){
-			//alert(xhr.responseText);
 			//TODO: 根据datatype 返回相应的值
+			if(dataType == "text"||dataType=="TEXT") {
+				if (success != null){
+					//普通文本
+					success(xhr.responseText);
+				}
+			}else if(dataType=="xml"||dataType=="XML") {
+				if (success != null){
+					//接收xml文档    
+					success(xhr.responseXML);
+				}  
+			}else if(dataType=="json"||dataType=="JSON") {
+				if (success != null){
+					//将json字符串转换为js对象  
+					success(eval("("+xhr.responseText+")"));
+				}
+			}
 		}
 	}
 }
@@ -965,12 +982,6 @@ function each(object, callback, args) {
 			}
 		} else {
 			for (var value = object[0]; i < length && callback.call(value, i, value) !== false; value = object[++i]) {}
-			/*object[0]取得jQuery对象中的第一个DOM元素，通过for循环，
-			得到遍历整个jQuery对象中对应的每个DOM元素，通过 callback.call( value,i,value);
-			将callback的this对象指向value对象，并且传递两个参数,i表示索引值，value表示DOM元素；
-			其中callback是类似于 function(index, elem) { ... } 的方法。
-			所以就得到 $("...").each(function(index, elem){ ... });
-			*/
 		}
 	}
 	return object;
