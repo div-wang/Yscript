@@ -319,10 +319,8 @@ function Base(args) {
 				if (node.length == 0) node.push(document);		//如果默认没有父节点，就把document放入
 				switch (elements[i].charAt(0)) {
 					case '#' :
-						childElements = [];	
-						if (this.getId(elements[i]) != null) {			//清理掉临时节点，以便父节点失效，子节点有效
-							childElements.push(this.getId(elements[i]));
-						};
+						childElements = [];	         //清理掉临时节点，以便父节点失效，子节点有效
+						childElements.push(this.getId(elements[i].substring(1)));
 						node = childElements;		//保存父节点，因为childElements要清理，所以需要创建node数组
 						break;
 					case '.' : 
@@ -565,12 +563,12 @@ Base.prototype.value = function (str) {
 		else{
 			if (arguments.length == 0) {
 				return this.elements[i].value;
-			}else{
-				this.elements[i].value = str;
 			}
+			this.elements[i].value = str;
+			return this;
 		}
 	}
-	return this;
+	return null;
 }
 
 /**
