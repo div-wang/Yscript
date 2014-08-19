@@ -10,43 +10,34 @@
 
 </head>
 <style>
-    #w00{height:30px;background:#ccc;width:500px;margin:0 auto}
-    #w00 a{padding:0 5px;line-height: 30px;}
-    #w00 span{float:right;line-height: 30px;}
-    #w0{width:500px;height:300px;overflow:hidden;margin:0 auto;}
-    .hide_tag{width:500px;height:300px;overflow:auto;display:none}
-
+    #w0{height:30px;background:#ccc;width:500px;margin:0 auto;position: relative}
+    #w00{width:400px;line-height: 28px;height: 28px}
+    #w0 span{line-height: 30px;height: 30px;padding:0 5px;}
+    
 </style>
 <body>
-<input type="500px">
-<div id="w0">
-<p id="w00"><span onclick="abc(this)">展开</span></p>
-<div id="w000"></div>
-</div>
+<input type="hidden" name="hidden_name" value="">
+<div id="w0"><input type="text" id="w00"><span onclick="abc(this)">展开</span></div>
 </body>
 <script type="text/javascript" src="js/y.js"></script>
 <script type="text/javascript" src="js/y.ui.YDropdown.js"></script>
 <script type="text/javascript" src="js/catalog&brand.js"></script>
 <script type="text/javascript">
 var cbc = function (){alert(111)}
-YDropdown('w0','w00','w000',brand_list,true,{id:"id",name:"name",alias:"initial",type:"type"},'cbc');
-  //YDropdown('w1','w11',brand_list,{id:"id",name:"name",alias:"initial"},cbc);
-  //YDropdown('w2','w22',catalog_list,{id:"id",name:"name",alias:"initial"},cbc);
 function abc(obj){
-    obj.onclick = function(){
-        obj.innerHTML = "收起";
-        obj.setAttribute("onclick","efg(this)")
-        Y("#w000").show();
-        Y(".hide_tag").eq(0).show();
-    }
+    obj.innerHTML = "收起";
+    obj.setAttribute("onclick","efg(this)")
+    YDropdown('w0',catalog_list,true,{id:"id",name:"name",alias:"initial",type:"type"},'cbc');
 }
 function efg(obj){
-    obj.onclick = function(){
-        obj.innerHTML = "更多";
-        obj.setAttribute("onclick","abc(this)")
-        Y("#w000").hide();
-        Y(".hide_tag").show();
-    }
+    obj.innerHTML = "更多";
+    obj.setAttribute("onclick","abc(this)")
+    var w0 = document.getElementById('w0')
+    var id = document.getElementById('htmlbox')
+    var style = w0.getElementsByTagName('style')[0]
+    w0.removeChild(id);
+    w0.removeChild(style);
 }
+
 </script>
 </html>
