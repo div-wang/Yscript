@@ -32,43 +32,50 @@ function YDropdown(YDropdown,url,bool,config,fn){
 		}
 	};
 	function jsondata(data_name){		//处理数组
-
 		var tit = [];
+		var qtHtml = [] ;
+		var qtzimu = '' ;
 		var Ahtml = {A:[],B:[],C:[],D:[],E:[],F:[],G:[],H:[],I:[],J:[],K:[],L:[],M:[],N:[],O:[],P:[],Q:[],R:[],S:[],T:[],U:[],V:[],W:[],X:[],Y:[],Z:[]};
-		var allHtml = ""
 		var htmlbox = document.createElement("div");
 		htmlbox.id = "htmlbox";
 		var htmlall = document.createElement("div");
 		var htmlk = document.createElement("p");
 		var stylelink = document.createElement("style") 
-		stylelink.innerHTML = '#htmlbox{width: 500px;}#htmlbox p{background: #eee}#htmlbox .hide_tag{border: 1px solid #eee;display: none}#htmlbox a{padding:0 5px;line-height: 24px;color:#555}#htmlbox .cur{border-bottom: 2px solid blue}';
-		//document.body.insertBefore(stylelink,YDropdown)
+		stylelink.innerHTML = '#htmlbox{width: 100%;position:absolute;top:30px;left:0;z-index:9999;background:#fff}#htmlbox p{background: #469bde;padding:0 10px}#htmlbox .hide_tag{border: 1px solid #469bde;display: none;max-height:200px;overflow:auto}#htmlbox a{padding:5px;line-height: 24px;color:#fff}#htmlbox .hide_tag a{padding:0 20px;display:block;line-height: 28px;float:left;color:#444}#htmlbox .cur{border-bottom: 2px solid #fac51f}';
 		for (var i = 0 ; i < data_name.length ; i++) {
 			var str = data_name[i].split(';')
 			tit.push(str[2].charAt(0).toLocaleUpperCase()) //判断首字母			
 		};
 		for(var j in tit){
-			name_list[tit[j]].push(data_name[j]);			
-		}	
-		for (var k in name_list){
-			for (var i = 0 ; i < name_list[k].length ; i++) {
-				var allhtml = '<a href="javascript:" style="padding:0 3px" onclick="'+fn+'(this)" name="'+ name_list[k][i].split(';')[0] + '">' + name_list[k][i].split(';')[1] + '</a>';
-				Ahtml[k] += allhtml ;
-				allHtml += allhtml;
-			};
-			htmlk.innerHTML += '<a href="javascript:" >'+k+'</a>';
-			htmlall.innerHTML += '<div class="hide_tag">'+Ahtml[k]+'</div>';
+			if(name_list[tit[j]])
+			name_list[tit[j]].push(data_name[j]);
+			else qtHtml.push(data_name[j])		
 		}
-		htmlbox.innerHTML = '<p id="zimu"><a href="javascript:" class="cur">所有</a>'+htmlk.innerHTML+'</p><div class="hide_tag" style="display:block">'+allHtml+'</div>'+ htmlall.innerHTML
+		for (var j = 0 ; j < qtHtml.length ; j++) {
+			var qthtml = '<a href="javascript:" onclick="'+fn+'(this)" name="'+ qtHtml[j].split(';')[0] + '">' + qtHtml[j].split(';')[1] + '</a>';
+			qtzimu += qthtml;
+		};
+		for (var k in name_list){
+			if (name_list[k].length != 0) {
+				for (var i = 0 ; i < name_list[k].length ; i++) {
+					var allhtml = '<a href="javascript:" onclick="'+fn+'(this)" name="'+ name_list[k][i].split(';')[0] + '">' + name_list[k][i].split(';')[1] + '</a>';
+					Ahtml[k] += allhtml ;
+					//allHtml += allhtml;
+				};
+				htmlk.innerHTML += '<a href="javascript:" >'+k+'</a>';
+				htmlall.innerHTML += '<div class="hide_tag">'+Ahtml[k]+'</div>';
+			};
+		}
+		htmlbox.innerHTML = '<p id="zimu">'+htmlk.innerHTML+'<a href="javascript:">其他</a></p>'+ htmlall.innerHTML+'<div class="hide_tag">'+qtzimu+'</div>'
 		YDropdown.appendChild(htmlbox);
-		YDropdown.appendChild(stylelink);
+		YDropdown.appendChild(stylelink); 
 	}
 	jsondata(Pretreatment())
 	navlist()
 	function navlist(){
 		var a = document.getElementById('zimu').getElementsByTagName('a');
 		var div = document.getElementById('htmlbox').getElementsByTagName('div');
-		//alert(div.length)
+		div[0].style.display = "block" ; a[0].className = "cur";
 		for (var i = 0 ; i < a.length ; i++) {
 			a[i].index = i;
 			a[i].onclick = function(){
@@ -82,19 +89,3 @@ function YDropdown(YDropdown,url,bool,config,fn){
 		};
 	}
 }	
-
-function abc(obj){
-    obj.innerHTML = '收起<em class="icon_down icon_down2"></em>';
-    obj.setAttribute("onclick","efg(this)");
-    Y("#w00").show();
-    Y("#w000").show();
-    Y(".hide_tag").eq(0).show();
-
-}
-function efg(obj){
-    obj.innerHTML = '更多<em class="icon_down icon_down2"></em>';
-    obj.setAttribute("onclick","abc(this)");
-    Y("#w00").hide();
-    Y("#w000").hide();
-    Y(".hide_tag").hide();
-}
