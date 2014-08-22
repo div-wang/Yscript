@@ -1,6 +1,6 @@
 ﻿/*
  *y.js
- *版本：0.1.1 
+ *版本：0.1.2 
  *制作：div_wang
  *版权所有：39yst.com
  *特别感谢‘落雪飞花’，提供的技术支持！(*^__^*)
@@ -21,8 +21,7 @@
     (s = ua.match(/firefox\/([\d.]+)/)) ? sys.firefox = s[1] :  
     (s = ua.match(/chrome\/([\d.]+)/)) ? sys.chrome = s[1] :   
     (s = ua.match(/opera\/.*version\/([\d.]+)/)) ? sys.opera = s[1] :   
-    (s = ua.match(/version\/([\d.]+).*safari/)) ? sys.safari = s[1] : 0;  
-      
+    (s = ua.match(/version\/([\d.]+).*safari/)) ? sys.safari = s[1] : 0;      
     if (/webkit/.test(ua)) sys.webkit = ua.match(/webkit\/([\d.]+)/)[1];  
 	if (typeof(HTMLElement) !== "undefined") {
 		HTMLElement.prototype.insertAdjacentElement = function(where, parsedNode) {
@@ -70,12 +69,6 @@ function addDomLoaded(fn) {
 	
 	if ((sys.opera && sys.opera < 9) || (sys.firefox && sys.firefox < 3) || (sys.webkit && sys.webkit < 525)) {
 		//无论采用哪种，基本上用不着了
-		/*timer = setInterval(function () {
-			if (/loaded|complete/.test(document.readyState)) { 	//loaded是部分加载，有可能只是DOM加载完毕，complete是完全加载，类似于onload
-				doReady();
-			}
-		}, 1);*/
-
 		timer = setInterval(function () {
 			if (document && document.getElementById && document.getElementsByTagName && document.body) {
 				doReady();
@@ -319,7 +312,7 @@ function Base(args) {
 				if (node.length == 0) node.push(document);		//如果默认没有父节点，就把document放入
 				switch (elements[i].charAt(0)) {
 					case '#' :
-						childElements = [];	         //清理掉临时节点，以便父节点失效，子节点有效
+						childElements = [];				//清理掉临时节点，以便父节点失效，子节点有效
 						childElements.push(this.getId(elements[i].substring(1)));
 						node = childElements;		//保存父节点，因为childElements要清理，所以需要创建node数组
 						break;
@@ -532,6 +525,7 @@ Base.prototype.css = function (attr, value) {
 	}
 	return this;
 }
+
 
 //添加Class
 Base.prototype.addClass = function (className) {
@@ -748,8 +742,7 @@ window.Y = Y;
 
 //写入Cookie，name为名字，value是值
 //duration过期时间（天为单位，默认1天）
-function setCookie(name, value, duration)
-{
+function setCookie(name, value, duration) {
     var oDate = new Date();
     if (duration <= 0)
         duration = 1;
@@ -757,54 +750,40 @@ function setCookie(name, value, duration)
     document.cookie = name + "=" + encodeURI(value) + "; expires=" + oDate;
 };
 //读取Cookie,不存在返回空字符串""
-function getCookie(name)
-{
+function getCookie(name) {
     var arr=document.cookie.split('; ');
-	
-	for(var i=0;i<arr.length;i++)
-	{
+	for(var i=0;i<arr.length;i++) {
 		var arr2=arr[i].split('=');
-		
-		if(arr2[0]==name)
-		{
+		if(arr2[0]==name) {
 			return decodeURIComponent(arr2[1]);
 		}
 	}
 	return "";
 };
 //移除Cookie
-function delCookie(name)
-{
+function delCookie(name) {
     setCookie(name, 1, -1);
 };
 
 //动画
-function startMove(obj, json, fnEnd)
-{
-	function getStyle(obj, name)
-	{
-		if(obj.currentStyle)
-		{
+function startMove(obj, json, fnEnd) {
+	function getStyle(obj, name) {
+		if(obj.currentStyle) {
 			return obj.currentStyle[name];
 		}
-		else
-		{
+		else {
 			return getComputedStyle(obj, false)[name];
 		}
 	}
 	clearInterval(obj.timer);
 	obj.timer=setInterval(function (){
 		var bStop=true;		//假设：所有值都已经到了
-		for(var attr in json)
-		{
+		for(var attr in json) {
 			var cur=0;
-			
-			if(attr=='opacity')
-			{
+			if(attr=='opacity') {
 				cur=Math.round(parseFloat(getStyle(obj, attr))*100);
 			}
-			else
-			{
+			else {
 				cur=parseInt(getStyle(obj, attr));
 			}
 			var speed=(json[attr]-cur)/6;
@@ -812,18 +791,15 @@ function startMove(obj, json, fnEnd)
 			if(cur!=json[attr])
 				bStop=false;
 			
-			if(attr=='opacity')
-			{
+			if(attr=='opacity') {
 				obj.style.filter='alpha(opacity:'+(cur+speed)+')';
 				obj.style.opacity=(cur+speed)/100;
 			}
-			else
-			{
+			else {
 				obj.style[attr]=cur+speed+'px';
 			}
 		}
-		if(bStop)
-		{
+		if(bStop) {
 			clearInterval(obj.timer);			
 			if(fnEnd)fnEnd();
 		}
@@ -865,8 +841,7 @@ ajax = function(conf) {
     var async = conf.async;
     //回调函数可选
     var success = conf.success;
-
-
+    
     if (type == null){
         //type参数可选，默认为get
         type = "get";

@@ -71,7 +71,13 @@ function YDropdown(YDropdown,url,bool,config,fn){
 			YDropdowns.removeChild(stylelink);
 			bool = false
 		}
-		Yselect_close.close = function Yselect_close(){
+		Yselect_close.close = function Yselect_close(obool){
+			if(obool){
+				YDropdowns.removeChild(Yselect_box)
+				YDropdowns.removeChild(stylelink);
+				bool = false
+				return
+			};
 			if (bool) {
 				YDropdowns.removeChild(Yselect_box)
 				YDropdowns.removeChild(stylelink);
