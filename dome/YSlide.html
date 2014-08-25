@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>幻灯片滑动效果</title>
+<link rel="stylesheet" type="text/css" href="../y.css">
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script src="../y.ui/y.ui.slide.js"></script>
+</head>
+
+<body>
+
+<div class="play" id="play">
+	<ul>
+		<li><a href="#"><img src="images/5.jpg" alt="广告一" /></a></li>
+		<li><a href="#"><img src="images/4.jpg" alt="广告二" /></a></li>
+		<li><a href="#"><img src="images/3.jpg" alt="广告三" /></a></li>
+		<li><a href="#"><img src="images/2.jpg" alt="广告四" /></a></li>
+		<li><a href="#"><img src="images/1.jpg" alt="广告五" /></a></li>
+	</ul>
+</div>
+<script type="text/javascript">
+YSlide({
+	box:'play',
+	num:5,
+	speed:3000,
+	direction:'left',
+	point:true,
+	lr_btn:{show:true,hover:false}
+})
+
+</script>
+</body>
+</html>
