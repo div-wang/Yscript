@@ -6,7 +6,6 @@
  * config.speed         : 轮播图的速度 (毫秒数,0-正无穷)
  * config.direction     : 轮播图方向 (left/right/top/bottom)
  * config.point         : 轮播图点选按钮 (true/false)
- * config.lr_btn        : 左右按钮
  * config.lr_btn.show   : 左右按钮显示隐藏 (true/false)
  * config.lr_btn.hover  ：左右按钮划过效果 (true/false)
  */
