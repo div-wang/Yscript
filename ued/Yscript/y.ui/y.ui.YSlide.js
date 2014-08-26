@@ -33,9 +33,7 @@ function YSlide (config){
                 }
                 var speed=(json[attr]-cur)/6;
                 speed=speed>0?Math.ceil(speed):Math.floor(speed);
-                if(cur!=json[attr])
-                    bStop=false;
-                
+                if(cur!=json[attr])  bStop=false;
                 if(attr=='opacity') {
                     obj.style.filter='alpha(opacity:'+(cur+speed)+')';
                     obj.style.opacity=(cur+speed)/100;
@@ -65,6 +63,37 @@ function YSlide (config){
     var direction = config.direction;
     var bool = true;
     var img = 0;
+    var oBox_px = '';
+    if (config.direction == direction) { //根据方向自动滚动
+        if (direction == 'left' || direction == 'right') { 
+            oBox_px = getStyle(oBox, 'width').split('p')[0];
+            var oBoxUL_width = oBox_px*config.num+'px';
+            oBoxUL.style.width = oBoxUL_width;  
+            //var oBoxLI = oBoxUL.getElementsByTagName('li')[0]
+            //oBoxUL.appendChild(oBoxLI);
+        }if (direction == 'top' || direction == 'bottom') {
+            oBox_px = getStyle(oBox, 'height').split('p')[0]
+            var oBoxUL_height = oBox_px*config.num+'px';
+            oBoxUL.style.height = oBoxUL_height;
+            //var oBoxLI = oBoxUL.getElementsByTagName('li')[0]
+            //oBoxUL.appendChild(oBoxLI);
+        };// 判断上下左右
+        function autoslide(){ 
+            if (bool) {
+                if (img == config.num-1) {img = -1};
+                img = img + 1;
+                eval('startMove(oBoxUL,{'+direction+':-(oBox_px*img)})');
+                if(config.point){
+                    var point_li = point.getElementsByTagName('li');
+                    for (var s = 0 ; s < config.num; s++ ) {
+                        point_li[s].className = '';
+                    }; 
+                    point_li[img].className = 'cur'
+                }   
+            }else return;
+        }
+        var start = setInterval(autoslide , config.speed) 
+    };
     if(config.point){ //如果point为true，创建点选按钮，并默认第一个选中
         var point = document.createElement('ol');
         var point_html = '';
@@ -83,7 +112,7 @@ function YSlide (config){
                     point_li[k].className = '';
                 };
                 this.className = 'cur';            
-                eval('startMove(oBoxUL,{'+direction+':-(oBox_w*a-1)})');
+                eval('startMove(oBoxUL,{'+direction+':-(oBox_px*a-1)})');
                 img = a;
             }   
         };
@@ -114,7 +143,7 @@ function YSlide (config){
         l_btn.onclick = function(){  //点击左按钮事件          
             if (img>0) img = img-1
             else img = 4;
-            eval('startMove(oBoxUL,{'+direction+':-(oBox_w*img)})');
+            eval('startMove(oBoxUL,{'+direction+':-(oBox_px*img)})');
             if (config.point) {
                 var point_li = point.getElementsByTagName('li');
                 for (var j = 0 ; j < config.num; j++ ) {
@@ -126,7 +155,7 @@ function YSlide (config){
         r_btn.onclick = function(){ //点击右按钮事件 
             if (img<4) img = img+1
             else img = 0
-            eval('startMove(oBoxUL,{'+direction+':-(oBox_w*img)})');
+            eval('startMove(oBoxUL,{'+direction+':-(oBox_px*img)})');
             if (config.point) {
                 var point_li = point.getElementsByTagName('li');
                 for (var j = 0 ; j < config.num; j++ ) {
@@ -135,35 +164,5 @@ function YSlide (config){
                 point_li[img].className = 'cur';  
             }; 
         } //如果config.lr_btn.show，创建左右按钮
-    }
-    if (config.direction == direction) { //根据方向自动滚动
-        if (direction == 'left' || direction == 'right') { 
-            var oBox_w = getStyle(oBox, 'width').split('p')[0];
-            var oBoxUL_width = oBox_w*config.num+1+'px';
-            oBoxUL.style.width = oBoxUL_width;  
-            //var oBoxLI = oBoxUL.getElementsByTagName('li')[0]
-            //oBoxUL.appendChild(oBoxLI);
-        }if (direction == 'top' || direction == 'bottom') {
-            var oBox_h = getStyle(oBox, 'height').split('p')[0];
-            var oBoxUL_top = oBox_h*config.num+1+'px';
-            oBoxUL.style.height = oBoxUL_top;
-            //var oBoxLI = oBoxUL.getElementsByTagName('li')[0]
-            //oBoxUL.appendChild(oBoxLI);
-        };// 判断上下左右
-        function autoslide(){ 
-            if (bool) {
-                if (img == config.num-1) {img = -1};
-                img = img + 1;
-                eval('startMove(oBoxUL,{'+direction+':-(oBox_w*img)})');
-                if(config.point){
-                    var point_li = point.getElementsByTagName('li');
-                    for (var s = 0 ; s < config.num; s++ ) {
-                        point_li[s].className = '';
-                    }; 
-                    point_li[img].className = 'cur'
-                }   
-            }else return;
-        }
-        var start = setInterval(autoslide , config.speed) 
-    };   
+    }   
 }
