@@ -117,7 +117,7 @@ function YSlide (config){
             }   
         };
     }
-    if(config.lr_btn.show){ //如果config.lr_btn.show为true，创建左右按钮
+    if(config.lr_btn.show){ //如果config.lr_btn.show为true，创建左右点击按钮
        var l_btn = document.createElement('span'); 
        l_btn.id = 'YSlide_left_btn';
        l_btn.setAttribute('style','position:absolute;left:10px;top:50%;width:20px;height:80px;margin-top:-40px;background:#ccc;pointer :cursor;z-index:1');
@@ -126,7 +126,7 @@ function YSlide (config){
        r_btn.setAttribute('style','position:absolute;right:10px;top:50%;width:20px;height:80px;margin-top:-40px;background:#ccc;pointer :cursor;z-index:1');
        oBox.appendChild(r_btn);
        oBox.appendChild(l_btn);
-       if (config.lr_btn.hover) { //如果config.lr_btn.hover为true，默认划过box显示，划出box隐藏
+       if (config.lr_btn.hover) { //如果config.lr_btn.hover为true，左右按钮默认划过box显示，划出box隐藏
             r_btn.style.display = 'none';
             l_btn.style.display = 'none'; 
             oBox.onmouseover = function(){
@@ -163,6 +163,6 @@ function YSlide (config){
                 };
                 point_li[img].className = 'cur';  
             }; 
-        } //如果config.lr_btn.show，创建左右按钮
+        } 
     }   
 }
