@@ -54,9 +54,13 @@ function YSelect(id,Ydata,bool,config,fn){
 		var Yselect_letter = document.createElement("p"); //26字母容器
 		Yselect_letter.id = ida+'_Yselect_letter'
 		var stylelink = document.createElement("style") //创建皮肤，有两套皮肤可供选择
+		stylelink.type = 'text/css'; 
 		//stylelink.innerHTML = '#'+id+'_Yselect_box{width: 100%;position:absolute;top:30px;left:0;z-index:9999;background:#fff}#'+id+'_Yselect_box p{background: #469bde;padding:0 10px;}#'+id+'_Yselect_box p span.close{font: 16px/20px 微软雅黑;cursor:pointer;position:absolute;top:0;right:0;color:#f00}#'+id+'_Yselect_box .hide_tag{border: 1px solid #469bde;padding:5px;display: none;min-height:100px;max-height:300px;min-width:300px;max-width:800px;overflow:auto}#'+id+'_Yselect_box p a{padding:5px;line-height: 28px;color:#fff}#'+id+'_Yselect_box .hide_tag a{width:80px;display:block;text-decoration:none;padding:5px;line-height: 12px;font-size:12px;float:left;color:#444;overflow: hidden; text-overflow:ellipsis;white-space:nowrap;}#'+id+'_Yselect_box .hide_tag a:hover{background:#469bde;color:#fff;}#'+id+'_Yselect_box .cur{border-bottom: 2px solid #fac51f}';
-		stylelink.innerHTML = '#'+ida+'_Yselect_box{width: 100%;min-width:500px;max-width:800px;position:absolute;top:30px;left:0;z-index:9999;background:#fff;border:1px solid #ddd;}#'+ida+'_Yselect_box p{padding:0 10px;}#'+ida+'_Yselect_box p span.close{font: 16px/20px 微软雅黑;cursor:pointer;position:absolute;top:0;right:0;color:#666}#'+ida+'_Yselect_box .hide_tag{padding:5px 10px;display: none;min-height:50px;max-height:200px;overflow:auto}#'+ida+'_Yselect_box p a{padding:5px;line-height: 28px;color:#333;border-bottom:2px solid #bbb;font-weight:bold}#'+ida+'_Yselect_box .hide_tag a{width:80px;display:block;text-decoration:none;padding:5px;line-height: 12px;font-size:12px;float:left;color:#444;overflow: hidden; text-overflow:ellipsis;white-space:nowrap;}#'+ida+'_Yselect_box .hide_tag a:hover{background:#469bde;color:#fff;}#'+ida+'_Yselect_box a.cur{border-bottom: 2px solid #469bde;color:#469bde}';
-		for (var i = 0 ; i < data_name.length ; i++) {
+		//stylelink.innerHTML = '#'+ida+'_Yselect_box{width: 100%;min-width:500px;max-width:800px;position:absolute;top:30px;left:0;z-index:9999;background:#fff;border:1px solid #ddd;}#'+ida+'_Yselect_box p{padding:0 10px;}#'+ida+'_Yselect_box p span.close{font: 16px/20px 微软雅黑;cursor:pointer;position:absolute;top:0;right:0;color:#666}#'+ida+'_Yselect_box .hide_tag{padding:5px 10px;display: none;min-height:50px;max-height:200px;overflow:auto}#'+ida+'_Yselect_box p a{padding:5px;line-height: 28px;color:#333;border-bottom:2px solid #bbb;font-weight:bold}#'+ida+'_Yselect_box .hide_tag a{width:80px;display:block;text-decoration:none;padding:5px;line-height: 12px;font-size:12px;float:left;color:#444;overflow: hidden; text-overflow:ellipsis;white-space:nowrap;}#'+ida+'_Yselect_box .hide_tag a:hover{background:#469bde;color:#fff;}#'+ida+'_Yselect_box a.cur{border-bottom: 2px solid #469bde;color:#469bde}';
+	    rules = document.createTextNode('#'+ida+'_Yselect_box{width: 100%;min-width:500px;max-width:800px;position:absolute;top:30px;left:0;z-index:9999;background:#fff;border:1px solid #ddd;}#'+ida+'_Yselect_box p{padding:0 10px;}#'+ida+'_Yselect_box p span.close{font: 16px/20px 微软雅黑;cursor:pointer;position:absolute;top:0;right:0;color:#666}#'+ida+'_Yselect_box .hide_tag{padding:5px 10px;display: none;min-height:50px;max-height:200px;overflow:auto}#'+ida+'_Yselect_box p a{padding:5px;line-height: 28px;color:#333;border-bottom:2px solid #bbb;font-weight:bold}#'+ida+'_Yselect_box .hide_tag a{width:80px;display:block;text-decoration:none;padding:5px;line-height: 12px;font-size:12px;float:left;color:#444;overflow: hidden; text-overflow:ellipsis;white-space:nowrap;}#'+ida+'_Yselect_box .hide_tag a:hover{background:#469bde;color:#fff;}#'+ida+'_Yselect_box a.cur{border-bottom: 2px solid #469bde;color:#469bde}');
+		if(stylelink.styleSheet)
+	    	stylelink.styleSheet.cssText = rules.nodeValue;
+		else stylelink.appendChild(rules);		for (var i = 0 ; i < data_name.length ; i++) {
 			var str = data_name[i].split(';')
 			tit.push(str[2].charAt(0).toLocaleUpperCase()) //判断首字母，赋值给tit		
 		};
@@ -79,12 +83,12 @@ function YSelect(id,Ydata,bool,config,fn){
 		Yselect_box.innerHTML = '<p id="'+ida+'_Yselect_letter'+'">'+Yselect_letter.innerHTML+'<span class="close">x</span></p>'+ Yselect_div.innerHTML;
 		YDropdowns.appendChild(Yselect_box);
 		YDropdowns.appendChild(stylelink); //将select插入页面
-		Yselect_box.getElementsByTagName('p')[0].getElementsByTagName('span')[0].onclick = function Yselect_close(){
+		Yselect_box.getElementsByTagName('p')[0].getElementsByTagName('span')[0].onclick = function (){
 			YDropdowns.removeChild(Yselect_box)
 			YDropdowns.removeChild(stylelink);
 			bool = false
 		} //点击销毁select
-		Yselect_close.close = function Yselect_close(obool){
+		Yselect_close.close = function (obool){
 			if(obool){
 				YDropdowns.removeChild(Yselect_box)
 				YDropdowns.removeChild(stylelink);
