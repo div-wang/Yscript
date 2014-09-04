@@ -53,6 +53,7 @@ Y('#selector li').last() //寻找last li
     Y('.click_node').click(function(event) {
         Y('#selector li').css('background','');
         Y('#selector').find('li').css('background','red');
+        Y(document.body).append('<div class="popup_background"></div>');
     });
     Y('.click_frist').click(function(event) {
         Y('#selector li').css('background','');
