@@ -29,6 +29,7 @@ function YSlide (config){
                     cur=Math.round(parseFloat(getStyle(obj, attr))*100);
                 }
                 else {
+                    //alert(getStyle(obj, attr))
                     cur=parseInt(getStyle(obj, attr));
                 }
                 var speed=(json[attr]-cur)/6;
@@ -68,21 +69,27 @@ function YSlide (config){
         if (direction == 'left' || direction == 'right') { 
             oBox_px = getStyle(oBox, 'width').split('p')[0];
             var oBoxUL_width = oBox_px*config.num+'px';
-            oBoxUL.style.width = oBoxUL_width;  
-            //var oBoxLI = oBoxUL.getElementsByTagName('li')[0]
-            //oBoxUL.appendChild(oBoxLI);
+            oBoxUL.style.width = oBoxUL_width; 
+            if (direction == 'left') oBoxUL.style.left = 0;
+            else oBoxUL.style.right = 0;
+            var oBoxLI = document.createElement("li");
+            oBoxLI.innerHTML =  oBoxUL.getElementsByTagName('li')[0].innerHTML;
+            oBoxUL.appendChild(oBoxLI);
         }if (direction == 'top' || direction == 'bottom') {
             oBox_px = getStyle(oBox, 'height').split('p')[0]
             var oBoxUL_height = oBox_px*config.num+'px';
             oBoxUL.style.height = oBoxUL_height;
-            //var oBoxLI = oBoxUL.getElementsByTagName('li')[0]
-            //oBoxUL.appendChild(oBoxLI);
+            if (direction == 'top') oBoxUL.style.top = 0;
+            else oBoxUL.style.bottom = 0;
+            var oBoxLI = document.createElement("li");
+            oBoxLI.innerHTML =  oBoxUL.getElementsByTagName('li')[0].innerHTML;
+            oBoxUL.appendChild(oBoxLI);
         };// 判断上下左右
         function autoslide(){ 
             if (bool) {
-                if (img == config.num-1) {img = -1};
                 img = img + 1;
-                eval('startMove(oBoxUL,{'+direction+':-(oBox_px*img)})');
+                if (img == config.num) {eval('startMove(oBoxUL,{'+direction+':-(oBox_px*img)},function(){oBoxUL.style.'+direction+'=0})');img = 0;}
+                else{eval('startMove(oBoxUL,{'+direction+':-(oBox_px*img)})');}
                 if(config.point){
                     var point_li = point.getElementsByTagName('li');
                     for (var s = 0 ; s < config.num; s++ ) {
@@ -120,30 +127,32 @@ function YSlide (config){
     if(config.lr_btn.show){ //如果config.lr_btn.show为true，创建左右点击按钮
        var l_btn = document.createElement('span'); 
        l_btn.id = 'YSlide_left_btn';
-       l_btn.setAttribute('style','position:absolute;left:10px;top:50%;width:20px;height:80px;margin-top:-40px;background:#ccc;pointer :cursor;z-index:1');
        var r_btn = document.createElement('span');
        r_btn.id = 'YSlide_right_btn';
-       r_btn.setAttribute('style','position:absolute;right:10px;top:50%;width:20px;height:80px;margin-top:-40px;background:#ccc;pointer :cursor;z-index:1');
        oBox.appendChild(r_btn);
        oBox.appendChild(l_btn);
        if (config.lr_btn.hover) { //如果config.lr_btn.hover为true，左右按钮默认划过box显示，划出box隐藏
-            r_btn.style.display = 'none';
-            l_btn.style.display = 'none'; 
+            r_btn.style.cssText= 'position:absolute;left:10px;top:50%;width:20px;height:80px;margin-top:-40px;background:#ccc;pointer :cursor;z-index:11';
+            l_btn.style.cssText= 'position:absolute;right:10px;top:50%;width:20px;height:80px;margin-top:-40px;background:#ccc;pointer :cursor;z-index:11'; 
+            l_btn.setAttribute('style','position:absolute;left:10px;top:50%;width:20px;height:80px;margin-top:-40px;background:#ccc;pointer :cursor;z-index:11');
+            r_btn.setAttribute('style','position:absolute;right:10px;top:50%;width:20px;height:80px;margin-top:-40px;background:#ccc;pointer :cursor;z-index:11');
             oBox.onmouseover = function(){
                 r_btn.style.display = 'block';
                 l_btn.style.display = 'block';
                 bool = false;
             }
-            oBox.onmouseout = function(){
+            oBox.onmouseout = function(ev){
+                var e = ev || event
+                if (this.contains(e.toElement)) return;
                 r_btn.style.display = 'none';
                 l_btn.style.display = 'none'; 
                 bool = true;       
             }
         };
         l_btn.onclick = function(){  //点击左按钮事件          
-            if (img>0) img = img-1
-            else img = 4;
-            eval('startMove(oBoxUL,{'+direction+':-(oBox_px*img)})');
+            img = img-1
+            if (img < 0) {eval('oBoxUL.style.'+direction+'= -(oBox_px*config.num)+"px";img = config.num-1;startMove(oBoxUL,{'+direction+':-(oBox_px)*(config.num-1)})')}
+            else{eval('startMove(oBoxUL,{'+direction+':-(oBox_px*img)})');}
             if (config.point) {
                 var point_li = point.getElementsByTagName('li');
                 for (var j = 0 ; j < config.num; j++ ) {
@@ -153,9 +162,10 @@ function YSlide (config){
             };                                         
         }
         r_btn.onclick = function(){ //点击右按钮事件 
-            if (img<4) img = img+1
-            else img = 0
-            eval('startMove(oBoxUL,{'+direction+':-(oBox_px*img)})');
+            img = img+1
+            if (img == config.num) {eval('startMove(oBoxUL,{'+direction+':-(oBox_px*img)},function(){oBoxUL.style.'+direction+'=0})');img = 0;}
+            else{eval('startMove(oBoxUL,{'+direction+':-(oBox_px*img)})');}
+            //eval('startMove(oBoxUL,{'+direction+':-(oBox_px*img)})');
             if (config.point) {
                 var point_li = point.getElementsByTagName('li');
                 for (var j = 0 ; j < config.num; j++ ) {

@@ -23,6 +23,7 @@
     (s = ua.match(/opera\/.*version\/([\d.]+)/)) ? sys.opera = s[1] :   
     (s = ua.match(/version\/([\d.]+).*safari/)) ? sys.safari = s[1] : 0;      
     if (/webkit/.test(ua)) sys.webkit = ua.match(/webkit\/([\d.]+)/)[1];  
+	
 	if (typeof(HTMLElement) !== "undefined") {
 		HTMLElement.prototype.insertAdjacentElement = function(where, parsedNode) {
 			switch (where) {
@@ -627,22 +628,23 @@ Base.prototype.text = function (str) {
 Base.prototype.childs = function () {
 	var c = [];
 	for (var i = 0; i < this.elements.length; i ++) {
-		if(this.elements[i] instanceof HTMLElement){
 			if(this.elements[i].childNodes && this.elements[i].childNodes.length > 0){
 				for(var j=0;j<this.elements[i].childNodes.length;j++){
 					c.push(this.elements[i].childNodes[j]);
 				}
 			}
-		}
 	}
 	return c;
 }
 
 Base.prototype.append = function (html) {
+
+	//alert(html instanceof HTMLElement)
 	if(this.elements.length > 0) for(var i=0;i<this.elements.length;i++){
 		if(typeof html === 'string'){
 			this.elements[i].insertAdjacentHTML('beforeEnd',html);
-		}else if((html instanceof HTMLElement) || (html instanceof Text)){
+		//}else if((html instanceof HTMLElement) || (html instanceof Text)){
+		}else if(typeof html === 'object'){
 			this.elements[i].insertAdjacentElement('beforeEnd',html);
 			return this;
 		}else if(html instanceof Base){
