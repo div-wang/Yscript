@@ -1,17 +1,14 @@
 ﻿/*
  *y.js
- *版本：0.1.2 
+ *版本：0.2.0 
  *制作：div_wang
  *版权所有：39yst.com
- *特别感谢‘落雪飞花’，提供的技术支持！(*^__^*)
- *未经授权，不得用做商业用途，否则承担法律责任。
+ *特别感谢‘eglic(eglic.csdn@gmail.com)’、‘落雪飞花’，提供的技术支持！(*^__^*)
  */
 (function () {
-
 /*
  *工具类开始
  */
-
 //浏览器检测  
 (function () {  
     window.sys = {};  
@@ -67,7 +64,6 @@ function addDomLoaded(fn) {
 		isReady = true;
 		fn();
 	}
-	
 	if ((sys.opera && sys.opera < 9) || (sys.firefox && sys.firefox < 3) || (sys.webkit && sys.webkit < 525)) {
 		//无论采用哪种，基本上用不着了
 		timer = setInterval(function () {
@@ -302,7 +298,6 @@ function predef(e) {
 function Base(args) {
 	//创建一个数组，来保存获取的节点和节点数组
 	this.elements = [];
-	
 	if (typeof args == 'string') {
 		//css模拟
 		if (args.indexOf(' ') != -1) {
@@ -437,25 +432,19 @@ Base.prototype.ge = function (num) {
 
 //获取首个节点，并返回这个节点对象
 Base.prototype.first = function () {
-	return this.elements[0];
+	var firstNode = this.elements[this.elements.length - 1];
+	this.elements = [];
+	this.elements[0] = firstNode;
+	return this;
 };
 
 //获取末个节点，并返回这个节点对象
 Base.prototype.last = function () {
-	return this.elements[this.elements.length - 1];
-};
-
-
-//获取某一个节点的属性
-Base.prototype.attr = function (obj, value) {
-	for (var i = 0; i < this.elements.length; i ++) {
-		if (arguments.length == 1) {
-			return this.elements[i].getAttribute(obj);
-		} else if (arguments.length == 2) {
-			this.elements[i].setAttribute(obj, value);
-		}
-	}
+	var lastNode = this.elements[this.elements.length - 1];
+	this.elements = [];
+	this.elements[0] = lastNode;
 	return this;
+	//return this.elements[this.elements.length - 1];
 };
 
 //获取某一个节点在整个节点组中是第几个索引
@@ -466,20 +455,116 @@ Base.prototype.index = function () {
 	}
 };
 
+//获取某一个节点，并且Base对象
+Base.prototype.eq = function (num) {
+	var element = this.elements[num];
+	this.elements = [];
+	this.elements[0] = element;
+	return this;
+};
+
+//获取某一个节点的父元素
+Base.prototype.parent = function () {
+	for (var i = 0; i < this.elements.length; i ++) {
+		var parent = this.elements[i].parentNode;
+	}
+	this.elements = [];
+	this.elements[0] = parent;
+	return this;
+};
+
+//获取某一个节点的兄弟元素
+Base.prototype.subling = function () {
+	var sN = [];
+	for (var i = 0; i < this.elements.length; i ++) {
+		var subling = this.elements[i].parentNode.childNodes;
+		if(subling && subling.length > 0){
+			for(var j = 0; j < subling.length; j++){
+				if (subling[j].nodeType==1)
+				sN.push(subling[j]);
+			}
+		}
+	}
+	this.elements = sN;
+	return this;
+};
+
+//获取某一个节点的子元素
+Base.prototype.childs = function () {
+	var cN = [];
+	for (var i = 0; i < this.elements.length; i ++) {
+		var childs = this.elements[i].childNodes;
+		if(childs && childs.length > 0){
+			for(var j = 0;j < childs.length; j++){
+				if (childs[j].nodeType==1)
+				cN.push(childs[j]);
+			}
+		}
+	}
+	this.elements = [];
+	this.elements = cN;
+	return this;
+}
+
+Base.prototype.append = function (html,location) {
+	//alert(html instanceof HTMLElement)
+	if(this.elements.length > 0){
+		if (arguments.length == 1) location = 'beforeEnd';
+		for(var i=0;i<this.elements.length;i++){
+			if(typeof html === 'string'){
+				this.elements[i].insertAdjacentHTML(location,html);
+			//}else if((html instanceof HTMLElement) || (html instanceof Text)){
+			}else if(html instanceof Base){
+				if(html.elements.length > 0){
+					for(var j=0;j<html.elements.length;j++){
+						this.elements[i].insertAdjacentElement(location,html.elements[j]);
+					}
+				}
+				return this;
+			}else if(typeof html === 'object'){
+				this.elements[i].insertAdjacentElement(location,html);
+				return this;
+			}else{
+				throw new Error('错误的对象类型');
+			}
+		}
+	} 
+	return this;
+}
+
+//获取某一个节点的属性
+Base.prototype.attr = function (obj, value) {
+	for (var i = 0; i < this.elements.length; i ++) {
+		if (arguments.length == 1) {
+			return this.elements[i].getAttribute(obj);
+		} else if (arguments.length == 2) {
+			if (window.ActiveXObject && obj == 'style' && sys.ie < 8) {
+				alert(111);
+				return
+			}
+			this.elements[i].setAttribute(obj, value);
+		}
+	}
+	return this;
+};
+
+//设置CSS
+Base.prototype.css = function (attr, value) {
+	for (var i = 0; i < this.elements.length; i ++) {
+		if (arguments.length == 1) {
+			return getStyle(this.elements[i], attr);
+		}
+		this.elements[i].style[attr] = value;
+	}
+	return this;
+}
+
 //设置某一个节点的透明度
 Base.prototype.opacity = function (num) {
 	for (var i = 0; i < this.elements.length; i ++) {
 		this.elements[i].style.opacity = num / 100;
 		this.elements[i].style.filter = 'alpha(opacity=' + num + ',finishOpacity=0,style=0)';
 	}
-	return this;
-};
-
-//获取某一个节点，并且Base对象
-Base.prototype.eq = function (num) {
-	var element = this.elements[num];
-	this.elements = [];
-	this.elements[0] = element;
 	return this;
 };
 
@@ -508,6 +593,7 @@ Base.prototype.offsetTop = function () {
 			return top
 	}
 }
+
 //获取某一个对象距离左边的距离，
 Base.prototype.offsetLeft = function () {
 	for (var i = 0; i < this.elements.length; i ++) {
@@ -515,18 +601,6 @@ Base.prototype.offsetLeft = function () {
 			return left
 	}
 }
-
-//设置CSS
-Base.prototype.css = function (attr, value) {
-	for (var i = 0; i < this.elements.length; i ++) {
-		if (arguments.length == 1) {
-			return getStyle(this.elements[i], attr);
-		}
-		this.elements[i].style[attr] = value;
-	}
-	return this;
-}
-
 
 //添加Class
 Base.prototype.addClass = function (className) {
@@ -566,6 +640,107 @@ Base.prototype.value = function (str) {
 	return null;
 }
 
+//设置innerHTML
+Base.prototype.html = function (str) {
+	for (var i = 0; i < this.elements.length; i ++) {
+		if (arguments.length == 0) {
+			return this.elements[i].innerHTML;
+		}
+		this.elements[i].innerHTML = str;
+	}
+	return this;
+}
+
+//设置innerText
+Base.prototype.text = function (str) {
+	for (var i = 0; i < this.elements.length; i ++) {
+		if (arguments.length == 0) {
+			return getInnerText(this.elements[i]);
+		}
+		if (typeof this.elements[i].textContent == 'string') 
+		this.elements[i].textContent = str ;
+		else
+		this.elements[i].innerText = str ;
+	}
+	return this;
+}
+
+//设置事件发生器
+Base.prototype.bind = function (event, fn) {
+	for (var i = 0; i < this.elements.length; i ++) {
+		addEvent(this.elements[i], event, fn);
+	}
+	return this;
+};
+
+//设置鼠标移入移出方法
+Base.prototype.hover = function (over, out) {
+	for (var i = 0; i < this.elements.length; i ++) {
+		addEvent(this.elements[i], 'mouseover', over);
+		addEvent(this.elements[i], 'mouseout', out);
+	}
+	return this; 
+};
+
+//设置显示
+Base.prototype.show = function (num) {
+	if (arguments.length == 1) {
+		for (var i = 0; i < this.elements.length; i ++) {
+			startMove(this.elements[i], {'opacity':1000},num)
+		}
+	}else{
+		for (var i = 0; i < this.elements.length; i ++) {
+			this.elements[i].style.display = 'none';
+		}
+	};
+	return this;
+};
+
+//设置隐藏
+Base.prototype.hide = function (num) {
+	if (arguments.length == 1) {
+		for (var i = 0; i < this.elements.length; i ++) {
+			startMove(this.elements[i], {'opacity':0},num)
+		}
+	}else{
+		for (var i = 0; i < this.elements.length; i ++) {
+			this.elements[i].style.display = 'none';
+		}
+	};
+	return this;
+};
+
+//触发点击事件
+Base.prototype.click = function (fn) {
+	for (var i = 0; i < this.elements.length; i ++) {
+		this.elements[i].onclick = fn;
+	}
+	return this;
+};
+
+//触发浏览器窗口事件
+Base.prototype.resize = function (fn) {
+	for (var i = 0; i < this.elements.length; i ++) {
+		var element = this.elements[i];
+		addEvent(window, 'resize', function () {
+			fn();
+			if (element.offsetLeft > getInner().width + getScroll().left - element.offsetWidth) {
+				element.style.left = getInner().width + getScroll().left - element.offsetWidth + 'px';
+				if (element.offsetLeft <= 0 + getScroll().left) {
+					element.style.left = 0 + getScroll().left + 'px';
+				}
+			}
+			if(element.offsetTop > getInner().height + getScroll().top - element.offsetheight) {
+				element.style.top = getInner().height + getScroll().top - element.offsetheight + 'px';
+				if (element.offsetTop <= 0 + getScroll().top) {
+					element.style.top = 0 + getScroll().top + 'px';
+				}
+			}
+		});
+	}
+	return this;
+};
+
 /**
  * 表单字段获得焦点
  * @author	 eglic.csdn@gmail.com
@@ -601,146 +776,56 @@ Base.prototype.select = function () {
 	return this;
 }
 
-//设置innerHTML
-Base.prototype.html = function (str) {
+Base.prototype.animate = function (json, time, fnEnd) {
+	if (time) var s = Math.round(time/30)
+	else var s = 10;
 	for (var i = 0; i < this.elements.length; i ++) {
-		if (arguments.length == 0) {
-			return this.elements[i].innerHTML;
-		}
-		this.elements[i].innerHTML = str;
-	}
-	return this;
-}
-
-//设置innerText
-Base.prototype.text = function (str) {
-	for (var i = 0; i < this.elements.length; i ++) {
-		if (arguments.length == 0) {
-			return getInnerText(this.elements[i]);
-		}
-		if (typeof this.elements[i].textContent == 'string') 
-		this.elements[i].textContent = str ;
-		else
-		this.elements[i].innerText = str ;
-	}
-	return this;
-}
-Base.prototype.childs = function () {
-	var c = [];
-	for (var i = 0; i < this.elements.length; i ++) {
-			if(this.elements[i].childNodes && this.elements[i].childNodes.length > 0){
-				for(var j=0;j<this.elements[i].childNodes.length;j++){
-					c.push(this.elements[i].childNodes[j]);
+		var _this = this.elements[i];
+		clearInterval(_this.timer);
+		_this.timer=setInterval(function (){
+			var bStop=true;		//假设：所有值都已经到了
+			for(var attr in json) {
+				var cur=0;
+				if(attr=='opacity') {
+					cur=Math.round(parseFloat(getStyle(_this, attr))*100);
+				}
+				else {
+					cur=parseInt(getStyle(_this, attr));
+				}
+				var speed=(json[attr]-cur)/s;
+				speed=speed>0?Math.ceil(speed):Math.floor(speed);
+				if(cur!=json[attr])
+					bStop=false;
+				if(attr=='opacity') {
+					_this.style.filter='alpha(opacity:'+(cur+speed)+')';
+					_this.style.opacity=(cur+speed)/100;
+				}
+				else {
+					_this.style[attr]=cur+speed+'px';
 				}
 			}
+			if(bStop) {
+				clearInterval(_this.timer);			
+				if(fnEnd)fnEnd();
+			}
+		}, 30);
 	}
-	return c;
+	return this
 }
-
-Base.prototype.append = function (html) {
-
-	//alert(html instanceof HTMLElement)
-	if(this.elements.length > 0) for(var i=0;i<this.elements.length;i++){
-		if(typeof html === 'string'){
-			this.elements[i].insertAdjacentHTML('beforeEnd',html);
-		//}else if((html instanceof HTMLElement) || (html instanceof Text)){
-		}else if(typeof html === 'object'){
-			this.elements[i].insertAdjacentElement('beforeEnd',html);
-			return this;
-		}else if(html instanceof Base){
-			if(html.elements.length > 0){
-				for(var j=0;j<html.elements.length;j++){
-					this.elements[i].insertAdjacentElement('beforeEnd',html.elements[j]);
-				}
-			}
-			return this;
-		}else{
-			throw new Error('错误的对象类型');
-		}
-	}
-	return this;
-}
-
-//设置事件发生器
-Base.prototype.bind = function (event, fn) {
-	for (var i = 0; i < this.elements.length; i ++) {
-		addEvent(this.elements[i], event, fn);
-	}
-	return this;
-};
-
-//设置鼠标移入移出方法
-Base.prototype.hover = function (over, out) {
-	for (var i = 0; i < this.elements.length; i ++) {
-		addEvent(this.elements[i], 'mouseover', over);
-		addEvent(this.elements[i], 'mouseout', out);
-	}
-	return this; 
-};
-
-//设置显示
-Base.prototype.show = function () {
-	for (var i = 0; i < this.elements.length; i ++) {
-		this.elements[i].style.display = 'block';
-	}
-	return this;
-};
-
-//设置隐藏
-Base.prototype.hide = function () {
-	for (var i = 0; i < this.elements.length; i ++) {
-		this.elements[i].style.display = 'none';
-	}
-	return this;
-};
-
-//触发点击事件
-Base.prototype.click = function (fn) {
-	for (var i = 0; i < this.elements.length; i ++) {
-		this.elements[i].onclick = fn;
-	}
-	return this;
-};
-
-//触发浏览器窗口事件
-Base.prototype.resize = function (fn) {
-	for (var i = 0; i < this.elements.length; i ++) {
-		var element = this.elements[i];
-		addEvent(window, 'resize', function () {
-			fn();
-			if (element.offsetLeft > getInner().width + getScroll().left - element.offsetWidth) {
-				element.style.left = getInner().width + getScroll().left - element.offsetWidth + 'px';
-				if (element.offsetLeft <= 0 + getScroll().left) {
-					element.style.left = 0 + getScroll().left + 'px';
-				}
-			}
-			if(element.offsetTop > getInner().height + getScroll().top - element.offsetheight) {
-				element.style.top = getInner().height + getScroll().top - element.offsetheight + 'px';
-				if (element.offsetTop <= 0 + getScroll().top) {
-					element.style.top = 0 + getScroll().top + 'px';
-				}
-			}
-		});
-	}
-	return this;
-};
-
 
 //插件入口
 Base.prototype.extend = function (name, fn) {
 	Base.prototype[name] = fn;
 };
 
-
-
 //前台调用
 var Y = function (args) {
 	return new Base(args);
 }
-
 window.Y = Y;
 
 })();
+
 
 //写入Cookie，name为名字，value是值
 //duration过期时间（天为单位，默认1天）
@@ -751,6 +836,7 @@ function setCookie(name, value, duration) {
 	oDate.setDate(oDate.getDate()+duration);
     document.cookie = name + "=" + encodeURI(value) + "; expires=" + oDate;
 };
+
 //读取Cookie,不存在返回空字符串""
 function getCookie(name) {
     var arr=document.cookie.split('; ');
@@ -768,7 +854,9 @@ function delCookie(name) {
 };
 
 //动画
-function startMove(obj, json, fnEnd) {
+function startMove(obj, json, time, fnEnd) {
+	if (time) var s = Math.round(time/30)
+	else var s = 10;
 	function getStyle(obj, name) {
 		if(obj.currentStyle) {
 			return obj.currentStyle[name];
@@ -788,7 +876,7 @@ function startMove(obj, json, fnEnd) {
 			else {
 				cur=parseInt(getStyle(obj, attr));
 			}
-			var speed=(json[attr]-cur)/6;
+			var speed=(json[attr]-cur)/s;
 			speed=speed>0?Math.ceil(speed):Math.floor(speed);
 			if(cur!=json[attr])
 				bStop=false;
