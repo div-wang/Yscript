@@ -61,7 +61,7 @@ Y('#selector li').last() //寻找last li
     });
     Y('.click_last').click(function(event) {
         Y('#selector li').css('background','');
-        Y('#selector li').last().style.background = 'red'
+        Y('#selector li').last().css('background','red');
     });
 </script>
 
@@ -91,11 +91,11 @@ Y('.hide').click(function(event) {
 </div>
 <script type="text/javascript">
     Y('.show').click(function(event) {
-        Y('.box1').show();
+        Y('.box1').show(1000);
         Y('.box1').opacity(100);
     });
     Y('.hide').click(function(event) {
-        Y('.box1').hide();
+        Y('.box1').hide(1000);
     });
     Y('.opacity').click(function(event) {
 
@@ -108,10 +108,22 @@ Y('.hide').click(function(event) {
 <a class="pre" href="javascript:">js代码</a>
 <h2>动画</h2>
     <div class="top">
-        <div class="box2"><a href="slide.html">点击查看演示动画</a></div>
+        <div class="box2"><a href="javascript:" class="anim">点击查看演示动画</a></div>
     </div>
 </div>
-
+<script type="text/javascript">
+    Y('.anim').click(function(event) {
+        var startTime = new Date().getTime();
+        Y('.box2').animate(
+            {'width': 200,'height':200}, 
+            3000,
+            function() {
+                var endTime = new Date().getTime();
+                alert(endTime-startTime)
+            }
+        );
+    });
+</script>
 
 <!----------------------鼠标划过------------------------------>
 <div id="show">
@@ -208,7 +220,7 @@ Y('.removeclass').click(function(){
 <h2>文档操作</h2>
     <div class="top">
         <div class="box6">
-            <input type="text" ><br>
+            <input type="text" class="input"><br>
             <span>在输入框内输入内容后点击下面的按钮，看会出现什么</span>
         </div>
     </div>
@@ -247,6 +259,13 @@ Y('.docvalue').click(function(){
     var text = Y('.box6 input').value();
     Y('.box6 span').text('这是value:'+text);
 });
+
+Y('.input').click(function(){
+	//alert(Y(this).parent().html())
+	Y(this).parent().attr('style','')
+})
+
+//alert(Y('.input').subling().eq(2).html())
 </script>
 
 <!--公用js代码-->
