@@ -57,7 +57,7 @@ Y('#selector li').last() //寻找last li
     });
     Y('.click_frist').click(function(event) {
         Y('#selector li').css('background','');
-        Y('#selector li').first().style.background = 'red'
+        Y('#selector li').first().css('background','red')
     });
     Y('.click_last').click(function(event) {
         Y('#selector li').css('background','');
@@ -70,7 +70,7 @@ Y('#selector li').last() //寻找last li
 <a class="pre" href="javascript:">js代码</a>
 <h2>显示/隐藏</h2>
     <div class="top">
-        <div class="box1"></div>
+        <div class="box1 box9" style="display:none">1</div>
     </div>
     <div class="bot">
         <button class="show">显示</button>
@@ -91,15 +91,13 @@ Y('.hide').click(function(event) {
 </div>
 <script type="text/javascript">
     Y('.show').click(function(event) {
-        Y('.box1').show(1000);
-        Y('.box1').opacity(100);
+        Y('.box9').show(1000);
     });
     Y('.hide').click(function(event) {
-        Y('.box1').hide(1000);
+        Y('.box9').hide(1000);
     });
     Y('.opacity').click(function(event) {
-
-        Y('.box1').opacity(30);
+        Y('.box9').opacity(30);
     });    
 </script>
 
@@ -115,14 +113,17 @@ Y('.hide').click(function(event) {
     Y('.anim').click(function(event) {
         var startTime = new Date().getTime();
         Y('.box2').animate(
-            {'width': 200,'height':200}, 
-            3000,
+            {'width': 800,'height':800}, 
+            100,
             function() {
                 var endTime = new Date().getTime();
                 alert(endTime-startTime)
             }
         );
     });
+    
+    /*//ys.setCookie('name','wang')
+    alert(ys.each();)*/
 </script>
 
 <!----------------------鼠标划过------------------------------>
