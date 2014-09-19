@@ -6,9 +6,7 @@
  *特别感谢‘eglic(eglic.csdn@gmail.com)’、‘落雪飞花’，提供的技术支持！(*^__^*)
  */
 (function () {
-/*
- *工具类开始
- */
+
 //浏览器检测  
 (function () {  
     window.sys = {};  
@@ -20,39 +18,40 @@
     (s = ua.match(/opera\/.*version\/([\d.]+)/)) ? sys.opera = s[1] :   
     (s = ua.match(/version\/([\d.]+).*safari/)) ? sys.safari = s[1] : 0;      
     if (/webkit/.test(ua)) sys.webkit = ua.match(/webkit\/([\d.]+)/)[1];  
-	
-	if (typeof(HTMLElement) !== "undefined") {
-		HTMLElement.prototype.insertAdjacentElement = function(where, parsedNode) {
-			switch (where) {
-				case "beforeBegin":
-					this.parentNode.insertBefore(parsedNode, this);
-					break;
-				case "afterBegin":
-					this.insertBefore(parsedNode, this.firstChild);
-					break;
-				case "beforeEnd":
-					this.appendChild(parsedNode);
-					break;
-				case "afterEnd":
-					if (this.nextSibling)
-						this.parentNode.insertBefore(parsedNode, this.nextSibling);
-					else
-						this.parentNode.appendChild(parsedNode);
-					break;
-			}
-		}
-		HTMLElement.prototype.insertAdjacentHTML = function(where, htmlStr) {
-			var r = this.ownerDocument.createRange();
-			r.setStartBefore(this);
-			var parsedHTML = r.createContextualFragment(htmlStr);
-			this.insertAdjacentElement(where, parsedHTML);
-		}
-		HTMLElement.prototype.insertAdjacentText = function(where, txtStr) {
-			var parsedText = document.createTextNode(txtStr);
-			this.insertAdjacentElement(where, parsedText);
+})();  
+
+//append方法处理
+if (typeof(HTMLElement) !== "undefined") {
+	HTMLElement.prototype.insertAdjacentElement = function(where, parsedNode) {
+		switch (where) {
+			case "beforeBegin":
+				this.parentNode.insertBefore(parsedNode, this);
+				break;
+			case "afterBegin":
+				this.insertBefore(parsedNode, this.firstChild);
+				break;
+			case "beforeEnd":
+				this.appendChild(parsedNode);
+				break;
+			case "afterEnd":
+				if (this.nextSibling)
+					this.parentNode.insertBefore(parsedNode, this.nextSibling);
+				else
+					this.parentNode.appendChild(parsedNode);
+				break;
 		}
 	}
-})();  
+	HTMLElement.prototype.insertAdjacentHTML = function(where, htmlStr) {
+		var r = this.ownerDocument.createRange();
+		r.setStartBefore(this);
+		var parsedHTML = r.createContextualFragment(htmlStr);
+		this.insertAdjacentElement(where, parsedHTML);
+	}
+	HTMLElement.prototype.insertAdjacentText = function(where, txtStr) {
+		var parsedText = document.createTextNode(txtStr);
+		this.insertAdjacentElement(where, parsedText);
+	}
+}
 
 //DOM加载
 function addDomLoaded(fn) {
@@ -189,7 +188,6 @@ function getScroll() {
 	}
 }
 
-
 //跨浏览器获取Style
 function getStyle(element, attr) {
 	var value;
@@ -201,6 +199,48 @@ function getStyle(element, attr) {
 	return value;
 }
 
+//动画组件
+function startMove(obj, json, time, fnEnd) {
+	if (time>30) var s = Math.round(time/30)
+	else var s = 1;
+	function getStyle(obj, name) {
+		if(obj.currentStyle) {
+			return obj.currentStyle[name];
+		}
+		else {
+			return getComputedStyle(obj, false)[name];
+		}
+	}
+	clearInterval(obj.timer);
+	obj.timer=setInterval(function (){
+		var bStop=true;		//假设：所有值都已经到了
+		for(var attr in json) {
+			var cur=0;
+			if(attr=='opacity') {
+				cur=Math.round(parseFloat(getStyle(obj, attr))*100);
+			} 
+			else {
+				cur=parseInt(getStyle(obj, attr));
+			}
+			var speed=(json[attr]-cur)/s;
+			speed=speed>0?Math.ceil(speed):Math.floor(speed);
+			if(cur!=json[attr])
+				bStop=false;
+			
+			if(attr=='opacity') {
+				obj.style.filter='alpha(opacity:'+(cur+speed)+')';
+				obj.style.opacity=(cur+speed)/100;
+			}
+			else {
+				obj.style[attr]=cur+speed+'px';
+			}
+		}
+		if(bStop) {
+			clearInterval(obj.timer);			
+			if(fnEnd)fnEnd();
+		}
+	}, 30);
+}
 
 //判断class是否存在
 function hasClass(element, className) {
@@ -289,12 +329,12 @@ function predef(e) {
 }
 
 
-/*
- *
- *方法类开始
- *
+ /**
+ * 主库文件
+ * @author	 Div_wang
+ * @returns  
  */
-//基础库
+
 function Base(args) {
 	//创建一个数组，来保存获取的节点和节点数组
 	this.elements = [];
@@ -432,7 +472,7 @@ Base.prototype.ge = function (num) {
 
 //获取首个节点，并返回这个节点对象
 Base.prototype.first = function () {
-	var firstNode = this.elements[this.elements.length - 1];
+	var firstNode = this.elements[0];
 	this.elements = [];
 	this.elements[0] = firstNode;
 	return this;
@@ -444,7 +484,6 @@ Base.prototype.last = function () {
 	this.elements = [];
 	this.elements[0] = lastNode;
 	return this;
-	//return this.elements[this.elements.length - 1];
 };
 
 //获取某一个节点在整个节点组中是第几个索引
@@ -572,7 +611,7 @@ Base.prototype.opacity = function (num) {
 Base.prototype.height = function (obj) {
 	for (var i = 0; i < this.elements.length; i ++) {
 			var px = getStyle(this.elements[i],'height');
-			var height = px.split('p');
+			var height = px[i].split('p');
 			return height[0]
 	}
 }
@@ -686,11 +725,25 @@ Base.prototype.hover = function (over, out) {
 Base.prototype.show = function (num) {
 	if (arguments.length == 1) {
 		for (var i = 0; i < this.elements.length; i ++) {
-			startMove(this.elements[i], {'opacity':1000},num)
+			var element = this.elements[i]
+			if (element.style.display == 'block') {return}
+			var styles = ''
+			if (element.getAttribute('style') != null) {
+				styles = element.getAttribute('style')
+			}else{
+				styles = 'display:block';
+			}
+			element.style.opacity = 0;
+			element.style.display = 'block';
+			var height = element.offsetHeight;
+			var width = element.offsetWidth;
+			element.style.height = 0;
+			element.style.width = 0;
+			startMove(element, {'opacity':100,'height':height,'width':width},num,function(){element.setAttribute('style',styles);element.style.display = 'block'})				
 		}
 	}else{
 		for (var i = 0; i < this.elements.length; i ++) {
-			this.elements[i].style.display = 'none';
+			this.elements[i].style.display = 'block';
 		}
 	};
 	return this;
@@ -700,7 +753,15 @@ Base.prototype.show = function (num) {
 Base.prototype.hide = function (num) {
 	if (arguments.length == 1) {
 		for (var i = 0; i < this.elements.length; i ++) {
-			startMove(this.elements[i], {'opacity':0},num)
+			var element = this.elements[i];
+			if (element.style.display == 'none') {return}
+			var styles = ''
+			if (element.getAttribute('style')!=null) {
+				styles = element.getAttribute('style');
+			}else{
+				styles = 'display:none'
+			}
+			startMove(element, {'opacity':0,'height':0,'width':0},num,function(){element.setAttribute('style',styles);element.style.display = 'none'})
 		}
 	}else{
 		for (var i = 0; i < this.elements.length; i ++) {
@@ -741,6 +802,32 @@ Base.prototype.resize = function (fn) {
 	return this;
 };
 
+//跨浏览器获取视口大小
+Base.prototype.getInner = function() {
+	if (typeof window.innerWidth != 'undefined') {
+		return {
+			width : window.innerWidth,
+			height : window.innerHeight
+		}
+	} else {
+		return {
+			width : document.documentElement.clientWidth,
+			height : document.documentElement.clientHeight
+		}
+	}
+}
+
+Base.prototype.animate = function (json, time, fnEnd) {
+	for (var i = 0; i < this.elements.length; i ++) {
+		var _this = this.elements[i];
+		startMove(_this, json, time, fnEnd)
+	}
+	
+	return this
+}
+
+
+
 /**
  * 表单字段获得焦点
  * @author	 eglic.csdn@gmail.com
@@ -776,129 +863,79 @@ Base.prototype.select = function () {
 	return this;
 }
 
-Base.prototype.animate = function (json, time, fnEnd) {
-	if (time) var s = Math.round(time/30)
-	else var s = 10;
-	for (var i = 0; i < this.elements.length; i ++) {
-		var _this = this.elements[i];
-		clearInterval(_this.timer);
-		_this.timer=setInterval(function (){
-			var bStop=true;		//假设：所有值都已经到了
-			for(var attr in json) {
-				var cur=0;
-				if(attr=='opacity') {
-					cur=Math.round(parseFloat(getStyle(_this, attr))*100);
-				}
-				else {
-					cur=parseInt(getStyle(_this, attr));
-				}
-				var speed=(json[attr]-cur)/s;
-				speed=speed>0?Math.ceil(speed):Math.floor(speed);
-				if(cur!=json[attr])
-					bStop=false;
-				if(attr=='opacity') {
-					_this.style.filter='alpha(opacity:'+(cur+speed)+')';
-					_this.style.opacity=(cur+speed)/100;
-				}
-				else {
-					_this.style[attr]=cur+speed+'px';
+//each函数
+Base.prototype.each = function(object, callback, args) {
+//该方法有三个参数:进行操作的对象obj，进行操作的函数fn，函数的参数args
+	var name, i = 0,length = object.length;
+	if (args) {
+		if (length == undefined) {
+			for (name in object) {
+				if (callback.apply(object[name], args) === false) {
+					break;
 				}
 			}
-			if(bStop) {
-				clearInterval(_this.timer);			
-				if(fnEnd)fnEnd();
+		}else {
+			for (; i < length;) {
+				if (callback.apply(object[i++], args) === false) {
+					break;
+				}
 			}
-		}, 30);
-	}
-	return this
-}
-
-//插件入口
-Base.prototype.extend = function (name, fn) {
-	Base.prototype[name] = fn;
-};
-
-//前台调用
-var Y = function (args) {
-	return new Base(args);
-}
-window.Y = Y;
-
-})();
-
-
-//写入Cookie，name为名字，value是值
-//duration过期时间（天为单位，默认1天）
-function setCookie(name, value, duration) {
-    var oDate = new Date();
-    if (duration <= 0)
-        duration = 1;
-	oDate.setDate(oDate.getDate()+duration);
-    document.cookie = name + "=" + encodeURI(value) + "; expires=" + oDate;
-};
-
-//读取Cookie,不存在返回空字符串""
-function getCookie(name) {
-    var arr=document.cookie.split('; ');
-	for(var i=0;i<arr.length;i++) {
-		var arr2=arr[i].split('=');
-		if(arr2[0]==name) {
-			return decodeURIComponent(arr2[1]);
+		}
+	} else {
+		if (length == undefined) {
+			for (name in object) {
+				if (callback.call(object[name], name, object[name]) === false) {
+					break;
+				}
+			}
+		} else {
+			for (var value = object[0]; i < length && callback.call(value, i, value) !== false; value = object[++i]) {}
 		}
 	}
-	return "";
-};
-//移除Cookie
-function delCookie(name) {
-    setCookie(name, 1, -1);
-};
-
-//动画
-function startMove(obj, json, time, fnEnd) {
-	if (time) var s = Math.round(time/30)
-	else var s = 10;
-	function getStyle(obj, name) {
-		if(obj.currentStyle) {
-			return obj.currentStyle[name];
-		}
-		else {
-			return getComputedStyle(obj, false)[name];
-		}
-	}
-	clearInterval(obj.timer);
-	obj.timer=setInterval(function (){
-		var bStop=true;		//假设：所有值都已经到了
-		for(var attr in json) {
-			var cur=0;
-			if(attr=='opacity') {
-				cur=Math.round(parseFloat(getStyle(obj, attr))*100);
-			}
-			else {
-				cur=parseInt(getStyle(obj, attr));
-			}
-			var speed=(json[attr]-cur)/s;
-			speed=speed>0?Math.ceil(speed):Math.floor(speed);
-			if(cur!=json[attr])
-				bStop=false;
-			
-			if(attr=='opacity') {
-				obj.style.filter='alpha(opacity:'+(cur+speed)+')';
-				obj.style.opacity=(cur+speed)/100;
-			}
-			else {
-				obj.style[attr]=cur+speed+'px';
-			}
-		}
-		if(bStop) {
-			clearInterval(obj.timer);			
-			if(fnEnd)fnEnd();
-		}
-	}, 30);
+	return object;
 }
 
+/**
+ * 去头尾空白
+ */
+Base.prototype.trim = function (str){
+	return str.replace(/(^\s+)|(\s+$)/gi,'');
+}
+/**
+ * 获取url 参数
+ */
+Base.prototype.getUrlParam = function(key){
+	if(this.indexOf('?') > 0){
+		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
+		var oreg = new RegExp(sreg,'gim');
+		if(oreg.test(this)){
+			return RegExp.$4;
+		}else{
+			return null;
+		}
+	}else{
+		return null;
+	}
+}
+/**
+ * 设置url 参数
+ */
+Base.prototype.setUrlParam = function(key,value){
+	if(this.indexOf('?') > 0){
+		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
+		var oreg = new RegExp(sreg,'gim');
+		if(oreg.test(this)){
+			return this.replace(oreg,'$1$2$3' + value + '$5');
+		}else{
+			return this + '&' + key + '=' + value;
+		}
+	}else{
+		return this + '?' + key + '=' + value;
+	}
+}
 
 //封装ajax
-ajax = function(conf) {
+Base.prototype.ajax = function(conf) {
 	var xhr = (function () {
 		if (typeof XMLHttpRequest != 'undefined') {
 			return new XMLHttpRequest();
@@ -992,72 +1029,51 @@ ajax = function(conf) {
 	}
 }
 
-/**
- * 获取url 参数
- */
-String.prototype.getUrlParam = function(key){
-	if(this.indexOf('?') > 0){
-		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
-		var oreg = new RegExp(sreg,'gim');
-		if(oreg.test(this)){
-			return RegExp.$4;
-		}else{
-			return null;
-		}
-	}else{
-		return null;
-	}
-}
-/**
- * 设置url 参数
- */
-String.prototype.setUrlParam = function(key,value){
-	if(this.indexOf('?') > 0){
-		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
-		var oreg = new RegExp(sreg,'gim');
-		if(oreg.test(this)){
-			return this.replace(oreg,'$1$2$3' + value + '$5');
-		}else{
-			return this + '&' + key + '=' + value;
-		}
-	}else{
-		return this + '?' + key + '=' + value;
-	}
-}
-/**
- * 去头尾空白
- */
-String.prototype.trim = function (){
-	return this.replace(/(^\s+)|(\s+$)/gi,'');
-}
+//写入Cookie，name为名字，value是值
+//duration过期时间（天为单位，默认1天）
+Base.prototype.setCookie = function(name, value, duration) {
+    var oDate = new Date();
+    if (duration <= 0)
+        duration = 1;
+	oDate.setDate(oDate.getDate()+duration);
+    document.cookie = name + "=" + encodeURI(value) + "; expires=" + oDate;
+};
 
-function each(object, callback, args) {
-//该方法有三个参数:进行操作的对象obj，进行操作的函数fn，函数的参数args
-	var name, i = 0,length = object.length;
-	if (args) {
-		if (length == undefined) {
-			for (name in object) {
-				if (callback.apply(object[name], args) === false) {
-					break;
-				}
-			}
-		}else {
-			for (; i < length;) {
-				if (callback.apply(object[i++], args) === false) {
-					break;
-				}
-			}
-		}
-	} else {
-		if (length == undefined) {
-			for (name in object) {
-				if (callback.call(object[name], name, object[name]) === false) {
-					break;
-				}
-			}
-		} else {
-			for (var value = object[0]; i < length && callback.call(value, i, value) !== false; value = object[++i]) {}
+//读取Cookie,不存在返回空字符串""
+Base.prototype.getCookie = function(name) {
+    var arr=document.cookie.split('; ');
+	for(var i=0;i<arr.length;i++) {
+		var arr2=arr[i].split('=');
+		if(arr2[0]==name) {
+			return decodeURIComponent(arr2[1]);
 		}
 	}
-	return object;
+	return "";
+};
+//移除Cookie
+Base.prototype.delCookie = function(name) {
+    setCookie(name, 1, -1);
+};
+
+//插件入口
+Base.prototype.extend = function (name, fn) {
+	Base.prototype[name] = fn;
+};
+
+//前台调用
+var Y = function (args) {
+	return new Base(args);
 }
+window.ys = Y();
+window.Y = Y;
+window.ajax = ys.ajax
+window.each = ys.each
+window.setCookie = ys.setCookie
+window.getCookie = ys.getCookie
+window.delCookie = ys.delCookie
+})();
+
+
+
+
+
