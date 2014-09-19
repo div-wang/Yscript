@@ -1,6 +1,6 @@
 ﻿/*
  *y.js
- *版本：0.2.0 
+ *版本：0.2.1 
  *制作：div_wang
  *版权所有：39yst.com
  *特别感谢‘eglic(eglic.csdn@gmail.com)’、‘落雪飞花’，提供的技术支持！(*^__^*)
