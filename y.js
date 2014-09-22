@@ -968,6 +968,8 @@ Base.prototype.ajax = function(conf) {
     var async = conf.async;
     //回调函数可选
     var success = conf.success;
+    //跨域获取数据
+    var jsonpCallback = conf.jsonpCallback;
     
     if (type == null){
         //type参数可选，默认为get
@@ -978,7 +980,7 @@ Base.prototype.ajax = function(conf) {
         dataType = "text";
     }
     if (async == null){
-        //type参数可选，默认为get
+        //async参数可选，默认为true
         async = true;
     }
 
@@ -1011,6 +1013,27 @@ Base.prototype.ajax = function(conf) {
 						success(eval("("+xhr.responseText+")"));
 					}
 				}
+				if (dataType=="jsonp"||dataType=="JSONP"){
+					if (success != null){
+						
+					  	function addScriptTag(src){
+					        var script = document.createElement('script');
+					        script.setAttribute("type","text/javascript");
+					        script.src = src;
+					        document.body.appendChild(script);
+					    }
+					    window.onload = function(){
+					        //调用远程服务
+					        addScriptTag(url);  
+					    }
+					    //回调函数person
+					    var jsonpCallback = function (data) {
+					        return data
+					    }
+					    //将json字符串转换为js对象  
+						success(eval("("+jsonpCallback+")"));
+				    }
+    			}
 			}
 		};
 	}else{
