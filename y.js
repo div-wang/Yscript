@@ -969,6 +969,7 @@ Base.prototype.ajax = function(conf) {
     //回调函数可选
     var success = conf.success;
     //跨域获取数据
+    var jsonp = conf.jsonp;
     var jsonpCallback = conf.jsonpCallback;
     
     if (type == null){
@@ -994,6 +995,27 @@ Base.prototype.ajax = function(conf) {
                     "application/x-www-form-urlencoded");
         xhr.send(data);
     }
+	if (dataType=="jsonp"||dataType=="JSONP"){
+		if (success != null){
+		  	function addScriptTag(src){
+		        var script = document.createElement('script');
+		        script.setAttribute("type","text/javascript");
+		        script.src = src
+		        document.body.appendChild(script);
+		    }
+		    window.onload = function(){
+		        //调用远程服务
+		        addScriptTag(url+'?'+jsonp+'=person');  
+		    }
+		    //回调函数person
+		    function person (data) {
+		        return data
+		    }
+		    alert(person())
+		    //将json字符串转换为js对象  
+			success(eval("("+person()+")"));
+	    }
+	}
     if (async) {
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
@@ -1013,27 +1035,6 @@ Base.prototype.ajax = function(conf) {
 						success(eval("("+xhr.responseText+")"));
 					}
 				}
-				if (dataType=="jsonp"||dataType=="JSONP"){
-					if (success != null){
-						
-					  	function addScriptTag(src){
-					        var script = document.createElement('script');
-					        script.setAttribute("type","text/javascript");
-					        script.src = src;
-					        document.body.appendChild(script);
-					    }
-					    window.onload = function(){
-					        //调用远程服务
-					        addScriptTag(url);  
-					    }
-					    //回调函数person
-					    var jsonpCallback = function (data) {
-					        return data
-					    }
-					    //将json字符串转换为js对象  
-						success(eval("("+jsonpCallback+")"));
-				    }
-    			}
 			}
 		};
 	}else{
