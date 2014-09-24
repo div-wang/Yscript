@@ -1,1 +1,1 @@
-result({"state":false,"error":"\u7528\u6237\u540d\u4e0d\u80fd\u4e3a\u7a7a"})
+callback({"state":false,"error":"\u7528\u6237\u540d\u4e0d\u80fd\u4e3a\u7a7a"})
