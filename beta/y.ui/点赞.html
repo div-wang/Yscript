@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>放大镜</title>
+<script type="text/javascript" src="http://www.sucaijiayuan.com/statics/js/jquery.js"></script>
+<script type="text/javascript" src="http://www.39yst.com/js/y.js"></script>
+<style type="text/css">
+#zan{position: relative;}
+#zan div{position: absolute;top: 0px;left: 0px;color: #f00}
+</style>
+<script type="text/javascript">
+ <!--
+window.onload = function(){
+
+	/*var zan = document.getElementById('zan');
+	var zan_num = parseInt(zan.getElementsByTagName('span')[0].innerHTML);
+	var i = zan_num;
+	zan.onclick = function(){ 
+		if (i > zan_num || getCookie('zan_cookie') == "zan_jia1") {
+			alert('你已经赞过了')
+			return;
+		}else{
+			i = i+1;
+			var zan_html = zan.innerHTML;
+			zan.innerHTML = zan_html+"<div id='zan_jia'>+<b>1</b></div>"
+			var zan_jia = document.getElementById('zan_jia');
+			startMove(zan_jia,{top:-20,left:30,opacity:0},function zan_fn(){
+				zan.innerHTML = zan_html;
+				zan.getElementsByTagName('span')[0].innerHTML = i;
+				setCookie('zan_cookie','zan_jia1',3)
+			});
+		}
+	}*/
+	
+
+}
+function zan(obj){ 
+	if (obj.name == 1 ){alert('你已经赞过了');return} 
+	else{
+		obj.name = 1;
+		var i = obj.innerHTML.split("(")[1].split(")")[0];
+		var zan_jia = document.createElement('div');
+		zan_jia.innerHTML = '+<b>1</b>';
+		alert(i);
+		obj.appendChild(zan_jia);
+		startMove(zan_jia,{top:-20,left:30,opacity:0},function(){
+			obj.removeChild(zan_jia);
+			obj.innerHTML = obj.innerHTML.split("(")[0]+"("+(i+1)+")";
+			setCookie('zan_cookie','zan_jia1',3)
+		});
+	}
+}
+</script>
+</head>
+<body>
+<a id="zan" href="javascript:" onclick="zan(this)">赞(<span>0</span>)</a>
+<a id="zan" href="javascript:" onclick="zan(this)">赞(<span>0</span>)</a>
+</body>
+</html>
