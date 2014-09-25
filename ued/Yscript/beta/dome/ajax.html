@@ -23,7 +23,7 @@
     </style>
     <script src="../y.js"></script>
     <script type="text/javascript">
-    function addScriptTag(src){
+    /*function addScriptTag(src){
         var script = document.createElement('script');
         script.setAttribute("type","text/javascript");
         script.src = src;
@@ -35,18 +35,21 @@
     //自定义的回调函数result
     function ajaxlogin(data) {
         alert(data.error);
-    }
+    }*/
     </script>
 
     <script type="text/javascript">  
-    /*ajax({
+    ajax({
         url:"http://10.0.2.41/ued/Yscript/dome/json.js",
         dataType:'jsonp',
         jsonp : 'callback',
         success:function(data){
-            alert(data)
+            for(var i in data){
+                alert(data.i)
+            }
+            
         }
-    })*/
+    })
     //alert(success)
 
 
