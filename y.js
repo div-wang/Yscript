@@ -1,6 +1,6 @@
 ﻿/*
  *y.js
- *版本：0.2.3 
+ *版本：0.2.4 
  *制作：div_wang:826950544@qq.com
  *版权所有：39yst.com
  *特别感谢‘eglic(eglic.csdn@gmail.com)’、‘落雪飞花’，提供的技术支持！(*^__^*)
@@ -921,45 +921,6 @@
 		return object;
 	}
 
-	/**
-	 * 去头尾空白
-	 */
-	Base.prototype.trim = function (str){
-		return str.replace(/(^\s+)|(\s+$)/gi,'');
-	}
-	/**
-	 * 获取url 参数
-	 */
-	Base.prototype.getUrlParam = function(key){
-		if(this.indexOf('?') > 0){
-			var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
-			var oreg = new RegExp(sreg,'gim');
-			if(oreg.test(this)){
-				return RegExp.$4;
-			}else{
-				return null;
-			}
-		}else{
-			return null;
-		}
-	}
-	/**
-	 * 设置url 参数
-	 */
-	Base.prototype.setUrlParam = function(key,value){
-		if(this.indexOf('?') > 0){
-			var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
-			var oreg = new RegExp(sreg,'gim');
-			if(oreg.test(this)){
-				return this.replace(oreg,'$1$2$3' + value + '$5');
-			}else{
-				return this + '&' + key + '=' + value;
-			}
-		}else{
-			return this + '?' + key + '=' + value;
-		}
-	}
-
 	//封装ajax
 	Base.prototype.ajax = function(conf) {
 		var xhr = (function () {
@@ -1099,7 +1060,44 @@
 	window.delCookie = ys.delCookie
 })();
 
-
+/**
+ * 去头尾空白
+ */
+String.prototype.trim = function (str){
+	return str.replace(/(^\s+)|(\s+$)/gi,'');
+}
+/**
+ * 获取url 参数
+ */
+String.prototype.getUrlParam = function(key){
+	if(this.indexOf('?') > 0){
+		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
+		var oreg = new RegExp(sreg,'gim');
+		if(oreg.test(this)){
+			return RegExp.$4;
+		}else{
+			return null;
+		}
+	}else{
+		return null;
+	}
+}
+/**
+ * 设置url 参数
+ */
+String.prototype.setUrlParam = function(key,value){
+	if(this.indexOf('?') > 0){
+		var sreg = '(\\?|\\&)(' + key + ')(\\=)(.*?)([\\&]|$)';
+		var oreg = new RegExp(sreg,'gim');
+		if(oreg.test(this)){
+			return this.replace(oreg,'$1$2$3' + value + '$5');
+		}else{
+			return this + '&' + key + '=' + value;
+		}
+	}else{
+		return this + '?' + key + '=' + value;
+	}
+}
 
 
 
