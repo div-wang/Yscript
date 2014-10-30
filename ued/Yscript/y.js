@@ -1,6 +1,6 @@
 ﻿/*
  *y.js
- *版本：0.2.4 
+ *版本：0.2.5 
  *制作：div_wang:826950544@qq.com
  *版权所有：39yst.com
  *特别感谢‘eglic(eglic.csdn@gmail.com)’、‘落雪飞花’，提供的技术支持！(*^__^*)
@@ -1015,7 +1015,12 @@
 			}
 		}
 	}
-
+	/**
+	 * 去头尾空白
+	 */
+	Base.prototype.trim = function (str){
+		return str.replace(/(^\s+)|(\s+$)/gi,'');
+	}
 	//写入Cookie，name为名字，value是值
 	//duration过期时间（天为单位，默认1天）
 	Base.prototype.setCookie = function(name, value, duration) {
@@ -1051,21 +1056,16 @@
 	var Y = function (args) {
 		return new Base(args);
 	}
-	window.ys = Y();
+	window.$$ = Y();
 	window.Y = Y;
-	window.ajax = ys.ajax
-	window.each = ys.each
-	window.setCookie = ys.setCookie
-	window.getCookie = ys.getCookie
-	window.delCookie = ys.delCookie
+	//window.ajax = Y().ajax
+	//window.each = Y().each
+	window.setCookie = Y().setCookie
+	window.getCookie = Y().getCookie
+	window.delCookie = Y().delCookie
 })();
 
-/**
- * 去头尾空白
- */
-String.prototype.trim = function (str){
-	return str.replace(/(^\s+)|(\s+$)/gi,'');
-}
+
 /**
  * 获取url 参数
  */
