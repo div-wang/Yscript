@@ -33,7 +33,7 @@ var popup = {
 
             var popup_agreement_style = document.createElement('style');
                 popup_agreement_style.type = "text/css";
-            var popup_agreement_style_text = '.popup_agreement_text{width:50%;height:70%;overflow-y:scroll;line-height:1.6;border:10px solid #999;background:#fff;color:#333;position:absolute;top:10%;left:25%;z-index:12; font-size:12px;}.popup_agreement_close{background:#e33a3d;width:20%;border-radius:5px; cursor:pointer; color:#fff; font-family:"微软雅黑"; font-size:14px;min-width:200px;height:3em;margin:0 auto;display:block;text-align:center;line-height:3em} #popup_agreement_tan{position:absolute;top:0;width:100%;height:100%;background:#000;opacity:0.5;filter:alpha(opacity=50);z-index:10;width:'+agreement_width+'px;'+agreement_height+'px;}'
+            var popup_agreement_style_text = '.popup_agreement_text{width:50%;height:70%;overflow-y:scroll;line-height:1.6;border:10px solid #999;background:#fff;color:#333;position:fixed;top:10%;left:25%;z-index:12; font-size:12px;}.popup_agreement_close{background:#e33a3d;width:20%;border-radius:5px; cursor:pointer; color:#fff; font-family:"微软雅黑"; font-size:14px;min-width:200px;height:3em;margin:0 auto;display:block;text-align:center;line-height:3em} #popup_agreement_tan{position:absolute;top:0;width:100%;height:100%;background:#000;opacity:0.5;filter:alpha(opacity=50);z-index:10;width:'+agreement_width+'px;height:'+agreement_height+'px;}'
                 if (popup_agreement_style.styleSheet) { //IE
                   popup_agreement_style.styleSheet.cssText = popup_agreement_style_text;
                 } else { 
@@ -87,11 +87,11 @@ var popup = {
                 popup_tryOut_box.className = 'try_address pr';
                 popup_tryOut_box.style.display = 'block';
                 popup_tryOut_box.style.width = box.width+'px';
-                popup_tryOut_box.style.height = box.height+'px';
-                popup_tryOut_box.innerHTML = '<h4 class="add_h4">'+box.title+'</h4><div class="blank30"></div><div class="add_box"></div><form action="" class="all_bottom"><input type="buttom" class="bottom_btn" value="提交"></form><div class="closebox" onclick="popup.tryOut.close()"></div>';
+                popup_tryOut_box.innerHTML = '<div class="all_contet"><h4 class="add_h4">'+box.title+'</h4><div class="blank15"></div><div class="popup_tryOut_box1" style="height:'+(box.height-120)+'px"></div><p class="all_bottom"><input type="button" class="bottom_btn" value="提交" onclick="popup.tryOut.close()"></p><div class="closebox" onclick="popup.tryOut.close()"></div></div>';
                 document.body.appendChild(popup_tryOut_box);  
+                popup_tryOut_box.style.height = box.height+'px';
             };
-            callback()
+            if (typeof callback != 'undefined') callback();  
         } , 
         close:function(callback){
             if (document.getElementById('popup_tryOut_tan') != undefined) {
@@ -106,7 +106,7 @@ var popup = {
                     document.body.removeChild(a[i]);
                 };                 
             };   
-            callback()
+            if (typeof callback != 'undefined') callback();  
         }
     },
     select:{
@@ -138,9 +138,10 @@ var popup = {
                 popup_select_box.innerHTML = '<h4 class="add_h4">'+box.title+'</h4><form action="" ><div class="add_box"><div class="add_box1"><div class="add_top"><label>检索:</label><input type="text" name="n1" id="selectname"></div><table class="address1"></table><div id="page"></div><div style="height:25px;"></div></div></div><div class="all_bottom" style="text-align:right;background:#ddd"><input type="button"  class="bottom_btn" value="确定"/><input type="button"  class="bottom_btn" value="取消" onclick="popup.select.close()"/></div></form><div class="closebox" onclick="popup.select.close()" style="width:15px;height:15px; background:url(./images/all.png) -303px -22px; position:absolute; right:16px; top:10px; cursor:pointer;"></div>';
                 document.body.appendChild(popup_select_box);    
             };
-            callback()
+            if (typeof callback != 'undefined') callback();  
         } , 
         close:function(callback){
+            if (typeof callback != 'undefined') callback();  
             if (document.getElementById('popup_select_tan') != undefined) {
                 document.body.removeChild(document.getElementById('popup_select_tan'))
             };
@@ -153,8 +154,6 @@ var popup = {
                     document.body.removeChild(a[i]);
                 };                 
             }; 
-            if(callback) callback();
-            
         }
     }
 };
