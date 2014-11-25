@@ -8,7 +8,7 @@
 (function () {
 	//浏览器检测  
 	(function () {  
-	    window.sys = {};  
+	    window.sys = {};   
 	    var ua = navigator.userAgent.toLowerCase();   
 	    var s;        
 	    (s = ua.match(/msie ([\d.]+)/)) ? sys.ie = s[1] :  
