@@ -1,14 +1,15 @@
 ﻿/*
  *y.js
- *版本：0.2.5 
+ *版本：0.5 
  *制作：div_wang:826950544@qq.com
  *版权所有：39yst.com
  *特别感谢‘eglic(eglic.csdn@gmail.com)’、‘落雪飞花’，提供的技术支持！(*^__^*)
  */
 (function () {
+	var w = window;
 	//浏览器检测  
 	(function () {  
-	    window.sys = {};   
+	    w.sys = {};  
 	    var ua = navigator.userAgent.toLowerCase();   
 	    var s;        
 	    (s = ua.match(/msie ([\d.]+)/)) ? sys.ie = s[1] :  
@@ -114,7 +115,7 @@
 
 	//执行事件处理函数
 	addEvent.exec = function (event) {
-		var e = event || addEvent.fixEvent(window.event);
+		var e = event || addEvent.fixEvent(w.event);
 		var es = this.events[e.type];
 		for (var i in es) {
 			es[i].call(this, e);
@@ -163,13 +164,12 @@
 		}
 	}
 
-
 	//跨浏览器获取视口大小
 	function getInner() {
-		if (typeof window.innerWidth != 'undefined') {
+		if (typeof w.innerWidth != 'undefined') {
 			return {
-				width : window.innerWidth,
-				height : window.innerHeight
+				width : w.innerWidth,
+				height : w.innerHeight
 			}
 		} else {
 			return {
@@ -190,8 +190,8 @@
 	//跨浏览器获取Style
 	function getStyle(element, attr) {
 		var value;
-		if (typeof window.getComputedStyle != 'undefined') {//W3C
-			value = window.getComputedStyle(element, null)[attr];
+		if (typeof w.getComputedStyle != 'undefined') {//W3C
+			value = w.getComputedStyle(element, null)[attr];
 		} else if (typeof element.currentStyle != 'undeinfed') {//IE
 			value = element.currentStyle[attr];
 		}
@@ -245,7 +245,6 @@
 	function hasClass(element, className) {
 		return element.className.match(new RegExp('(\\s|^)' +className +'(\\s|$)'));
 	}
-
 
 	//跨浏览器添加link规则
 	function insertRule(sheet, selectorText, cssText, position) {
@@ -319,7 +318,7 @@
 
 	//滚动条固定
 	function fixedScroll() {
-		window.scrollTo(fixedScroll.left, fixedScroll.top);
+		w.scrollTo(fixedScroll.left, fixedScroll.top);
 	}
 
 	//阻止默认行为
@@ -327,13 +326,11 @@
 		e.preventDefault();
 	}
 
-
 	 /**
 	 * 主库文件
 	 * @author	 Div_wang
 	 * 
 	 */
-
 	function Base(args) {
 		//创建一个数组，来保存获取的节点和节点数组
 		this.elements = [];
@@ -493,7 +490,7 @@
 		}
 	};
 
-	//获取某一个节点，并且Base对象
+	//获取某一个节点，并且返回Base对象
 	Base.prototype.eq = function (num) {
 		var element = this.elements[num];
 		this.elements = [];
@@ -576,7 +573,7 @@
 			if (typeof obj == 'string' && arguments.length == 1) {
 				return this.elements[i].getAttribute(obj);
 			} else if (typeof obj == 'string' && arguments.length == 2) {
-				if (window.ActiveXObject && sys.ie < 8) {
+				if (w.ActiveXObject && sys.ie < 8) {
 					if (obj == 'style'){
 						this.elements[i].style.cssText=value;
 					}else if (obj == 'class'){
@@ -587,7 +584,7 @@
 				this.elements[i].setAttribute(obj, value);
 			} else if (typeof obj == 'object' && arguments.length == 1) {
 				for(var c in obj){
-					if (window.ActiveXObject && sys.ie < 8) {
+					if (w.ActiveXObject && sys.ie < 8) {
 						if (c == 'style'){
 							this.elements[i].style.cssText=obj[c];
 						}else if (c == 'class'){
@@ -613,7 +610,7 @@
 				for(var c in attr){
 					val += c+':'+attr[c]+';'
 				}
-				if (window.ActiveXObject && sys.ie < 8) {
+				if (w.ActiveXObject && sys.ie < 8) {
 					this.elements[i].style.cssText=val;
 					return
 				}
@@ -706,7 +703,7 @@
 		return null;
 	}
 
-	//设置innerHTML
+	//获取innerHTML
 	Base.prototype.html = function (str) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			if (arguments.length == 0) {
@@ -717,7 +714,7 @@
 		return this;
 	}
 
-	//设置innerText
+	//获取innerText
 	Base.prototype.text = function (str) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			if (arguments.length == 0) {
@@ -732,7 +729,7 @@
 	}
 
 	//设置事件发生器
-	Base.prototype.bind = function (event, fn) {
+	Base.prototype.on = function (event, fn) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			addEvent(this.elements[i], event, fn);
 		}
@@ -831,10 +828,10 @@
 
 	//跨浏览器获取视口大小
 	Base.prototype.getInner = function() {
-		if (typeof window.innerWidth != 'undefined') {
+		if (typeof w.innerWidth != 'undefined') {
 			return {
-				width : window.innerWidth,
-				height : window.innerHeight
+				width : w.innerWidth,
+				height : w.innerHeight
 			}
 		} else {
 			return {
@@ -844,6 +841,7 @@
 		}
 	}
 
+	//简易动画函数
 	Base.prototype.animate = function (json, time, fnEnd) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			var _this = this.elements[i];
@@ -851,8 +849,6 @@
 		}
 		return this
 	}
-
-
 
 	/**
 	 * 表单字段获得焦点
@@ -891,7 +887,7 @@
 
 	//each函数
 	Base.prototype.each = function(object, callback, args) {
-	//该方法有三个参数:进行操作的对象obj，进行操作的函数fn，函数的参数args
+		//该方法有三个参数:进行操作的对象obj，进行操作的函数fn，函数的参数args
 		var name, i = 0,length = object.length;
 		if (args) {
 			if (length == undefined) {
@@ -927,11 +923,7 @@
 			if (typeof XMLHttpRequest != 'undefined') {
 				return new XMLHttpRequest();
 			} else if (typeof ActiveXObject != 'undefined') {
-				var version = [
-											'MSXML2.XMLHttp.6.0',
-											'MSXML2.XMLHttp.3.0',
-											'MSXML2.XMLHttp'
-				];
+				var version = ['MSXML2.XMLHttp.6.0','MSXML2.XMLHttp.3.0','MSXML2.XMLHttp'];
 				for (var i = 0; version.length; i ++) {
 					try {
 						return new ActiveXObject(version[i]);
@@ -1015,12 +1007,56 @@
 			}
 		}
 	}
-	/**
-	 * 去头尾空白
-	 */
+
+    //自定义弹窗msg
+    Base.prototype.msgshow = function(str){
+    	var d = document;
+        var msg_width = d.body.clientWidth || d.dElement.clientWidth,
+            msg_height = d.body.clientHeight || d.dElement.clientHeight;  
+        var popup_msg_style = d.createElement('style');
+            popup_msg_style.type = "text/css";
+        var popup_msg_style_text = '.popup_msg_box{border-radius:5px;min-width:200px;width:30%;min-height:30%;font-family:"寰蒋闆呴粦"; word-break:break-all;word-wrap:break-word;font-size:14px;font-weight:bold;padding:30px 5px 10px;text-align:center;line-height:1.6;border:1px solid #999;background:#fff;color:#333;position:fixed;top:30%;left:35%;z-index:12; }.popup_msg_close{position:absolute;top:5px;right:5px;background:#3e7ef8;border-radius:5px; cursor:pointer; color:#fff; font-family:"寰蒋闆呴粦"; font-size:14px;width:20px;height:1.5em;display:block;text-align:center;line-height:1.5em} #popup_msg_tan{position:absolute;top:0;width:100%;height:100%;background:#000;opacity:0.5;filter:alpha(opacity=50);z-index:10;width:'+msg_width+'px;height:'+msg_height+'px;}'
+            if (popup_msg_style.styleSheet) { //IE
+              popup_msg_style.styleSheet.cssText = popup_msg_style_text;
+            } else { 
+              popup_msg_style.innerHTML = popup_msg_style_text;
+            }
+            d.body.appendChild(popup_msg_style);
+        var popup_msg_tan = d.createElement('div');
+            popup_msg_tan.id = 'popup_msg_tan';
+            d.body.appendChild(popup_msg_tan);
+        var popup_msg_box = d.createElement('div');
+            popup_msg_box.innerHTML = '<a class="popup_msg_close" onclick="msgx(this)">X</a>'+str;
+            if (msg_width<300) {popup_msg_box.style.left=(msg_width-200)/2 + 'px'};
+            popup_msg_box.className = 'popup_msg_box';
+            d.body.appendChild(popup_msg_box);
+        w.onresize = function(){
+        	msg_width = d.body.clientWidth || d.dElement.clientWidth,
+            msg_height = d.body.clientHeight || d.dElement.clientHeight;
+           	popup_msg_tan.style.width = msg_width+'px';
+           	popup_msg_tan.style.height = msg_height+'px'
+        }
+    }
+    // 自定义弹窗msg关闭
+    Base.prototype.msgclose = function(obj){
+    	var d = document;
+        var a = obj.parentNode.parentNode.childNodes;
+        for (var i = 0 ; i < a.length; i++) {
+            if (a[i].nodeType==1 && a[i].type == "text/css") {
+                d.body.removeChild(a[i]);
+            }; 
+            if (a[i].nodeType==1 && a[i].id == "popup_msg_tan") {
+                d.body.removeChild(a[i]);
+            };                   
+        };
+        d.body.removeChild(obj.parentNode);
+    }
+
+	//去头尾空白
 	Base.prototype.trim = function (str){
 		return str.replace(/(^\s+)|(\s+$)/gi,'');
 	}
+
 	//写入Cookie，name为名字，value是值
 	//duration过期时间（天为单位，默认1天）
 	Base.prototype.setCookie = function(name, value, duration) {
@@ -1030,7 +1066,6 @@
 		oDate.setDate(oDate.getDate()+duration);
 	    document.cookie = name + "=" + encodeURI(value) + "; expires=" + oDate;
 	};
-
 	//读取Cookie,不存在返回空字符串""
 	Base.prototype.getCookie = function(name) {
 	    var arr=document.cookie.split('; ');
@@ -1056,18 +1091,27 @@
 	var Y = function (args) {
 		return new Base(args);
 	}
-	window.$$ = Y();
-	window.Y = Y;
-	//window.ajax = Y().ajax
-	//window.each = Y().each
-	window.setCookie = Y().setCookie
-	window.getCookie = Y().getCookie
-	window.delCookie = Y().delCookie
+	w.$$ = Y();
+	w.Y = Y;
+	w.msgx = Y().msgclose;   
+    w.msg = Y().msgshow;
+
+	//debug
+    w.onerror = function (errorMessage, scriptURI, lineNumber, columnNumber) {
+        // 其他情况，都以alert方式直接提示错误信息
+        var msgs = [];
+        msgs.push("亲，代码有错误");
+        msgs.push("<br>错误信息：", errorMessage);
+        msgs.push("<br>出错文件：", scriptURI);
+        msgs.push("<br>出错位置：", lineNumber + '行，' + columnNumber + '列');
+        msg(msgs.join(''));
+    }
 })();
 
 
 /**
  * 获取url 参数
+ * eglic(eglic.csdn@gmail.com)
  */
 String.prototype.getUrlParam = function(key){
 	if(this.indexOf('?') > 0){
@@ -1084,6 +1128,7 @@ String.prototype.getUrlParam = function(key){
 }
 /**
  * 设置url 参数
+ * eglic(eglic.csdn@gmail.com)
  */
 String.prototype.setUrlParam = function(key,value){
 	if(this.indexOf('?') > 0){
