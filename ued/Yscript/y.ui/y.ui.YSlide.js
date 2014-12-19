@@ -1,13 +1,15 @@
 /**
- * YSlide轮播图插件
- * @param {type} config
- * config.box           : 轮播图容器ID (轮播图容器的父ID)
- * config.num           : 轮播图的数量 (数字，根据具体轮播子元素数量而定)
- * config.speed         : 轮播图的速度 (毫秒数,0-正无穷)
- * config.direction     : 轮播图方向 (left/right/top/bottom)
- * config.point         : 轮播图点选按钮 (true/false)
- * config.lr_btn        : 左右按钮显示隐藏 (true/false)
- */
+  * YSlide轮播图插件
+  * 版本：0.2 
+  * @param {type} config
+    * config.box           : 轮播图容器ID (轮播图容器的父ID)
+    * config.num           : 轮播图的数量 (数字，根据具体轮播子元素数量而定)
+    * config.speed         : 轮播图的速度 (毫秒数,0-正无穷)
+    * config.direction     : 轮播图方向 (left/right/top/bottom)
+    * config.point         : 轮播图点选按钮 (true/false)
+    * config.lr_btn.show   : 左右按钮显示隐藏 (true/false)
+    * config.lr_btn.hover  ：左右按钮划过效果 (true/false)
+  */
 function YSlide (config){
     //动画
     function startMove(obj, json, fnEnd) {
@@ -67,7 +69,8 @@ function YSlide (config){
     if (config.direction == direction) { //根据方向自动滚动
         if (direction == 'left' || direction == 'right') { 
             oBox_px = getStyle(oBox, 'width').split('p')[0];
-            var oBoxUL_width = oBox_px*config.num+'px';
+            var oBoxUL_width = oBox_px*(config.num+1)+'px';
+            oBoxUL.style.position = 'absolute';
             oBoxUL.style.width = oBoxUL_width; 
             if (direction == 'left') oBoxUL.style.left = 0;
             else oBoxUL.style.right = 0;
@@ -76,7 +79,8 @@ function YSlide (config){
             oBoxUL.appendChild(oBoxLI);
         }if (direction == 'top' || direction == 'bottom') {
             oBox_px = getStyle(oBox, 'height').split('p')[0]
-            var oBoxUL_height = oBox_px*config.num+'px';
+            var oBoxUL_height = oBox_px*(config.num+1)+'px';
+            oBoxUL.style.position = 'absolute'; 
             oBoxUL.style.height = oBoxUL_height;
             if (direction == 'top') oBoxUL.style.top = 0;
             else oBoxUL.style.bottom = 0;
@@ -98,13 +102,20 @@ function YSlide (config){
                 }   
             }else return;
         }
-        var start = setInterval(autoslide , config.speed) 
+        oBox.onmouseover = function(){
+            bool = false;
+        }
+        oBox.onmouseout = function(){
+            bool = true;
+        }
+        var start = setInterval(autoslide , config.speed) ;
     };
     if(config.point){ //如果point为true，创建点选按钮，并默认第一个选中
         var point = document.createElement('ol');
         var point_html = '';
         for (var i = 0 ;i < config.num; i++) {
-            point_html += '<li>'+i+'</li>'
+            if (config.point.number) point_html += '<li>'+(i+1)+'</li>';
+            else point_html += '<li></li>'
         };
         point.innerHTML = point_html;
         oBox.insertBefore(point,oBoxUL);
@@ -123,22 +134,6 @@ function YSlide (config){
             }   
         };
     }
-    oBox.onmouseover = function(){
-        if (config.lr_btn) {
-            r_btn.style.display = 'block';
-            l_btn.style.display = 'block';
-        };
-        bool = false;
-    };
-    oBox.onmouseout = function(ev){
-        var e = ev || event
-        if (this.contains(e.toElement)) return;
-        if (config.lr_btn) {
-            r_btn.style.display = 'none';
-            l_btn.style.display = 'none'; 
-        };
-        bool = true;       
-    };
     if(config.lr_btn.show){ //如果config.lr_btn.show为true，创建左右点击按钮
        var l_btn = document.createElement('span'); 
        l_btn.id = 'YSlide_left_btn';
@@ -146,10 +141,22 @@ function YSlide (config){
        r_btn.id = 'YSlide_right_btn';
        oBox.appendChild(r_btn);
        oBox.appendChild(l_btn);
-        r_btn.style.cssText= 'position:absolute;left:10px;top:50%;width:20px;height:80px;margin-top:-40px;background:#ccc;pointer :cursor;z-index:11';
-        l_btn.style.cssText= 'position:absolute;right:10px;top:50%;width:20px;height:80px;margin-top:-40px;background:#ccc;pointer :cursor;z-index:11'; 
-        l_btn.setAttribute('style','position:absolute;left:10px;top:50%;width:20px;height:80px;margin-top:-40px;background:#ccc;pointer :cursor;z-index:11');
-        r_btn.setAttribute('style','position:absolute;right:10px;top:50%;width:20px;height:80px;margin-top:-40px;background:#ccc;pointer :cursor;z-index:11');
+       if (config.lr_btn.hover) { //如果config.lr_btn.hover为true，左右按钮默认划过box显示，划出box隐藏
+            r_btn.style.position = 'absolute';
+            l_btn.style.position = 'absolute'; 
+            oBox.onmouseover = function(){
+                r_btn.style.display = 'block';
+                l_btn.style.display = 'block';
+                bool = false;
+            }
+            oBox.onmouseout = function(ev){
+                var e = ev || event
+                if (this.contains(e.toElement)) return;
+                r_btn.style.display = 'none';
+                l_btn.style.display = 'none'; 
+                bool = true;       
+            }
+        };
         l_btn.onclick = function(){  //点击左按钮事件          
             img = img-1
             if (img < 0) {eval('oBoxUL.style.'+direction+'= -(oBox_px*config.num)+"px";img = config.num-1;startMove(oBoxUL,{'+direction+':-(oBox_px)*(config.num-1)})')}
