@@ -1,7 +1,7 @@
 /**
   * YSlide轮播图插件
   * 版本：0.2 
-  * @param {type} config
+  * @param {object} : config
     * config.box           : 轮播图容器ID (轮播图容器的父ID)
     * config.num           : 轮播图的数量 (数字，根据具体轮播子元素数量而定)
     * config.speed         : 轮播图的速度 (毫秒数,0-正无穷)
