@@ -4,18 +4,15 @@
  * 1、分享到微信朋友圈
  * 2、分享给微信好友
  * 3、分享到腾讯微博
- * 4、新的分享接口，包含朋友圈、好友、微博的分享（for iOS）
- * 5、隐藏/显示右上角的菜单入口
- * 6、隐藏/显示底部浏览器工具栏
- * 7、获取当前的网络状态
- * 8、调起微信客户端的图片播放组件
- * 9、关闭公众平台Web页面
- * 10、判断当前网页是否在微信内置浏览器中打开
- * 11、增加打开扫描二维码
- * 12、支持WeixinApi的错误监控
- * 13、检测应用程序是否已经安装（需要官方开通权限）
- * 14、打开微信内置地图（认证过的公众号可用）
- * 15、发送电子邮件
+ * 4、隐藏/显示右上角的菜单入口
+ * 5、隐藏/显示底部浏览器工具栏
+ * 6、获取当前的网络状态
+ * 7、调起微信客户端的图片播放组件
+ * 8、关闭公众平台Web页面
+ * 9、判断当前网页是否在微信内置浏览器中打开
+ * 10、支持WeixinApi的错误监控
+ * 11、发送电子邮件
+ * 12、禁止用户分享
  *
  * @author zhaoxianlie(http://www.baidufe.com)
  */
@@ -27,7 +24,7 @@
      * 定义WeixinApi
      */
     var WeixinApi = {
-        version:3.2
+        version: 4.3
     };
 
     // 将WeixinApi暴露到window下：全局可使用，对旧版本向下兼容
@@ -58,7 +55,7 @@
             obj = arguments[i];
             if (typeof obj === 'object') {
                 for (k in obj) {
-                    result[k] = obj[k];
+                    obj[k] && (result[k] = obj[k]);
                 }
             }
         }
@@ -95,57 +92,73 @@
 
         // 执行分享，并处理结果
         var handler = function (theData, argv) {
-            // 新的分享接口，单独处理
-            if (cmd.menu === 'menu:general:share') {
-                // 如果是收藏操作，并且在wxCallbacks中配置了favorite为false，则不执行回调
-                if (argv.shareTo == 'favorite' || argv.scene == 'favorite') {
-                    if (callbacks.favorite === false) {
-                        return argv.generalShare(theData, function () {
-                        });
-                    }
-                }
 
-                argv.generalShare(theData, progress);
+            // 加工一下数据
+            if (cmd.menu == 'menu:share:timeline' ||
+                (cmd.menu == 'general:share' && argv.shareTo == 'timeline')) {
+
+                var title = theData.title;
+                theData.title = theData.desc || title;
+                theData.desc = title || theData.desc;
+            }
+
+            // 如果是收藏操作，并且在wxCallbacks中配置了favorite为false，则不执行回调
+            if (argv && (argv.shareTo == 'favorite' || argv.scene == 'favorite')) {
+                if (callbacks.favorite === false) {
+                    WeixinJSBridge.invoke('sendAppMessage', theData, new Function());
+                } else {
+                    WeixinJSBridge.invoke(cmd.action, theData, progress);
+                }
             } else {
-                WeixinJSBridge.invoke(cmd.action, theData, progress);
+                // 新的分享接口，单独处理
+                if (cmd.menu === 'general:share') {
+                    if (argv.shareTo === 'timeline') {
+                        WeixinJSBridge.invoke('shareTimeline', theData, progress);
+                    } else if (argv.shareTo === 'friend') {
+                        WeixinJSBridge.invoke('sendAppMessage', theData, progress);
+                    } else if (argv.shareTo === 'QQ') {
+                        WeixinJSBridge.invoke('shareQQ', theData, progress);
+                    } else if (argv.shareTo === 'weibo') {
+                        WeixinJSBridge.invoke('shareWeibo', theData, progress);
+                    }
+                } else {
+                    WeixinJSBridge.invoke(cmd.action, theData, progress);
+                }
             }
         };
 
         // 监听分享操作
         WeixinJSBridge.on(cmd.menu, function (argv) {
+            callbacks.dataLoaded = callbacks.dataLoaded || new Function();
             if (callbacks.async && callbacks.ready) {
-                WeixinApi["_wx_loadedCb_"] = callbacks.dataLoaded || new Function();
+                WeixinApi["_wx_loadedCb_"] = callbacks.dataLoaded;
                 if (WeixinApi["_wx_loadedCb_"].toString().indexOf("_wx_loadedCb_") > 0) {
                     WeixinApi["_wx_loadedCb_"] = new Function();
                 }
                 callbacks.dataLoaded = function (newData) {
-                    // 这种情况下，数据仍需加工
+                    callbacks.__cbkCalled = true;
                     var theData = _extend(data, newData);
-                    if (cmd.menu == 'menu:share:timeline' ||
-                        (cmd.menu == 'menu:general:share' && argv.shareTo == 'timeline')) {
-                        theData = {
-                            "appid":theData.appId ? theData.appId : '',
-                            "img_url":theData.imgUrl,
-                            "link":theData.link,
-                            "desc":theData.title,
-                            "title":theData.desc,
-                            "img_width":"640",
-                            "img_height":"640"
-                        };
-                    }
+                    theData.img_url = theData.imgUrl || theData.img_url;
+                    delete theData.imgUrl;
                     WeixinApi["_wx_loadedCb_"](theData);
                     handler(theData, argv);
                 };
                 // 然后就绪
                 if (!(argv && (argv.shareTo == 'favorite' || argv.scene == 'favorite') && callbacks.favorite === false)) {
                     callbacks.ready && callbacks.ready(argv, data);
+                    // 如果设置了async为true，但是在ready方法中并没有手动调用dataLoaded方法，则自动触发一次
+                    if (!callbacks.__cbkCalled) {
+                        callbacks.dataLoaded({});
+                        callbacks.__cbkCalled = false;
+                    }
                 }
             } else {
                 // 就绪状态
+                var theData = _extend(data);
                 if (!(argv && (argv.shareTo == 'favorite' || argv.scene == 'favorite') && callbacks.favorite === false)) {
-                    callbacks.ready && callbacks.ready(argv, data);
+                    callbacks.ready && callbacks.ready(argv, theData);
                 }
-                handler(data, argv);
+                handler(theData, argv);
             }
         });
     };
@@ -170,16 +183,16 @@
      */
     WeixinApi.shareToTimeline = function (data, callbacks) {
         _share({
-            menu:'menu:share:timeline',
-            action:'shareTimeline'
+            menu: 'menu:share:timeline',
+            action: 'shareTimeline'
         }, {
-            "appid":data.appId ? data.appId : '',
-            "img_url":data.imgUrl,
-            "link":data.link,
-            "desc":data.title,
-            "title":data.desc,
-            "img_width":"640",
-            "img_height":"640"
+            "appid": data.appId ? data.appId : '',
+            "img_url": data.imgUrl,
+            "link": data.link,
+            "desc": data.desc,
+            "title": data.title,
+            "img_width": "640",
+            "img_height": "640"
         }, callbacks);
     };
 
@@ -203,19 +216,18 @@
      */
     WeixinApi.shareToFriend = function (data, callbacks) {
         _share({
-            menu:'menu:share:appmessage',
-            action:'sendAppMessage'
+            menu: 'menu:share:appmessage',
+            action: 'sendAppMessage'
         }, {
-            "appid":data.appId ? data.appId : '',
-            "img_url":data.imgUrl,
-            "link":data.link,
-            "desc":data.desc,
-            "title":data.title,
-            "img_width":"640",
-            "img_height":"640"
+            "appid": data.appId ? data.appId : '',
+            "img_url": data.imgUrl,
+            "link": data.link,
+            "desc": data.desc,
+            "title": data.title,
+            "img_width": "640",
+            "img_height": "640"
         }, callbacks);
     };
-
 
     /**
      * 分享到腾讯微博
@@ -234,11 +246,11 @@
      */
     WeixinApi.shareToWeibo = function (data, callbacks) {
         _share({
-            menu:'menu:share:weibo',
-            action:'shareWeibo'
+            menu: 'menu:share:weibo',
+            action: 'shareWeibo'
         }, {
-            "content":data.desc,
-            "url":data.link
+            "content": data.desc,
+            "url": data.link
         }, callbacks);
     };
 
@@ -262,39 +274,33 @@
      */
     WeixinApi.generalShare = function (data, callbacks) {
         _share({
-            menu:'menu:general:share'
+            menu: 'general:share'
         }, {
-            "appid":data.appId ? data.appId : '',
-            "img_url":data.imgUrl,
-            "link":data.link,
-            "desc":data.desc,
-            "title":data.title,
-            "img_width":"640",
-            "img_height":"640"
+            "appid": data.appId ? data.appId : '',
+            "img_url": data.imgUrl,
+            "link": data.link,
+            "desc": data.desc,
+            "title": data.title,
+            "img_width": "640",
+            "img_height": "640"
         }, callbacks);
     };
 
     /**
-     * 加关注（此功能只是暂时先加上，不过因为权限限制问题，不能用，如果你的站点是部署在*.qq.com下，也许可行）
-     * @param       {String}    appWeixinId     微信公众号ID
-     * @param       {Object}    callbacks       回调方法
-     * @p-config    {Function}  fail(resp)      失败
-     * @p-config    {Function}  confirm(resp)   成功
+     * 设置页面禁止分享：包括朋友圈、好友、腾讯微博、qq
+     * @param callback
      */
-    WeixinApi.addContact = function (appWeixinId, callbacks) {
-        callbacks = callbacks || {};
-        WeixinJSBridge.invoke("addContact", {
-            webtype:"1",
-            username:appWeixinId
-        }, function (resp) {
-            var success = !resp.err_msg || "add_contact:ok" == resp.err_msg
-                || "add_contact:added" == resp.err_msg;
-            if (success) {
-                callbacks.success && callbacks.success(resp);
-            } else {
-                callbacks.fail && callbacks.fail(resp);
-            }
-        })
+    WeixinApi.disabledShare = function (callback) {
+        callback = callback || function () {
+            alert('当前页面禁止分享！');
+        };
+        ['menu:share:timeline', 'menu:share:appmessage', 'menu:share:qq',
+            'menu:share:weibo', 'general:share'].forEach(function (menu) {
+                WeixinJSBridge.on(menu, function () {
+                    callback();
+                    return false;
+                });
+            });
     };
 
     /**
@@ -309,8 +315,8 @@
             return;
         }
         WeixinJSBridge.invoke('imagePreview', {
-            'current':curSrc,
-            'urls':srcList
+            'current': curSrc,
+            'urls': srcList
         });
     };
 
@@ -398,9 +404,38 @@
      * @param readyCallback
      */
     WeixinApi.ready = function (readyCallback) {
+
+        /**
+         * 加一个钩子，同时解决Android和iOS下的分享问题
+         * @private
+         */
+        var _hook = function () {
+            var _WeixinJSBridge = {};
+            Object.keys(WeixinJSBridge).forEach(function (key) {
+                _WeixinJSBridge[key] = WeixinJSBridge[key];
+            });
+            Object.keys(WeixinJSBridge).forEach(function (key) {
+                if (typeof WeixinJSBridge[key] === 'function') {
+                    WeixinJSBridge[key] = function () {
+                        try {
+                            var args = arguments.length > 0 ? arguments[0] : {},
+                                runOn3rd_apis = args.__params ? args.__params.__runOn3rd_apis || [] : [];
+                            ['menu:share:timeline', 'menu:share:appmessage', 'menu:share:weibo',
+                                'menu:share:qq', 'general:share'].forEach(function (menu) {
+                                    runOn3rd_apis.indexOf(menu) === -1 && runOn3rd_apis.push(menu);
+                                });
+                        } catch (e) {
+                        }
+                        return _WeixinJSBridge[key].apply(WeixinJSBridge, arguments);
+                    };
+                }
+            });
+        };
+
         if (readyCallback && typeof readyCallback == 'function') {
             var Api = this;
             var wxReadyFunc = function () {
+                _hook();
                 readyCallback(Api);
             };
             if (typeof window.WeixinJSBridge == "undefined") {
@@ -423,96 +458,6 @@
         return /MicroMessenger/i.test(navigator.userAgent);
     };
 
-    /*
-     * 打开扫描二维码
-     * @param       {Object}    callbacks       回调方法
-     * @p-config    {Function}  fail(resp)      失败
-     * @p-config    {Function}  success(resp)   成功
-     */
-    WeixinApi.scanQRCode = function (callbacks) {
-        callbacks = callbacks || {};
-        WeixinJSBridge.invoke("scanQRCode", {}, function (resp) {
-            switch (resp.err_msg) {
-                // 打开扫描器成功
-                case 'scan_qrcode:ok':
-                    callbacks.success && callbacks.success(resp);
-                    break;
-
-                // 打开扫描器失败
-                default :
-                    callbacks.fail && callbacks.fail(resp);
-                    break;
-            }
-        });
-    };
-
-    /**
-     * 检测应用程序是否已安装
-     *         by mingcheng 2014-10-17
-     *
-     * @param       {Object}    data               应用程序的信息
-     * @p-config    {String}    packageUrl      应用注册的自定义前缀，如 xxx:// 就取 xxx
-     * @p-config    {String}    packageName        应用的包名
-     *
-     * @param       {Object}    callbacks       相关回调方法
-     * @p-config    {Function}  fail(resp)      失败
-     * @p-config    {Function}  success(resp)   成功，如果有对应的版本信息，则写入到 resp.version 中
-     * @p-config    {Function}  all(resp)       无论成功失败都会执行的回调
-     */
-    WeixinApi.getInstallState = function (data, callbacks) {
-        callbacks = callbacks || {};
-
-        WeixinJSBridge.invoke("getInstallState", {
-            "packageUrl":data.packageUrl || "",
-            "packageName":data.packageName || ""
-        }, function (resp) {
-            var msg = resp.err_msg, match = msg.match(/state:yes_?(.*)$/);
-            if (match) {
-                resp.version = match[1] || "";
-                callbacks.success && callbacks.success(resp);
-            } else {
-                callbacks.fail && callbacks.fail(resp);
-            }
-
-            callbacks.all && callbacks.all(resp);
-        });
-    };
-
-    /**
-     * 从网页里直接调起微信地图
-     *
-     * @param       {Object}    data             打开地图所需要的数据
-     * @p-config    {String}    latitude         纬度
-     * @p-config    {String}    longitude        经度
-     * @p-config    {String}    name             POI名称
-     * @p-config    {String}    adress           地址
-     * @p-config    {String}    scale            缩放
-     * @p-config    {String}    infoUrl          查看位置界面底部的超链接
-     *
-     * @param       {Object}    callbacks       相关回调方法
-     * @p-config    {Function}  fail(resp)      失败
-     * @p-config    {Function}  success(resp)   成功
-     * @p-config    {Function}  all(resp)       无论成功失败都会执行的回调
-     */
-    WeixinApi.openLocation = function (data, callbacks) {
-        callbacks = callbacks || {};
-        WeixinJSBridge.invoke('openLocation', {
-            "latitude":data.latitude,
-            "longitude":data.longitude,
-            "name":data.name,
-            "address":data.address,
-            "scale":data.scale || 14,
-            "infoUrl":data.infoUrl || ''
-        }, function (resp) {
-            if (resp.err_msg === "open_location:ok") {
-                callbacks.success && callbacks.success(resp);
-            } else {
-                callbacks.fail && callbacks.fail(resp);
-            }
-            callbacks.all && callbacks.all(resp);
-        });
-    };
-
     /**
      * 发送邮件
      * @param       {Object}  data      邮件初始内容
@@ -527,8 +472,8 @@
     WeixinApi.sendEmail = function (data, callbacks) {
         callbacks = callbacks || {};
         WeixinJSBridge.invoke("sendEmail", {
-            "title":data.subject,
-            "content":data.body
+            "title": data.subject,
+            "content": data.body
         }, function (resp) {
             if (resp.err_msg === 'send_email:sent') {
                 callbacks.success && callbacks.success(resp);
@@ -555,10 +500,10 @@
             // 有callback的情况下，将错误信息传递到options.callback中
             if (typeof callback === 'function') {
                 callback({
-                    message:errorMessage,
-                    script:scriptURI,
-                    line:lineNumber,
-                    column:columnNumber
+                    message: errorMessage,
+                    script: scriptURI,
+                    line: lineNumber,
+                    column: columnNumber
                 });
             } else {
                 // 其他情况，都以alert方式直接提示错误信息
@@ -572,51 +517,87 @@
         }
     };
 
+    /**
+     * 通用分享，一种简便的写法
+     * @param wxData
+     * @param wxCallbacks
+     */
+    WeixinApi.share = function (wxData, wxCallbacks) {
+        WeixinApi.ready(function (Api) {
+            // 用户点开右上角popup菜单后，点击分享给好友，会执行下面这个代码
+            Api.shareToFriend(wxData, wxCallbacks);
+
+            // 点击分享到朋友圈，会执行下面这个代码
+            Api.shareToTimeline(wxData, wxCallbacks);
+
+            // 点击分享到腾讯微博，会执行下面这个代码
+            Api.shareToWeibo(wxData, wxCallbacks);
+
+            // 分享到各渠道
+            Api.generalShare(wxData, wxCallbacks);
+        });
+    };
 })(window);
+
 // 开发阶段，开启WeixinApi的调试模式
-WeixinApi.enableDebugMode();
-var wx = WeixinApi.openInWeixin();
-var weixin;
-if(!wx) {
-    var sp = document.getElementById('popup_tan').getElementsByTagName('span')[1];
-    // weixin = function(){alert('请在微信打开')}
-    sp.style.display = 'none';
-}else{
-    // 初始化WeixinApi，等待分享
-    WeixinApi.ready(function(Api) {
-        // 微信分享的数据
-        var wxData = {
-            "appId": "", // 服务号可以填写appId
-            "imgUrl" : $('#pic').attr('src'),
-            "link" : window.location.href,
-            "desc" : $('#title').html(),
-            "title" : $('#title').html()
-        };
-        // 用户点开右上角popup菜单后，点击分享给好友，会执行下面这个代码
-        Api.shareToFriend(wxData, false);
-
-        // 点击分享到朋友圈，会执行下面这个代码
-        Api.shareToTimeline(wxData, false);
-
-        // 点击分享到腾讯微博，会执行下面这个代码
-        Api.shareToWeibo(wxData, false);
-
-        // iOS上，可以直接调用这个API进行分享，一句话搞定
-        Api.generalShare(wxData,false);
-    });
-    weixin = function(){
-        tanclose();
-        popup.show();
-        var ts = document.getElementById('fx_ts');
-        document.getElementById('popup_select_tan').style.opacity = '0.7'
-        ts.style.display = 'block';
-        ts.onclick = tsclose;
-        setTimeout(tsclose, 10000);
-        function tsclose(){
-            ts.style.display = 'none';
-            popup.close();
+// WeixinApi.enableDebugMode();
+//微信内置浏览器分享
+var wx = WeixinApi.openInWeixin(),
+    weixin,meta,wxData,description,
+    weixinShareBtn = document.getElementById('share').getElementsByTagName('dl')[0],
+    as = document.getElementsByTagName('header')[0].getElementsByTagName('a')
+    meta = document.getElementsByTagName('meta')
+    for (var i =  0 ; i < meta.length ; i++) {
+        if(meta[i].name == 'description') description = meta[i].content;
+    };
+    // 微信分享的数据  
+    wxData = {
+        "appId": "wx52027cce40f21f11", // 服务号可以填写appId
+        "imgUrl" : document.getElementsByTagName('img')[0].src,
+        "link" : window.location.href,
+        "desc" : description,
+        "title" : document.title
+    };
+    if(!wx) {
+        as[1].className = 'user_info'
+        as[2].style.display = 'none'
+        weixinShareBtn.style.display = 'none';
+    }else{
+        as[1].className = 'wx_user_info'
+        as[2].style.display = 'block'
+        // 初始化WeixinApi，等待分享
+        WeixinApi.ready(function(Api) {
+            WeixinApi.share(wxData,false);
+        });
+        weixin = function(){
+            popup.show();
+            var ts = document.getElementById('fx_ts');
+            document.getElementById('popup_select_tan').style.opacity = '0.7';
+            ts.style.display = 'block';
+            ts.onclick = tsclose;
+            document.getElementById('popup_select_tan').onclick = tsclose;
+            setTimeout(tsclose, 10000);
+            function tsclose(){
+                ts.style.display = 'none';
+                popup.close();
+            }
         }
-    }
-}  
-
-
+    }  
+/* uc分享*/
+var Browser=new Object(); 
+    Browser.userAgent=window.navigator.userAgent.toLowerCase(); 
+    Browser.ios=/iphone/.test(Browser.userAgent); 
+    if(/UCBrowser/gi.test(navigator.userAgent)){
+        weixinShareBtn.style.display = 'block';
+        weixin = function(){
+            var title = wxData.desc;
+            var img = wxData.imgUrl;
+            var url = location.href+(location.search?"&":"?")+"uc_39yst";
+            if(Browser.ios){
+                ucbrowser.web_share(title, img, url, 'kWeixinFriend', '', '@39yst', '');
+            }else{
+                ucweb.startRequest("shell.page_share",[title,img,url,'WechatTimeline','','',''])
+            };
+            // gaevent('event','uc_share',Browser.ios?'ios':'android');
+        }
+    };
