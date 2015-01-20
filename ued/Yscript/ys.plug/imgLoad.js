@@ -41,5 +41,4 @@ function imgLoad(imgs,dataimg,pic){
         img.onerror=function(){img.src = pic} 
         img.src = val; 
     })
-
 } 
