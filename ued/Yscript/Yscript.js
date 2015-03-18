@@ -1,5 +1,5 @@
 ﻿/*
- *y.js
+ *Yscript.js
  *版本：0.5 
  *制作：div_wang:826950544@qq.com
  *版权所有：39yst.com
