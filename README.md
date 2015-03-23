@@ -26,26 +26,27 @@ Yscript.js
   	//hover(划过事件函数，离开事件函数)  
   
 ###3、显示隐藏和透明度
-  * 显示：show(num)  
-	* 隐藏：hide(num)  
-	* 透明度：opacity(num)  
-		// show()，hide() num为时间，毫秒为单位；opacity(num)的num为具体透明度，num=0-100的整数值；
+* 显示：show(num)  
+* 隐藏：hide(num)  
+* 透明度：opacity(num)  
+// show()，hide() num为时间，毫秒为单位；opacity(num)的num为具体透明度，num=0-100的整数值；
 
 ###4、操作class
-	* 增加class：addClass(‘className’)  
-	* 删除class：removeClass(‘className’)  
+* 增加class：addClass(‘className’)  
+* 删除class：removeClass(‘className’)  
 
 ###5、操作css
-	* css操作属性：
-	  css(‘cssStyle’) //获取一个css属性
-	  css(‘cssStyle’, ‘value’) //设置一个css属性
-	  css({‘cssStyle1’：‘value1’ ‘cssStyle2’：‘value2’…}) 
+  * css操作属性：
+		css(‘cssStyle’) //获取一个css属性
+		css(‘cssStyle’, ‘value’) //设置一个css属性
+		css({‘cssStyle1’：‘value1’ ‘cssStyle2’：‘value2’…}) 
 	  //设置一串css属性
-	* attr操作属性：attr(‘obj’, ‘value’)
+  * attr操作属性：
+		attr(‘obj’, ‘value’)
 		attr(‘obj’)  //获取一个行内属性
-	  attr(‘obj’, ‘value’)  //设置一个行内属性
-	  attr({‘obj1’：‘value1’ ‘obj2’：‘value2’…}) 
-	  //设置一串css属性
+		attr(‘obj’, ‘value’)  //设置一个行内属性
+		attr({‘obj1’：‘value1’ ‘obj2’：‘value2’…}) 
+    //设置一串css属性
     
 ###6、文档操作
   * 获取对象文本内容：text()  
@@ -65,18 +66,18 @@ Yscript.js
 		}
 
 ###7、动画操作
-    * animate（attr，time ，fn）  
-    // attr是具体的动画属性值json格式，time动画执行时间毫秒数，fn是回调函数
+  * animate（attr，time ，fn）  
+  	// attr是具体的动画属性值json格式，time动画执行时间毫秒数，fn是回调函数
   
 ###8、Cookie
-    * setCookie(name, value, duration)  
+  * setCookie(name, value, duration)  
       调用方法：setCookie=ys. setCookie=Y().setCookie
-    * getCookie(name)   
+  * getCookie(name)   
   	  调用方法：getCookie=ys. getCookie=Y().getCookie
-    * 	delCookie(name)  
-      调用方法：delCookie =ys. delCookie=Y().delCookie
-    // name为名字，value是值	 
-    //duration过期时间（天为单位，默认1天）
+  * delCookie(name)  
+      调用方法：delCookie =ys. delCookie=Y().delCookie  
+  	// name为名字，value是值	 
+  	//duration过期时间（天为单位，默认1天）
 
 ###9、Ajax
     ajax({
@@ -94,7 +95,7 @@ Yscript.js
   * 获取当前对象距顶部的距离：offsetTop()  
   * 获取当前对象距左边的距离：offsetLeft()  
   * 获取当前当前窗口宽度：getInner().width  
-  获取当前当前窗口高度：getInner().height  
+  * 获取当前当前窗口高度：getInner().height  
 
 ###11、补充说明
   * Each遍历：each(object, callback, args)  
