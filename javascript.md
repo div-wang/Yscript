@@ -98,12 +98,6 @@
 
 　　[4.1 模块化](#user-content-41-模块化)
 
-　　　　[4.1.1 AMD](#user-content-411-amd)
-
-　　　　[4.1.2 define](#user-content-412-define)
-
-　　　　[4.1.3 require](#user-content-413-require)
-
 　　[4.2 DOM](#42-dom)
 
 　　　　[4.2.1 元素获取](#user-content-421-元素获取)
