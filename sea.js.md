@@ -23,14 +23,14 @@ sea.js开发规范
   ```
   
   Jquery使用传统引入方式，不适用sea.js插件形式引入：
-   ```javascript
-    <script type="text/javascript" src="script/jquery/jquery.min.js"></script>
+  ```javascript
+  <script type="text/javascript" src="script/jquery/jquery.min.js"></script>
   ```
   
   单页面入口文件引入规则：
-   ```javascript
-    <script type="text/javascript">
-		  seajs.use('admin/import/zl');
-    </script>
+  ```javascript
+  <script type="text/javascript">
+	seajs.use('admin/import/zl');
+  </script>
   ```
   
