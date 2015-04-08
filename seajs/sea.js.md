@@ -68,7 +68,7 @@ Sea.js遵循CMD规范，但是写法上更像AMD规范；
 	
 具体CMD模块定义规范请阅读玉伯大大的：[CMD 模块定义规范 #242](https://github.com/seajs/seajs/issues/242)  
 	
-####4  打包上线	
+####5  打包上线	
 #####	sea.js 提供了一个专业的打包工具spm
 [spm](https://github.com/spmjs/spm) 是一套完整的浏览器端组件管理解决方案，包含对于 JavaScript、CSS 和模板的处理。
 
@@ -80,3 +80,7 @@ Blink：[spm中文文档](http://sorrycc.gitbooks.io/spm-handbook/content/index.
 ![spm bulid-1](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image005.png "spm bulid-1")   
 ![spm bulid-2](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image006.png "spm bulid-2")   
 	
+####6  项目规范	
+#####项目js文件在import目录和lib目录下开发，功能确定之后使用spm打包合并，并在0.2上测试（建议统一上传到0.2进行开发）；
+spm打包合并会自动生成dist文件夹，上线只需上传dist文件夹即可；  
+#####项目上线一定要保证页面的js入口文件使用的是压缩文件，不能使用debug文件上线；
