@@ -8,21 +8,21 @@ sea.js开发规范
 
 ####1  文件目录  
   ![文件整体目录](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image001.png "文件整体目录")  
-    •	`/dist/`目录下是已经打包好的js静态文件，是由spm自动生成的；  
-    •	`/import/`目录下是没有打包的入口文件；  
-    •	`/jquery/`目录下是jquery文件；  
-    •	`/lib/`目录下是通用的js插件；  
-    •	`package.json`定义打包文件路径和规则；  
-    •	`sea.js`就是主文件；  
+    `/dist/`目录下是已经打包好的js静态文件，是由spm自动生成的；  
+    `/import/`目录下是没有打包的入口文件；  
+    `/jquery/`目录下是jquery文件；  
+    `/lib/`目录下是通用的js插件；  
+    `package.json`定义打包文件路径和规则；  
+    `sea.js`就是主文件；  
 
 ####2  文件引入  
 
-  Sea.js使用统一文件引用：  
+  sea.js使用统一文件引用：  
   ```javascript
   <script type="text/javascript" src="script/sea.js"></script>
   ```
   
-  Jquery使用传统引入方式，不适用sea.js插件形式引入：
+  Jquery使用传统引入方式，不适用`sea.js`插件形式引入：
   ```javascript
   <script type="text/javascript" src="script/jquery/jquery.min.js"></script>
   ```
@@ -46,12 +46,12 @@ sea.js详细配置规则：[配置](https://github.com/seajs/seajs/issues/262)
 ![spm打包文件路径](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image004.png "spm打包文件路径")   
 	
 #####后期想法:  
-目前每个项目都是独立打包，都会有个独立的配置文件和sea.js，相对比较分散；后期开发统一的sea.js文件作为入口，每个项目单独做出一份config.js配置sea.js 的规则和Package.json单独打包，把所有项目的js文件放在一个目录下，统一管理；
+目前每个项目都是独立打包，都会有个独立的配置文件和`sea.js`，相对比较分散；后期开发统一的`sea.js`文件作为入口，每个项目单独做出一份`config.js`配置`sea.js` 的规则和`Package.json`单独打包，把所有项目的js文件放在一个目录下，统一管理；
 
 ####4  模块引入
 sea.js遵循CMD规范，但是写法上更像AMD规范；  
 
-模块使用define作为关键字函数：  
+模块使用`define`作为关键字函数：  
 ```javascript
 	define(['jquery'],function(require, exports, module) {
 		//code
@@ -71,15 +71,15 @@ sea.js遵循CMD规范，但是写法上更像AMD规范；
 #####	sea.js 提供了一个专业的打包工具spm
 [spm](https://github.com/spmjs/spm) 是一套完整的浏览器端组件管理解决方案，包含对于 JavaScript、CSS 和模板的处理。
 
-#####	spm依赖于node.js环境，所以请在本机安装node.js让后执行spm的安装（为方便后期使用，spm要全局安装）
+#####	spm依赖于node.js环境，所以请在本机安装`node.js`让后执行spm的安装（为方便后期使用，spm要全局安装）
 		$ npm install spm –g
 Blink：[spm中文文档](http://sorrycc.gitbooks.io/spm-handbook/content/index.html)
 
-#####	静态文件打包使用的是spm bulid命令，spm会自动根据package.json合并所有依赖文件；同时会生成不压缩的-debug文件，方便前期调试；
+#####	静态文件打包使用的是`spm bulid`命令，spm会自动根据`package.json`合并所有依赖文件；同时会生成不压缩的-debug文件，方便前期调试；
 ![spm bulid-1](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image005.png "spm bulid-1")   
 ![spm bulid-2](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image006.png "spm bulid-2")   
 	
 ####6  项目规范	
-#####项目js文件在import目录和lib目录下开发，功能确定之后使用spm打包合并，并在0.2上测试（建议统一上传到0.2进行开发）；
-spm打包合并会自动生成dist文件夹，上线只需上传dist文件夹即可；  
+#####项目js文件在`/import/`目录和`/lib/`目录下开发，功能确定之后使用spm打包合并，并在10.0.0.2上测试（建议统一上传到10.0.0.2进行开发）；
+spm打包合并会自动生成`/dist/`文件夹，上线只需上传`/dist/`文件夹即可；  
 #####项目上线一定要保证页面的js入口文件使用的是压缩文件，不能使用debug文件上线；
