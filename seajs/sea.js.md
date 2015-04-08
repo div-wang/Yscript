@@ -7,7 +7,7 @@ sea.js开发规范
     Sea.js 还提供常用插件，非常有助于开发调试和性能优化，并具有丰富的可扩展接口。
 
 ####1  文件目录  
-  ![baidu](http://www.baidu.com/img/bdlogo.gif "百度logo")  
+  ![文件整体目录](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image001.png "文件整体目录")  
     •	dist目录下是已经打包好的js静态文件，是由spm自动生成的；  
     •	import目录下是没有打包的入口文件；  
     •	jquery目录下是jquery文件；  
@@ -37,5 +37,5 @@ sea.js开发规范
 ####3 	配置文件详解 
 
 sea.js位置文件:  
-![baidu](http://www.baidu.com/img/bdlogo.gif "百度logo")  
+![sea.js配置文件](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image002.png "sea.js配置文件")  
 Sea.js详细配置规则：[配置](https://github.com/seajs/seajs/issues/262)
