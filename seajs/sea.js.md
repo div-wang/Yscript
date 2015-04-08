@@ -36,6 +36,47 @@ sea.js开发规范
   
 ####3 	配置文件详解 
 
-sea.js位置文件:  
+#####· sea.js配置文件:  
 ![sea.js配置文件](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image002.png "sea.js配置文件")  
-Sea.js详细配置规则：[配置](https://github.com/seajs/seajs/issues/262)
+Sea.js详细配置规则：[配置](https://github.com/seajs/seajs/issues/262)  
+	
+#####· spm配置文件:
+![spm配置文件](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image003.png "spm配置文件") 
+spm.output是需要打包的文件数组，打包好的文件会放入根据入口名字自动生成一个文件夹下，文件夹会放在dist目录下；  
+这样就实现了每个项目根据项目名称相对独立，不会产生冲突；  
+![spm打包文件路径](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image004.png "spm打包文件路径")   
+	
+#####· 后期想法:  
+目前每个项目都是独立打包，都会有个独立的配置文件和sea.js，相对比较分散；后期开发统一的sea.js文件作为入口，每个项目单独做出一份config.js配置sea.js 的规则和Package.json单独打包，把所有项目的js文件放在一个目录下，统一管理；
+
+####4  模块引入
+Sea.js遵循CMD规范，但是写法上更像AMD规范；  
+
+模块使用define作为关键字函数：  
+```javascript
+	define(['jquery'],function(require, exports, module) {
+		//code
+	})
+```
+
+引入模块的方式：
+```javascript
+	define(['jquery'],function(require, exports, module) {
+		require(’模块名称’）
+	})
+```
+	
+具体CMD模块定义规范请阅读玉伯大大的：[CMD 模块定义规范 #242](https://github.com/seajs/seajs/issues/242)  
+	
+####4  打包上线	
+#####	sea.js 提供了一个专业的打包工具spm
+[spm](https://github.com/spmjs/spm) 是一套完整的浏览器端组件管理解决方案，包含对于 JavaScript、CSS 和模板的处理。
+
+#####	spm依赖于node.js环境，所以请在本机安装node.js让后执行spm的安装（为方便后期使用，spm要全局安装）
+		$ npm install spm –g
+Blink：[spm中文文档](http://sorrycc.gitbooks.io/spm-handbook/content/index.html)
+
+#####	静态文件打包使用的是spm bulid命令，spm会自动根据package.json合并所有依赖文件；同时会生成不压缩的-debug文件，方便前期调试；
+![spm bulid-1](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image005.png "spm bulid-1")   
+![spm bulid-2](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image006.png "spm bulid-2")   
+	
