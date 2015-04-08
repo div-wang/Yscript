@@ -4,16 +4,16 @@ sea.js开发规范
 ####Sea.js 追求简单、自然的代码书写和组织方式，具有以下核心特性  
     •	书写模块代码。  
     •	自然直观的代码组织方式：依赖的自动加载、配置的简洁清晰，可以让我们更多地享受编码的乐趣。  
-    Sea.js 还提供常用插件，非常有助于开发调试和性能优化，并具有丰富的可扩展接口。
+    •	Sea.js 还提供常用插件，非常有助于开发调试和性能优化，并具有丰富的可扩展接口。
 
 ####1  文件目录  
   ![文件整体目录](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image001.png "文件整体目录")  
-    •	dist目录下是已经打包好的js静态文件，是由spm自动生成的；  
-    •	import目录下是没有打包的入口文件；  
-    •	jquery目录下是jquery文件；  
-    •	lib目录下是通用的js插件；  
-    •	package.json定义打包文件路径和规则；  
-    •	sea.js就是主文件；  
+    •	`/dist/`目录下是已经打包好的js静态文件，是由spm自动生成的；  
+    •	`/import/`目录下是没有打包的入口文件；  
+    •	`/jquery/`目录下是jquery文件；  
+    •	`/lib/`目录下是通用的js插件；  
+    •	`package.json`定义打包文件路径和规则；  
+    •	`sea.js`就是主文件；  
 
 ####2  文件引入  
 
@@ -36,21 +36,20 @@ sea.js开发规范
   
 ####3 	配置文件详解 
 
-#####· sea.js配置文件:  
+#####sea.js配置文件:  
 ![sea.js配置文件](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image002.png "sea.js配置文件")  
-Sea.js详细配置规则：[配置](https://github.com/seajs/seajs/issues/262)  
+sea.js详细配置规则：[配置](https://github.com/seajs/seajs/issues/262)  
 	
-#####· spm配置文件:
+#####spm配置文件:
 ![spm配置文件](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image003.png "spm配置文件") 
-spm.output是需要打包的文件数组，打包好的文件会放入根据入口名字自动生成一个文件夹下，文件夹会放在dist目录下；  
-这样就实现了每个项目根据项目名称相对独立，不会产生冲突；  
+`spm.output`是需要打包的文件数组，打包好的文件会放入根据入口名字自动生成一个文件夹下，文件夹会放在`/dist/`目录下；  
 ![spm打包文件路径](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image004.png "spm打包文件路径")   
 	
-#####· 后期想法:  
+#####后期想法:  
 目前每个项目都是独立打包，都会有个独立的配置文件和sea.js，相对比较分散；后期开发统一的sea.js文件作为入口，每个项目单独做出一份config.js配置sea.js 的规则和Package.json单独打包，把所有项目的js文件放在一个目录下，统一管理；
 
 ####4  模块引入
-Sea.js遵循CMD规范，但是写法上更像AMD规范；  
+sea.js遵循CMD规范，但是写法上更像AMD规范；  
 
 模块使用define作为关键字函数：  
 ```javascript
