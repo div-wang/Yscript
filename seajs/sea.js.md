@@ -22,8 +22,8 @@ sea.js开发规范
   <script type="text/javascript" src="script/sea.js"></script>
   ```
   
-  Jquery使用传统引入方式，不使用`sea.js`模块形式引入：
-      解释：jquery模块引入会将jquery打包进入口文件里，文件太大，占用空间，
+  Jquery使用传统引入方式，不使用`sea.js`模块形式引入：   
+        解释：jquery模块引入方式会将jquery打包进js入口文件里，js入口文件太大，占用空间
   ```javascript
   <script type="text/javascript" src="script/jquery/jquery.min.js"></script>
   ```
