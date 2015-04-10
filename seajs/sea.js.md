@@ -2,18 +2,18 @@
 sea.js开发规范  
 ==============
 ####Sea.js 追求简单、自然的代码书写和组织方式，具有以下核心特性  
-    •	书写模块代码。  
-    •	自然直观的代码组织方式：依赖的自动加载、配置的简洁清晰，可以让我们更多地享受编码的乐趣。  
-    •	Sea.js 还提供常用插件，非常有助于开发调试和性能优化，并具有丰富的可扩展接口。
+    * 书写模块代码。  
+    * 自然直观的代码组织方式：依赖的自动加载、配置的简洁清晰，可以让我们更多地享受编码的乐趣。  
+    * Sea.js 还提供常用插件，非常有助于开发调试和性能优化，并具有丰富的可扩展接口。
 
 ####1  文件目录  
   ![文件整体目录](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image001.png "文件整体目录")  
-    `/dist/`目录下是已经打包好的js静态文件，是由spm自动生成的；  
-    `/import/`目录下是没有打包的入口文件；  
-    `/jquery/`目录下是jquery文件；  
-    `/lib/`目录下是通用的js插件；  
-    `package.json`定义打包文件路径和规则；  
-    `sea.js`就是主文件；  
+  * `/dist/`目录下是已经打包好的js静态文件，是由spm自动生成的    
+  * `/import/`目录下是没有打包的入口文件  
+  * `/jquery/`目录下是jquery文件   
+  * `/lib/`目录下是通用的js插件    
+  * `package.json`定义打包文件路径和规则    
+  * `sea.js`就是主文件    
 
 ####2  文件引入  
 
@@ -22,7 +22,8 @@ sea.js开发规范
   <script type="text/javascript" src="script/sea.js"></script>
   ```
   
-  Jquery使用传统引入方式，不适用`sea.js`插件形式引入：
+  Jquery使用传统引入方式，不使用`sea.js`模块形式引入：
+      解释：jquery模块引入会将jquery打包进入口文件里，文件太大，占用空间，
   ```javascript
   <script type="text/javascript" src="script/jquery/jquery.min.js"></script>
   ```
@@ -49,7 +50,7 @@ sea.js详细配置规则：[配置](https://github.com/seajs/seajs/issues/262)
 目前每个项目都是独立打包，都会有个独立的配置文件和`sea.js`，相对比较分散；后期开发统一的`sea.js`文件作为入口，每个项目单独做出一份`config.js`配置`sea.js` 的规则和`Package.json`单独打包，把所有项目的js文件放在一个目录下，统一管理；
 
 ####4  模块引入
-sea.js遵循CMD规范，但是写法上更像AMD规范；  
+`sea.js`遵循`CMD`规范，但是写法上更像`AMD`规范；  
 
 模块使用`define`作为关键字函数：  
 ```javascript
@@ -65,13 +66,13 @@ sea.js遵循CMD规范，但是写法上更像AMD规范；
 	})
 ```
 	
-具体CMD模块定义规范请阅读玉伯大大的：[CMD 模块定义规范 #242](https://github.com/seajs/seajs/issues/242)  
+具体`CMD`模块定义规范请阅读玉伯大大的：[CMD 模块定义规范 #242](https://github.com/seajs/seajs/issues/242)  
 	
 ####5  打包上线	
 #####	sea.js 提供了一个专业的打包工具spm
-[spm](https://github.com/spmjs/spm) 是一套完整的浏览器端组件管理解决方案，包含对于 JavaScript、CSS 和模板的处理。
+[spm](https://github.com/spmjs/spm) 是一套完整的浏览器端组件管理解决方案，包含对于 `JavaScript`、`CSS` 和模板的处理。
 
-#####	spm依赖于node.js环境，所以请在本机安装`node.js`让后执行spm的安装（为方便后期使用，spm要全局安装）
+#####	spm依赖于node.js环境，所以请在本机安装node.js让后执行spm的安装（为方便后期使用，spm要全局安装）
 		$ npm install spm –g
 Blink：[spm中文文档](http://sorrycc.gitbooks.io/spm-handbook/content/index.html)
 
