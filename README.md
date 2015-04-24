@@ -1,7 +1,7 @@
 Yscript.js
 ===================================
 文件编号：	Yscript.js  
-文件版本号：	0.6(2015.03.18.12.00)
+文件版本号：	0.7(2015.04.24.10.00)
 
 ###1、选择器
   以大写的Y为选择器 、Ys == new Y == Y() 一个空的Y对象  
@@ -97,16 +97,16 @@ Yscript.js
   * 获取当前当前窗口宽度：getInner().width  
   * 获取当前当前窗口高度：getInner().height  
 
-###11、补充说明
+###11、补充对象
   * Each遍历：each(object, callback, args)  
   * 去首位空格：trim(string)  
-  * 事件发生器bind(event, fn)  
+  * 事件发生器：on(event, fn)  
   * 获取url 参数：url.getUrlParam(key)  
   * 设置url 参数：url.setUrlParam(key,value)  
   * 增加debug，默认打印错误信息；
 
 ###12、msg自定义弹窗
-  mag (str) 打印信息：str可以使string，number和function；
+  mag (arguments) 打印信息：`arguments`第一个参数可以是string、number和function类型；第二个参数可以是url链接或`function`函数;(url必须带http|https)
 
 
 

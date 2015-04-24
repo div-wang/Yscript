@@ -1,12 +1,15 @@
 ﻿/*
  *Yscript.js
- *版本：0.5 
+ *版本：0.7 
  *制作：div_wang:826950544@qq.com
  *版权所有：39yst.com
  *特别感谢‘eglic(eglic.csdn@gmail.com)’、‘落雪飞花’，提供的技术支持！(*^__^*)
  */
-(function () {
-	var w = window;
+(function (w,d) {
+	//定义head和body；
+	var H = d.getElementsByTagName('head')[0] || d.head || d.documentElement;
+    var B = d.getElementsByTagName('body')[0] || d.body || d.documentElement;
+    
 	//浏览器检测  
 	(function () {  
 	    w.sys = {};  
@@ -289,7 +292,7 @@
 		return top;
 	}
 
-	//删除左后空格
+	//删除空格
 	function trim(str) {
 		return str.replace(/(^\s*)|(\s*$)/g, '');
 	}
@@ -392,18 +395,21 @@
 		}
 	}
 
+	//原型扩展入口
+	Base.fn = Base.prototype;
+
 	//addDomLoaded
-	Base.prototype.ready = function (fn) {
+	Base.fn.ready = function (fn) {
 		addDomLoaded(fn);
 	};
 
 	//获取ID节点
-	Base.prototype.getId = function (id) {
+	Base.fn.getId = function (id) {
 		return document.getElementById(id)
 	};
 
 	//获取元素节点数组
-	Base.prototype.getTagName = function (tag, parentNode) {
+	Base.fn.getTagName = function (tag, parentNode) {
 		var node = null;
 		var temps = [];
 		if (parentNode != undefined) {
@@ -419,7 +425,7 @@
 	};
 
 	//获取CLASS节点数组
-	Base.prototype.getClass = function (className, parentNode) {
+	Base.fn.getClass = function (className, parentNode) {
 		var node = null;
 		var temps = [];
 		if (parentNode != undefined) {
@@ -437,7 +443,7 @@
 	}
 
 	//设置CSS选择器子节点
-	Base.prototype.find = function (str) {
+	Base.fn.find = function (str) {
 		var childElements = [];
 		for (var i = 0; i < this.elements.length; i ++) {
 			switch (str.charAt(0)) {
@@ -462,12 +468,12 @@
 	}
 
 	//获取某一个节点，并返回这个节点对象
-	Base.prototype.ge = function (num) {	
+	Base.fn.ge = function (num) {	
 		return this.elements[num];
 	};
 
 	//获取首个节点，并返回这个节点对象
-	Base.prototype.first = function () {
+	Base.fn.first = function () {
 		var firstNode = this.elements[0];
 		this.elements = [];
 		this.elements[0] = firstNode;
@@ -475,7 +481,7 @@
 	};
 
 	//获取末个节点，并返回这个节点对象
-	Base.prototype.last = function () {
+	Base.fn.last = function () {
 		var lastNode = this.elements[this.elements.length - 1];
 		this.elements = [];
 		this.elements[0] = lastNode;
@@ -483,7 +489,7 @@
 	};
 
 	//获取某一个节点在整个节点组中是第几个索引
-	Base.prototype.index = function () {
+	Base.fn.index = function () {
 		var children = this.elements[0].parentNode.children;
 		for (var i = 0; i < children.length; i ++) {
 			if (this.elements[0] == children[i]) return i;
@@ -491,7 +497,7 @@
 	};
 
 	//获取某一个节点，并且返回Base对象
-	Base.prototype.eq = function (num) {
+	Base.fn.eq = function (num) {
 		var element = this.elements[num];
 		this.elements = [];
 		this.elements[0] = element;
@@ -499,7 +505,7 @@
 	};
 
 	//获取某一个节点的父元素
-	Base.prototype.parent = function () {
+	Base.fn.parent = function () {
 		for (var i = 0; i < this.elements.length; i ++) {
 			var parent = this.elements[i].parentNode;
 		}
@@ -509,7 +515,7 @@
 	};
 
 	//获取某一个节点的兄弟元素
-	Base.prototype.sublings = function () {
+	Base.fn.sublings = function () {
 		var sN = [];
 		for (var i = 0; i < this.elements.length; i ++) {
 			var subling = this.elements[i].parentNode.childNodes;
@@ -525,7 +531,7 @@
 	};
 
 	//获取某一个节点的子元素
-	Base.prototype.childs = function () {
+	Base.fn.childs = function () {
 		var cN = [];
 		for (var i = 0; i < this.elements.length; i ++) {
 			var childs = this.elements[i].childNodes;
@@ -541,14 +547,13 @@
 		return this;
 	}
 
-	Base.prototype.append = function (html,location) {
+	Base.fn.append = function (html,location) {
 		//alert(html instanceof HTMLElement)
 		if(this.elements.length > 0){
 			if (arguments.length == 1) location = 'beforeEnd';
 			for(var i=0;i<this.elements.length;i++){
 				if(typeof html === 'string'){
 					this.elements[i].insertAdjacentHTML(location,html);
-				//}else if((html instanceof HTMLElement) || (html instanceof Text)){
 				}else if(html instanceof Base){
 					if(html.elements.length > 0){
 						for(var j=0;j<html.elements.length;j++){
@@ -568,7 +573,7 @@
 	}
 
 	//获取某一个节点的属性
-	Base.prototype.attr = function (obj, value) {
+	Base.fn.attr = function (obj, value) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			if (typeof obj == 'string' && arguments.length == 1) {
 				return this.elements[i].getAttribute(obj);
@@ -601,7 +606,7 @@
 	};
 
 	//设置CSS
-	Base.prototype.css = function (attr,value) {
+	Base.fn.css = function (attr,value) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			if (typeof attr == 'string' && arguments.length == 1) {
 				return getStyle(this.elements[i], attr);
@@ -623,7 +628,7 @@
 	}
 
 	//设置某一个节点的透明度
-	Base.prototype.opacity = function (num) {
+	Base.fn.opacity = function (num) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			this.elements[i].style.opacity = num / 100;
 			this.elements[i].style.filter = 'alpha(opacity=' + num + ',finishOpacity=0,style=0)';
@@ -632,7 +637,7 @@
 	};
 
 	//获取某一个节点的高度值，
-	Base.prototype.height = function (obj) {
+	Base.fn.height = function (obj) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			var px = getStyle(this.elements[i],'height');
 			var height = px[i].split('p');
@@ -641,7 +646,7 @@
 	}
 
 	//获取某一个节点的宽度值，
-	Base.prototype.width = function () {
+	Base.fn.width = function () {
 		for (var i = 0; i < this.elements.length; i ++) {
 			var px = getStyle(this.elements[i],'width');
 			var width = px.split('p');
@@ -650,7 +655,7 @@
 	}
 
 	//获取某一个对象距离顶部的距离，
-	Base.prototype.offsetTop = function () {
+	Base.fn.offsetTop = function () {
 		for (var i = 0; i < this.elements.length; i ++) {
 			var top = this.elements[i].offsetTop ;
 			return top
@@ -658,7 +663,7 @@
 	}
 
 	//获取某一个对象距离左边的距离，
-	Base.prototype.offsetLeft = function () {
+	Base.fn.offsetLeft = function () {
 		for (var i = 0; i < this.elements.length; i ++) {
 			var left = this.elements[i].offsetLeft ;
 			return left
@@ -666,7 +671,7 @@
 	}
 
 	//添加Class
-	Base.prototype.addClass = function (className) {
+	Base.fn.addClass = function (className) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			if (!hasClass(this.elements[i], className)) {
 				this.elements[i].className += ' ' + className;
@@ -676,7 +681,7 @@
 	}
 
 	//移除Class
-	Base.prototype.removeClass = function (className) {
+	Base.fn.removeClass = function (className) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			if (hasClass(this.elements[i], className)) {
 				this.elements[i].className = this.elements[i].className.replace(new RegExp('(\\s|^)' +className +'(\\s|$)'), ' ');
@@ -687,7 +692,7 @@
 
 
 	//设置表单字段内容获取
-	Base.prototype.value = function (str) {
+	Base.fn.value = function (str) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			if(this.elements[i].tagName != 'INPUT' && 
 					this.elements[i].tagName != 'TEXTAREA')
@@ -704,7 +709,7 @@
 	}
 
 	//获取innerHTML
-	Base.prototype.html = function (str) {
+	Base.fn.html = function (str) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			if (arguments.length == 0) {
 				return this.elements[i].innerHTML;
@@ -715,7 +720,7 @@
 	}
 
 	//获取innerText
-	Base.prototype.text = function (str) {
+	Base.fn.text = function (str) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			if (arguments.length == 0) {
 				return getInnerText(this.elements[i]);
@@ -729,7 +734,7 @@
 	}
 
 	//设置事件发生器
-	Base.prototype.on = function (event, fn) {
+	Base.fn.on = function (event, fn) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			addEvent(this.elements[i], event, fn);
 		}
@@ -737,7 +742,7 @@
 	};
 
 	//设置鼠标移入移出方法
-	Base.prototype.hover = function (over, out) {
+	Base.fn.hover = function (over, out) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			addEvent(this.elements[i], 'mouseover', over);
 			addEvent(this.elements[i], 'mouseout', out);
@@ -746,7 +751,7 @@
 	};
 
 	//设置显示
-	Base.prototype.show = function (num) {
+	Base.fn.show = function (num) {
 		if (arguments.length == 1) {
 			for (var i = 0; i < this.elements.length; i ++) {
 				var element = this.elements[i]
@@ -774,7 +779,7 @@
 	};
 
 	//设置隐藏
-	Base.prototype.hide = function (num) {
+	Base.fn.hide = function (num) {
 		if (arguments.length == 1) {
 			for (var i = 0; i < this.elements.length; i ++) {
 				var element = this.elements[i];
@@ -796,7 +801,7 @@
 	};
 
 	//触发点击事件
-	Base.prototype.click = function (fn) {
+	Base.fn.click = function (fn) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			this.elements[i].onclick = fn;
 		}
@@ -804,7 +809,7 @@
 	};
 
 	//触发浏览器窗口事件
-	Base.prototype.resize = function (fn) {
+	Base.fn.resize = function (fn) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			var element = this.elements[i];
 			addEvent(window, 'resize', function () {
@@ -827,7 +832,7 @@
 	};
 
 	//跨浏览器获取视口大小
-	Base.prototype.getInner = function() {
+	Base.fn.getInner = function() {
 		if (typeof w.innerWidth != 'undefined') {
 			return {
 				width : w.innerWidth,
@@ -842,7 +847,7 @@
 	}
 
 	//简易动画函数
-	Base.prototype.animate = function (json, time, fnEnd) {
+	Base.fn.animate = function (json, time, fnEnd) {
 		for (var i = 0; i < this.elements.length; i ++) {
 			var _this = this.elements[i];
 			startMove(_this, json, time, fnEnd)
@@ -855,7 +860,7 @@
 	 * @author	 eglic.csdn@gmail.com
 	 * @returns {_L9.Base.prototype}
 	 */
-	Base.prototype.focus = function () {
+	Base.fn.focus = function () {
 		for (var i = 0; i < this.elements.length; i ++) {
 			if(this.elements[i].tagName != 'INPUT' && 
 					this.elements[i].tagName != 'BUTTON' && 
@@ -873,7 +878,7 @@
 	 * @author	 eglic.csdn@gmail.com
 	 * @returns {_L9.Base.prototype}
 	 */
-	Base.prototype.select = function () {
+	Base.fn.select = function () {
 		for (var i = 0; i < this.elements.length; i ++) {
 			if(this.elements[i].tagName != 'INPUT' && 
 					this.elements[i].tagName != 'TEXTAREA')
@@ -886,7 +891,7 @@
 	}
 
 	//each函数
-	Base.prototype.each = function(object, callback, args) {
+	Base.fn.each = function(object, callback, args) {
 		//该方法有三个参数:进行操作的对象obj，进行操作的函数fn，函数的参数args
 		var name, i = 0,length = object.length;
 		if (args) {
@@ -918,7 +923,7 @@
 	}
 
 	//封装ajax
-	Base.prototype.ajax = function(conf) {
+	Base.fn.ajax = function(conf) {
 		var xhr = (function () {
 			if (typeof XMLHttpRequest != 'undefined') {
 				return new XMLHttpRequest();
@@ -1009,27 +1014,45 @@
 	}
 
     //自定义弹窗msg
-    Base.prototype.msgshow = function(str){
-    	var d = document;
-        var msg_width = d.body.clientWidth || d.dElement.clientWidth,
-            msg_height = d.body.clientHeight || d.dElement.clientHeight;  
+    var u;
+    Base.fn.msgshow = function(str,callback){
+    	var u;
+        var msg_width = d.body.clientWidth || d.documentElement.clientWidth,
+            msg_height = d.body.clientHeight || d.documentElement.clientHeight;  
+        var msg_srt_height = parseInt(msg_height*0.3)-110
         var popup_msg_style = d.createElement('style');
             popup_msg_style.type = "text/css";
-        var popup_msg_style_text = '.popup_msg_box{border-radius:5px;min-width:200px;width:30%;min-height:30%;font-family:"寰蒋闆呴粦"; word-break:break-all;word-wrap:break-word;font-size:14px;font-weight:bold;padding:30px 5px 10px;text-align:center;line-height:1.6;border:1px solid #999;background:#fff;color:#333;position:fixed;top:30%;left:35%;z-index:12; }.popup_msg_close{position:absolute;top:5px;right:5px;background:#3e7ef8;border-radius:5px; cursor:pointer; color:#fff; font-family:"寰蒋闆呴粦"; font-size:14px;width:20px;height:1.5em;display:block;text-align:center;line-height:1.5em} #popup_msg_tan{position:absolute;top:0;width:100%;height:100%;background:#000;opacity:0.5;filter:alpha(opacity=50);z-index:10;width:'+msg_width+'px;height:'+msg_height+'px;}'
+        var popup_msg_style_text = '.popup_msg_box{width:30%;min-height:30%;padding:30px 5px 0px;font-family:"微软雅黑";text-align:center; border:1px solid #999;border-radius:5px;background:#fff;color:#333;position:fixed;top:30%;left:35%;z-index:12; }.popup_msg_str{width:100%;word-break:break-all;word-wrap:break-word;font-size:14px;font-weight:bold;line-height:1.6;padding-bottom:60px}.popup_mag_true{background:#f4f4f4;width:100%;position:absolute;bottom:0px;left:0;border-radius:5px;padding:10px 0;}.popup_mag_true input{width:90px;height:30px;border:none;border-radius:5px;background:#e50014;color:#fff;font-size:13px;font-weight:bold;}.popup_msg_close{position:absolute;top:-7px;right:-7px;background:#fff;border-radius:50%; cursor:pointer; color:#f33c3c; font-size:17px;font-weight:900;width:25px;height:25px;display:block;} #popup_msg_tan{position:absolute;top:0;width:100%;height:100%;background:#000;opacity:0.5;filter:alpha(opacity=50);z-index:10;width:100%;height:'+msg_height+'px;}'
             if (popup_msg_style.styleSheet) { //IE
               popup_msg_style.styleSheet.cssText = popup_msg_style_text;
             } else { 
               popup_msg_style.innerHTML = popup_msg_style_text;
             }
-            d.body.appendChild(popup_msg_style);
+            H.appendChild(popup_msg_style);
         var popup_msg_tan = d.createElement('div');
             popup_msg_tan.id = 'popup_msg_tan';
-            d.body.appendChild(popup_msg_tan);
+            B.appendChild(popup_msg_tan);
         var popup_msg_box = d.createElement('div');
-            popup_msg_box.innerHTML = '<a class="popup_msg_close" onclick="msgx(this)">X</a>'+str;
-            if (msg_width<300) {popup_msg_box.style.left=(msg_width-200)/2 + 'px'};
+            popup_msg_box.innerHTML = '<a class="popup_msg_close" onclick="msgx(this)">X</a><div class="popup_msg_str">'+str+'<div id="time"></div></div><div class="popup_mag_true"><input type="button" value="确 定" onclick="msgx(this.parentNode)"></div>';
             popup_msg_box.className = 'popup_msg_box';
-            d.body.appendChild(popup_msg_box);
+            B.appendChild(popup_msg_box);
+
+            if(callback && typeof callback === 'function'){
+                callback();
+            }else if(callback && typeof callback == 'string'){
+                if (callback.match('http://')||callback.match('https://')){
+                    u = callback
+                    var i=5,t,s = d.getElementById('time');
+                    s.innerHTML = i+'秒后自动跳转';
+                    t = setInterval(function(){
+                        i-=1;
+                        s.innerHTML = i+'秒后自动跳转';
+                        if (i==0)  window.location.href = callback;
+                    },1000);
+                }else{
+                    popup_msg_box.innerHTML = '<a class="popup_msg_close" onclick="msgx(this)">X</a><div class="popup_msg_str">参数2不正确，请输入正确的网址;<div id="time"></div></div><div class="popup_mag_true"><input type="button" value="确 定" onclick="msgx(this.parentNode)"></div>';
+                }
+            }
         w.onresize = function(){
         	msg_width = d.body.clientWidth || d.dElement.clientWidth,
             msg_height = d.body.clientHeight || d.dElement.clientHeight;
@@ -1038,28 +1061,22 @@
         }
     }
     // 自定义弹窗msg关闭
-    Base.prototype.msgclose = function(obj){
-    	var d = document;
-        var a = obj.parentNode.parentNode.childNodes;
-        for (var i = 0 ; i < a.length; i++) {
-            if (a[i].nodeType==1 && a[i].type == "text/css") {
-                d.body.removeChild(a[i]);
-            }; 
-            if (a[i].nodeType==1 && a[i].id == "popup_msg_tan") {
-                d.body.removeChild(a[i]);
-            };                   
-        };
-        d.body.removeChild(obj.parentNode);
+    Base.fn.msgclose = function(obj){
+	    if (u) window.location.href = u;
+        var a = H.childNodes;
+        H.removeChild(a[a.length-1]);
+        B.removeChild(d.getElementById('popup_msg_tan'));
+        B.removeChild(obj.parentNode);
     }
 
 	//去头尾空白
-	Base.prototype.trim = function (str){
+	Base.fn.trim = function (str){
 		return str.replace(/(^\s+)|(\s+$)/gi,'');
 	}
 
 	//写入Cookie，name为名字，value是值
 	//duration过期时间（天为单位，默认1天）
-	Base.prototype.setCookie = function(name, value, duration) {
+	Base.fn.setCookie = function(name, value, duration) {
 	    var oDate = new Date();
 	    if (duration <= 0)
 	        duration = 1;
@@ -1067,7 +1084,7 @@
 	    document.cookie = name + "=" + encodeURI(value) + "; expires=" + oDate;
 	};
 	//读取Cookie,不存在返回空字符串""
-	Base.prototype.getCookie = function(name) {
+	Base.fn.getCookie = function(name) {
 	    var arr=document.cookie.split('; ');
 		for(var i=0;i<arr.length;i++) {
 			var arr2=arr[i].split('=');
@@ -1078,35 +1095,39 @@
 		return "";
 	};
 	//移除Cookie
-	Base.prototype.delCookie = function(name) {
+	Base.fn.delCookie = function(name) {
 	    setCookie(name, 1, -1);
 	};
 
 	//插件入口
-	Base.prototype.extend = function (name, fn) {
+	Base.fn.extend = function (name, fn) {
 		Base.prototype[name] = fn;
 	};
 
+	//debug
+    Base.fn.debug = function(callback){
+	    w.onerror = function (errorMessage, scriptURI, lineNumber, columnNumber) {
+	        // 其他情况，都以alert方式直接提示错误信息
+	        var msgs = [];
+	        msgs.push("亲，代码有错误");
+	        msgs.push("<br>错误信息：", errorMessage);
+	        msgs.push("<br>出错文件：", scriptURI);
+	        msgs.push("<br>出错位置：", lineNumber + '行，' + columnNumber + '列');
+	        msg(msgs.join(''));
+	    }    	
+    }
+
 	//前台调用
-	var Y = function (args) {
+	var $ = function (args) {
 		return new Base(args);
 	}
-	w.$$ = Y();
-	w.Y = Y;
-	w.msgx = Y().msgclose;   
-    w.msg = Y().msgshow;
 
-	//debug
-    w.onerror = function (errorMessage, scriptURI, lineNumber, columnNumber) {
-        // 其他情况，都以alert方式直接提示错误信息
-        var msgs = [];
-        msgs.push("亲，代码有错误");
-        msgs.push("<br>错误信息：", errorMessage);
-        msgs.push("<br>出错文件：", scriptURI);
-        msgs.push("<br>出错位置：", lineNumber + '行，' + columnNumber + '列');
-        msg(msgs.join(''));
-    }
-})();
+	w.$ = $; 
+	w.Debug = $().debug
+	w.msgx = $().msgclose;   
+    w.msg = $().msgshow;
+
+})(window,document);
 
 
 /**
@@ -1143,6 +1164,3 @@ String.prototype.setUrlParam = function(key,value){
 		return this + '?' + key + '=' + value;
 	}
 }
-
-
-
