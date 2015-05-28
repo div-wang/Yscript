@@ -398,6 +398,8 @@
 	//原型扩展入口
 	Base.fn = Base.prototype;
 
+	var $ = Base;
+	
 	//addDomLoaded
 	Base.fn.ready = function (fn) {
 		addDomLoaded(fn);

@@ -75,8 +75,10 @@ sea.js详细配置规则：[配置](https://github.com/seajs/seajs/issues/262)
 ##### spm依赖于node.js环境，所以请在本机安装node.js让后执行spm的安装（为方便后期使用，spm要全局安装）
     $ npm install spm –g
 Blink：[spm中文文档](http://sorrycc.gitbooks.io/spm-handbook/content/index.html)
+####spm更新版本到3.6，目前问题：  
+  `spm build`命令打包文件无法出现`-debug`文件;
+  `##### 静态文件打包使用的是`spm bulid`命令，spm会自动根据`package.json`合并所有依赖文件；同时会生成不压缩的-debug文件，方便前期调试；`
 
-##### 静态文件打包使用的是`spm bulid`命令，spm会自动根据`package.json`合并所有依赖文件；同时会生成不压缩的-debug文件，方便前期调试；
 ![spm bulid-1](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image005.png "spm bulid-1")   
 ![spm bulid-2](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image006.png "spm bulid-2")   
   
@@ -84,4 +86,7 @@ Blink：[spm中文文档](http://sorrycc.gitbooks.io/spm-handbook/content/index.
 #####项目js文件在`/import/`目录和`/lib/`目录下开发，功能确定之后使用spm打包合并，并在10.0.0.2上测试（建议统一上传到10.0.0.2进行开发）；
 spm打包合并会自动生成`/dist/`文件夹，上线只需上传`/dist/`文件夹即可；  
 #####项目上线一定要保证页面的js入口文件使用的是压缩文件，不能使用debug文件上线；
+
+
+
 
