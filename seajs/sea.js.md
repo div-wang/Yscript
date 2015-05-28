@@ -77,7 +77,7 @@ sea.js详细配置规则：[配置](https://github.com/seajs/seajs/issues/262)
 Blink：[spm中文文档](http://sorrycc.gitbooks.io/spm-handbook/content/index.html)
 ####spm更新版本到3.6，目前问题：  
   `spm build`命令打包文件无法出现`-debug`文件;  
-  ##### 静态文件打包使用的是`spm bulid`命令，spm会自动根据`package.json`合并所有依赖文件；同时会生成不压缩的-debug文件，方便前期调试；
+  old:静态文件打包使用的是`spm bulid`命令，spm会自动根据`package.json`合并所有依赖文件；同时会生成不压缩的-debug文件，方便前期调试；
 
 ![spm bulid-1](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image005.png "spm bulid-1")   
 ![spm bulid-2](https://github.com/div-wang/Yscript/blob/lib/seajs/img/image006.png "spm bulid-2")   
